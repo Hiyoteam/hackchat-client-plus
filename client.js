@@ -837,7 +837,7 @@ $('#set-custom-color').onclick = function () {
 		pushMessage({ nick: '*', text: `Suessfully set your auto nickname color to #${myColor}. Rejoin or join a Channel to make it go into effect.` })
 	} else if (color == '') {
 		myColor = null;
-		pushMessage({ nick: '*', text: "Suessfully disabled custom color." })
+		pushMessage({ nick: '*', text: "Suessfully disabled autocolor." })
 	}
 	localStorageSet('my-color', myColor)
 }
