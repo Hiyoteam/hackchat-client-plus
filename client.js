@@ -833,7 +833,7 @@ $('#set-custom-color').onclick = function () {
 		return;
 	}
 	if (/(#?)((^[0-9A-F]{6}$)|(^[0-9A-F]{3}$))/i.test(color)) {
-		myColor = ''.replace(/#/,'');
+		myColor = color.replace(/#/,'');
 	} else if (color == '') {
 		myColor = null;
 	}
