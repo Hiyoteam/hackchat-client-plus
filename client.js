@@ -347,6 +347,7 @@ function join(channel,oldNick) {
 					// The user cancelled the prompt in some manner
 					shouldConnect = false;
 					shouldAutoReconnect = false;
+					pushMessage({ nick: '!', text: "You cancelled joining. Press enter at the input field to reconnect." })
 				}
 			}
 		}
@@ -713,7 +714,7 @@ $('#chatinput').onkeydown = function (e) {
 
 		if (!wasConnected) {
 			pushMessage({ nick: '*', text: "Attempting to reconnect. . ." })
-			join(myChannel,myNick.split('#')[0] + '_#' + myNick.split('#')[1]);
+			join(myChannel);
 		}
 
 		// Submit message
