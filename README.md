@@ -11,6 +11,7 @@ some of the current features:
 - repair the display of yourself's messages (now no matter whether you use a tripcode, you can see the nickname of yourself in a different color from others', if you haven't set a custom nickname color with `/color` or `changecolor` command.)
 - custom invite (now you can invite another user to a certain channel decided by you instead of a random channel.)
 - fast quote (reply to a certain message by rightclicking the sender's nickname) (thanks to [https://crosst.chat] for this part of code)
+- custom nickname color (when joining a channel, the client will automatically change your nickname color with a `changecolor` command. as you dont need to set color mannually every time, your nickname wont be colorless any more.)
 
 ---
 

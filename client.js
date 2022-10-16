@@ -834,8 +834,10 @@ $('#set-custom-color').onclick = function () {
 	}
 	if (/(#?)((^[0-9A-F]{6}$)|(^[0-9A-F]{3}$))/i.test(color)) {
 		myColor = color.replace(/#/,'');
+		pushMessage({ nick: '*', text: `Suessfully set your auto nickname color to #${myColor}. Rejoin or join a Channel to make it go into effect.` })
 	} else if (color == '') {
 		myColor = null;
+		pushMessage({ nick: '*', text: "Suessfully disabled custom color." })
 	}
 	localStorageSet('my-color', myColor)
 }
