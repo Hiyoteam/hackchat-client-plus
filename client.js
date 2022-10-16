@@ -373,7 +373,7 @@ function join(channel) {
 			window.setTimeout(function () {
 				if (!wasConnected) {
 					shouldReconnect = false;
-					pushMessage({ nick: '!', text: "Failed to reconnect to server. When you think there is chance to succeed in reconnecting, send anything to reconnect." })
+					pushMessage({ nick: '!', text: "Failed to reconnect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." })
 				}
 			}, 2000);
 		}
@@ -711,7 +711,6 @@ $('#chatinput').onkeydown = function (e) {
 		if (!wasConnected) {
 			pushMessage({ nick: '*', text: "Attempting to reconnect. . ." })
 			join(myChannel)
-			return;
 		}
 
 		// Submit message
