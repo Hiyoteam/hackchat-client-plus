@@ -323,6 +323,8 @@ function notify(args) {
 
 var wasConnected = false;
 
+var shouldReconnect = true;
+
 function join(channel) {
 	ws = new WebSocket('wss://hack.chat/chat-ws');
 
@@ -348,6 +350,7 @@ function join(channel) {
 			localStorageSet('my-nick', myNick);
 			send({ cmd: 'join', channel: channel, nick: myNick });
 			wasConnected = true;
+			shouldReconnect = true;
 		} else {
 			ws.close()
 		}
@@ -355,22 +358,25 @@ function join(channel) {
 	}
 
 	ws.onclose = function () {
-		if (wasConnected) {
-			wasConnected = false;
-			pushMessage({ nick: '!', text: "Server disconnected. Attempting to reconnect. . ." });
-		}
-
-		myNick = myNick.split('#')[0] + '_#' + myNick.split('#')[1]
-
-		window.setTimeout(function () {
-			join(channel);
-		}, 2000);
-
-		window.setTimeout(function () {
-			if (!wasConnected) {
-				pushMessage({ nick: '!', text: "Failed to reconnect to server. When you think there is chance to succeed in reconnecting, send anything to reconnect." })
+		if (shouldReconnect){
+			if (wasConnected) {
+				wasConnected = false;
+				pushMessage({ nick: '!', text: "Server disconnected. Attempting to reconnect. . ." });
 			}
-		}, 2000);
+
+			myNick = myNick.split('#')[0] + '_#' + myNick.split('#')[1]
+
+			window.setTimeout(function () {
+				join(channel);
+			}, 2000);
+
+			window.setTimeout(function () {
+				if (!wasConnected) {
+					shouldReconnect = false;
+					pushMessage({ nick: '!', text: "Failed to reconnect to server. When you think there is chance to succeed in reconnecting, send anything to reconnect." })
+				}
+			}, 2000);
+		}
 	}
 
 	ws.onmessage = function (message) {
