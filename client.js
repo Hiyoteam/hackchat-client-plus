@@ -321,15 +321,12 @@ function notify(args) {
 	}
 }
 
-function join(channel) {
-	if (document.domain == 'hack.chat') {
-		// For https://hack.chat/
-		ws = new WebSocket('wss://hack.chat/chat-ws');
-	} else {
-		ws = new WebSocket('wss://hack.chat/chat-ws');
-	}
+var wasConnected = false;
 
-	var wasConnected = false;
+function join(channel) {
+	ws = new WebSocket('wss://hack.chat/chat-ws');
+
+	wasConnected = false;
 
 	ws.onopen = function () {
 		var shouldConnect = true;
