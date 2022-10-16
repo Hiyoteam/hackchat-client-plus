@@ -12,7 +12,7 @@ Some of the current features:
 - Custom invite (Now you can invite another user to a certain channel decided by you instead of a random channel.)
 - Fast quote (To reply to a certain message, just rightclick the sender's nickname) (thanks to [https://crosst.chat] for this part of code)
 - Autocolor (When joining a channel, the client will automatically change your nickname color with a `changecolor` command. As you dont need to set color mannually every time, your nickname wont be colorless any more.)
-- Better rejoin (When you are disconnected from the server, the client will rejoin with your nickname with an extra underline to avoid being blocked because of having the same nickname as your former connection which still exists in the server. And if it fails to rejoin, when you try to send something the client will try rejoining again.)
+- Better reconnect (When you are disconnected from the server, the client will reconnect with your nickname with an extra underline to avoid being blocked because of having the same nickname as your former connection which still exists in the server. And if it fails to reconnect, when you try to send something the client will try reconnecting again.)
 
 ---
 
