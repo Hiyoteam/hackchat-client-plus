@@ -323,9 +323,9 @@ function notify(args) {
 
 var wasConnected = false;
 
-var shouldReconnect = true;
+var shouldAutoReconnect = true;
 
-function join(channel) {
+function join(channel,oldNick) {
 	ws = new WebSocket('wss://hack.chat/chat-ws');
 
 	wasConnected = false;
@@ -335,6 +335,8 @@ function join(channel) {
 		if (!wasConnected) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
+			} else if (verifyNickname(oldNick.split('#')[0])) {
+				myNick = oldNick;
 			} else {
 				var newNick = prompt('Nickname:', myNick);
 				if (newNick !== null) {
@@ -342,6 +344,7 @@ function join(channel) {
 				} else {
 					// The user cancelled the prompt in some manner
 					shouldConnect = false;
+					shouldAutoReconnect = false;
 				}
 			}
 		}
@@ -350,7 +353,7 @@ function join(channel) {
 			localStorageSet('my-nick', myNick);
 			send({ cmd: 'join', channel: channel, nick: myNick });
 			wasConnected = true;
-			shouldReconnect = true;
+			shouldAutoReconnect = true;
 		} else {
 			ws.close()
 		}
@@ -358,21 +361,19 @@ function join(channel) {
 	}
 
 	ws.onclose = function () {
-		if (shouldReconnect){
+		if (shouldAutoReconnect){
 			if (wasConnected) {
 				wasConnected = false;
 				pushMessage({ nick: '!', text: "Server disconnected. Attempting to reconnect. . ." });
 			}
 
-			myNick = myNick.split('#')[0] + '_#' + myNick.split('#')[1]
-
 			window.setTimeout(function () {
-				join(channel);
+				join(channel,myNick.split('#')[0] + '_#' + myNick.split('#')[1]);
 			}, 2000);
 
 			window.setTimeout(function () {
 				if (!wasConnected) {
-					shouldReconnect = false;
+					shouldAutoReconnect = false;
 					pushMessage({ nick: '!', text: "Failed to reconnect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." })
 				}
 			}, 2000);
@@ -710,7 +711,7 @@ $('#chatinput').onkeydown = function (e) {
 
 		if (!wasConnected) {
 			pushMessage({ nick: '*', text: "Attempting to reconnect. . ." })
-			join(myChannel)
+			join(myChannel,myNick.split('#')[0] + '_#' + myNick.split('#')[1]);
 		}
 
 		// Submit message
