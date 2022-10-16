@@ -15,7 +15,7 @@ var markdownOptions = {
 	langPrefix: '',
 	linkify: true,
 	linkTarget: '_blank" rel="noreferrer',
-	typographer:  true,
+	typographer: true,
 	quotes: `""''`,
 
 	doHighlight: true,
@@ -26,12 +26,12 @@ var markdownOptions = {
 		if (lang && hljs.getLanguage(lang)) {
 			try {
 				return hljs.highlight(lang, str).value;
-			} catch (__) {}
+			} catch (__) { }
 		}
 
 		try {
 			return hljs.highlightAuto(str).value;
-		} catch (__) {}
+		} catch (__) { }
 
 		return '';
 	}
@@ -77,20 +77,20 @@ md.renderer.rules.image = function (tokens, idx, options) {
 		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' referrerpolicy="no-referrer"></a>';
 	}
 
-  return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
+	return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
 };
 
 md.renderer.rules.link_open = function (tokens, idx, options) {
 	var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
-  var target = options.linkTarget ? (' target="' + options.linkTarget + '"') : '';
-  return '<a rel="noreferrer" onclick="return verifyLink(this)" href="' + Remarkable.utils.escapeHtml(tokens[idx].href) + '"' + title + target + '>';
+	var target = options.linkTarget ? (' target="' + options.linkTarget + '"') : '';
+	return '<a rel="noreferrer" onclick="return verifyLink(this)" href="' + Remarkable.utils.escapeHtml(tokens[idx].href) + '"' + title + target + '>';
 };
 
-md.renderer.rules.text = function(tokens, idx) {
+md.renderer.rules.text = function (tokens, idx) {
 	tokens[idx].content = Remarkable.utils.escapeHtml(tokens[idx].content);
 
 	if (tokens[idx].content.indexOf('?') !== -1) {
-		tokens[idx].content = tokens[idx].content.replace(/(^|\s)(\?)\S+?(?=[,.!?:)]?\s|$)/gm, function(match) {
+		tokens[idx].content = tokens[idx].content.replace(/(^|\s)(\?)\S+?(?=[,.!?:)]?\s|$)/gm, function (match) {
 			var channelLink = Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(match.trim()));
 			var whiteSpace = '';
 			if (match[0] !== '?') {
@@ -100,7 +100,7 @@ md.renderer.rules.text = function(tokens, idx) {
 		});
 	}
 
-  return tokens[idx].content;
+	return tokens[idx].content;
 };
 
 md.use(remarkableKatex);
@@ -182,6 +182,7 @@ function localStorageSet(key, val) {
 
 var ws;
 var myNick = localStorageGet('my-nick') || '';
+var myColor = localStorageGet('my-color') || null;
 var myChannel = window.location.search.replace(/^\?/, '');
 var lastSent = [""];
 var lastSentPos = 0;
@@ -407,6 +408,12 @@ var COMMANDS = {
 		});
 
 		pushMessage({ nick: '*', text: "Users online: " + nicks.join(", ") })
+		
+		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" })
+
+		if (myColor) {
+			send({ cmd: 'changecolor', color: myColor })
+		}
 	},
 
 	onlineAdd: function (args) {
@@ -504,7 +511,7 @@ function pushMessage(args) {
 		nickLinkEl.textContent = args.nick;
 
 		if (args.nick === 'jeb_') {
-			nickLinkEl.setAttribute("class","jebbed");
+			nickLinkEl.setAttribute("class", "jebbed");
 		} else if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
 			nickLinkEl.setAttribute('style', 'color:#' + args.color + ' !important');
 		}
@@ -512,8 +519,8 @@ function pushMessage(args) {
 		//crosst.chat
 		nickLinkEl.onclick = function () {
 			// Reply to a whisper or info is meaningless
-			if ( args.type == 'whisper' || args.nick == '*' || args.nick == '!' ) {
-				insertAtCursor( args.text );
+			if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
+				insertAtCursor(args.text);
 				$('#chat-input').focus();
 				return;
 			} else {
@@ -526,28 +533,28 @@ function pushMessage(args) {
 					nick = nick.replace('CC_', '')
 				}
 				*/
-				insertAtCursor( '@' + nick + ' ' );
+				insertAtCursor('@' + nick + ' ');
 				$('#chatinput').focus();
 				return;
 			}
-			
+
 		}
 		// Mention someone when right-clicking
-		nickLinkEl.oncontextmenu = function ( e ) {
-			
+		nickLinkEl.oncontextmenu = function (e) {
+
 			e.preventDefault();
 			let replyText = '';
 			let originalText = args.text;
 			let overlongText = false;
-			
+
 			// Cut overlong text
-			if ( originalText.length > 350 ) {
+			if (originalText.length > 350) {
 				replyText = originalText.slice(0, 350);
 				overlongText = true;
 			}
 
 			// Add nickname
-			if ( args.trip ) {
+			if (args.trip) {
 				replyText = '>' + args.trip + ' ' + args.nick + '：\n';
 			} else {
 				replyText = '>' + args.nick + '：\n';
@@ -557,27 +564,27 @@ function pushMessage(args) {
 			originalText = originalText.split('\n');
 
 			// Cut overlong lines
-			if ( originalText.length >= 8 ) {
+			if (originalText.length >= 8) {
 				originalText = originalText.slice(0, 8);
 				overlongText = true;
 			}
 
-			for ( let replyLine of originalText ) {
+			for (let replyLine of originalText) {
 				// Cut third replied text
-				if ( !replyLine.startsWith('>>')) {
+				if (!replyLine.startsWith('>>')) {
 					replyText += '>' + replyLine + '\n';
 				}
 			}
 
 			// Add elipsis if text is cutted
-			if ( overlongText ) {
+			if (overlongText) {
 				replyText += '>……\n';
 			}
 			replyText += '\n';
 
 
 			// Add mention when reply to others
-			if ( args.nick != myNick ) {
+			if (args.nick != myNick) {
 				var nick = args.nick
 				replyText += '@' + nick + ' ';
 			}
@@ -586,7 +593,7 @@ function pushMessage(args) {
 			replyText += $('#chatinput').value;
 
 			$('#chatinput').value = '';
-			insertAtCursor( replyText );
+			insertAtCursor(replyText);
 			$('#chatinput').focus();
 		}
 		//\crosst.chat
@@ -599,11 +606,11 @@ function pushMessage(args) {
 	// Text
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
-	if (verifyMessage(args)){
+	if (verifyMessage(args)) {
 		textEl.innerHTML = md.render(args.text);
 	} else {
 		textEl.appendChild(document.createTextNode(args.text))
-		console.log('norender to dangerous message:',args)
+		console.log('norender to dangerous message:', args)
 	}
 	messageEl.appendChild(textEl);
 
@@ -803,8 +810,8 @@ $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
 	var e = event.toElement || event.relatedTarget;
 	try {
 		if (e.parentNode == this || e == this) {
-	     return;
-	  }
+			return;
+		}
 	} catch (e) { return; }
 
 	if (!$('#pin-sidebar').checked) {
@@ -817,6 +824,20 @@ $('#clear-messages').onclick = function () {
 	// Delete children elements
 	var messages = $('#messages');
 	messages.innerHTML = '';
+}
+
+$('#set-custom-color').onclick = function () {
+	// Set auto changecolor
+	let color = prompt('Your nickname color:(press enter without inputing to reset)')
+	if (color == null){
+		return;
+	}
+	if (/(#?)((^[0-9A-F]{6}$)|(^[0-9A-F]{3}$))/i.test(color)) {
+		myColor = ''.replace(/#/,'');
+	} else if (color == '') {
+		myColor = null;
+	}
+	localStorageSet('my-color', myColor)
 }
 
 // Restore settings from localStorage
@@ -832,8 +853,8 @@ if (localStorageGet('joined-left') == 'false') {
 
 if (localStorageGet('parse-latex') == 'false') {
 	$('#parse-latex').checked = false;
-	md.inline.ruler.disable([ 'katex' ]);
-	md.block.ruler.disable([ 'katex' ]);
+	md.inline.ruler.disable(['katex']);
+	md.block.ruler.disable(['katex']);
 }
 
 $('#pin-sidebar').onchange = function (e) {
@@ -848,11 +869,11 @@ $('#parse-latex').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('parse-latex', enabled);
 	if (enabled) {
-		md.inline.ruler.enable([ 'katex' ]);
-		md.block.ruler.enable([ 'katex' ]);
+		md.inline.ruler.enable(['katex']);
+		md.block.ruler.enable(['katex']);
 	} else {
-		md.inline.ruler.disable([ 'katex' ]);
-		md.block.ruler.disable([ 'katex' ]);
+		md.inline.ruler.disable(['katex']);
+		md.block.ruler.disable(['katex']);
 	}
 }
 
@@ -871,7 +892,7 @@ if (localStorageGet('allow-imgur') == 'false') {
 	$('#allow-imgur').checked = false;
 	allowImages = false;
 } else {
-  $('#allow-imgur').checked = true;
+	$('#allow-imgur').checked = true;
 	allowImages = true;
 }
 
@@ -886,9 +907,9 @@ var onlineUsers = [];
 var ignoredUsers = [];
 
 function userAdd(nick) {
-  if (nick.length >= 25) {
-    for(var i=5;i>3;i=i+1){console.log(i);}
-  }
+	if (nick.length >= 25) {
+		for (var i = 5; i > 3; i = i + 1) { console.log(i); }
+	}
 
 	var user = document.createElement('a');
 	user.textContent = nick;
@@ -932,10 +953,10 @@ function usersClear() {
 
 function userInvite(nick) {
 	target = prompt('target channel:(defaultly random channel generated by server)')
-	if (target){
+	if (target) {
 		send({ cmd: 'invite', nick: nick, to: target });
 	} else {
-		if (target == ''){
+		if (target == '') {
 			send({ cmd: 'invite', nick: nick });
 		}
 	}
@@ -979,10 +1000,10 @@ var schemes = [
 	'tomorrow',
 	'carrot',
 	'lax',
-  'Ubuntu',
-  'gruvbox-light',
-  'fried-egg',
-  'rainbow'
+	'Ubuntu',
+	'gruvbox-light',
+	'fried-egg',
+	'rainbow'
 ];
 
 var highlights = [
@@ -1053,7 +1074,7 @@ $('#highlight-selector').value = currentHighlight;
 if (myChannel == '') {
 	pushMessage({ text: frontpage });
 	$('#footer').classList.add('hidden');
-	$('#sidebar').classList.add('hidden');
+	//$('#sidebar').classList.add('hidden');
 } else {
 	join(myChannel);
 }
