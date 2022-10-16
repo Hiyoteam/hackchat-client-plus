@@ -1,17 +1,18 @@
 # hackchat-client-plus
 
-a tweaked hackchat client. aka hackchat++.
-most code from [https://github.com/hack-chat/main].
+A tweaked hackchat client. aka hackchat++.
+Most code are from [https://github.com/hack-chat/main].
 
-some of the current features:
+Some of the current features:
 
-- up to date (includes all known features of 2022/10 hack-chat official client)
-- open source and safe (no message or password recording)
-- defend known latex weapons (malicious latex messages wont be rendered but will be shown in plain text)
-- repair the display of yourself's messages (now no matter whether you use a tripcode, you can see the nickname of yourself in a different color from others', if you haven't set a custom nickname color with `/color` or `changecolor` command.)
-- custom invite (now you can invite another user to a certain channel decided by you instead of a random channel.)
-- fast quote (reply to a certain message by rightclicking the sender's nickname) (thanks to [https://crosst.chat] for this part of code)
-- autocolor (when joining a channel, the client will automatically change your nickname color with a `changecolor` command. as you dont need to set color mannually every time, your nickname wont be colorless any more.)
+- Up to date (Includes all known features of 2022/10 hack-chat official client)
+- Open source and safe (No message or password recording)
+- Defend known latex weapons (Malicious latex messages wont be rendered but will be shown in plain text)
+- Repair the display of yourself's messages (Now no matter whether you use a tripcode, you can see the nickname of yourself in a different color from others', if you haven't set a custom nickname color with `/color` or `changecolor` command.)
+- Custom invite (Now you can invite another user to a certain channel decided by you instead of a random channel.)
+- Fast quote (To reply to a certain message, just rightclick the sender's nickname) (thanks to [https://crosst.chat] for this part of code)
+- Autocolor (When joining a channel, the client will automatically change your nickname color with a `changecolor` command. As you dont need to set color mannually every time, your nickname wont be colorless any more.)
+- Better rejoin (When you are disconnected from the server, the client will rejoin with your nickname with an extra underline to avoid being blocked because of having the same nickname as your former connection which still exists in the server. And if it fails to rejoin, when you try to send something the client will try rejoining again.)
 
 ---
 

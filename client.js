@@ -357,11 +357,20 @@ function join(channel) {
 
 	ws.onclose = function () {
 		if (wasConnected) {
+			wasConnected = false;
 			pushMessage({ nick: '!', text: "Server disconnected. Attempting to reconnect. . ." });
 		}
 
+		myNick = myNick.split('#')[0] + '_#' + myNick.split('#')[1]
+
 		window.setTimeout(function () {
 			join(channel);
+		}, 2000);
+
+		window.setTimeout(function () {
+			if (!wasConnected) {
+				pushMessage({ nick: '!', text: "Failed to reconnect to server. When you think there is chance to succeed in reconnecting, send anything to reconnect." })
+			}
 		}, 2000);
 	}
 
@@ -693,6 +702,12 @@ $('#footer').onclick = function () {
 $('#chatinput').onkeydown = function (e) {
 	if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
 		e.preventDefault();
+
+		if (!wasConnected) {
+			pushMessage({ nick: '*', text: "Attempting to reconnect. . ." })
+			join(myChannel)
+			return;
+		}
 
 		// Submit message
 		if (e.target.value != '') {
