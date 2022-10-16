@@ -838,6 +838,8 @@ $('#set-custom-color').onclick = function () {
 	} else if (color == '') {
 		myColor = null;
 		pushMessage({ nick: '*', text: "Suessfully disabled autocolor." })
+	} else {
+		pushMessage({ nick: '!', text: "Invalid color. Please give color in hex RGB code." })
 	}
 	localStorageSet('my-color', myColor)
 }
