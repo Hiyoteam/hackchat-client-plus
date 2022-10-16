@@ -335,8 +335,10 @@ function join(channel,oldNick) {
 		if (!wasConnected) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
-			} else if (verifyNickname(oldNick.split('#')[0])) {
-				myNick = oldNick;
+			} else if (typeof oldNick == 'string') {
+				if (verifyNickname(oldNick.split('#')[0])){
+					myNick = oldNick;
+				}
 			} else {
 				var newNick = prompt('Nickname:', myNick);
 				if (newNick !== null) {
