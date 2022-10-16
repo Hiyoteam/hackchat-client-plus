@@ -158,7 +158,10 @@ var frontpage = [
 	"https://github.com/hack-chat/3rd-party-software-list",
 	"",
 	"Server and web client released under the WTFPL and MIT open source license.",
-	"No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages."
+	"No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages.",
+	"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
+	"Hosted at https://hcer.netlify.app/ and hc.thz.cool(thanks to Maggie, aka THZ, for hosting).",
+	"Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.github.io/history/) | [TanChat](https://chat.thz.cool)"
 ].join("\n");
 
 function $(query) {
