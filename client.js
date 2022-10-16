@@ -347,9 +347,11 @@ function join(channel) {
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
 			send({ cmd: 'join', channel: channel, nick: myNick });
+			wasConnected = true;
+		} else {
+			ws.close()
 		}
-
-		wasConnected = true;
+		
 	}
 
 	ws.onclose = function () {
