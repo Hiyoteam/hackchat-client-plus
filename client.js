@@ -601,6 +601,7 @@ function pushMessage(args) {
 			} else if (args.nick == myNick.split('#')[0]) {
 				reply(args)
 			} else {
+				var nick = args.nick
 				let at = '@'
 				if (softMention) {at += ' '}
 				insertAtCursor(at + nick + ' ');
