@@ -523,7 +523,7 @@ function reply(args) {//from crosst.chat
 			// Add mention when reply to others
 			if (args.nick != myNick.split('#')[0]) {
 				var nick = args.nick
-				replyText += '@' + nick + ' ';
+				replyText += '@' + (softMention&&' ') + nick + ' ';
 			}
 
 			// Insert reply text
@@ -599,7 +599,7 @@ function pushMessage(args) {
 			} else if (args.nick == myNick.split('#')[0]) {
 				reply(args)
 			} else {
-				insertAtCursor('@' + args.nick + ' ');
+				insertAtCursor('@' + (softMention&&' ') + nick + ' ');
 				$('#chatinput').focus();
 				return;
 			}
@@ -921,6 +921,20 @@ $('#allow-imgur').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('allow-imgur', enabled);
 	allowImages = enabled;
+}
+
+if (localStorageGet('soft-mention') == 'false') {
+	$('#soft-mention').checked = false;
+	softMention = false;
+} else {
+	$('#soft-mention').checked = true;
+	softMention = true;
+}
+
+$('#soft-mention').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('soft-mention', enabled);
+	softMention = enabled;
 }
 
 // User list
