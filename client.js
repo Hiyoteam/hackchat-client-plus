@@ -523,7 +523,9 @@ function reply(args) {//from crosst.chat
 			// Add mention when reply to others
 			if (args.nick != myNick.split('#')[0]) {
 				var nick = args.nick
-				replyText += '@' + (softMention&&' ') + nick + ' ';
+				let at = '@'
+				if (softMention) {at += ' '}
+				replyText += at + nick + ' ';
 			}
 
 			// Insert reply text
@@ -599,7 +601,9 @@ function pushMessage(args) {
 			} else if (args.nick == myNick.split('#')[0]) {
 				reply(args)
 			} else {
-				insertAtCursor('@' + (softMention&&' ') + nick + ' ');
+				let at = '@'
+				if (softMention) {at += ' '}
+				insertAtCursor(at + nick + ' ');
 				$('#chatinput').focus();
 				return;
 			}
