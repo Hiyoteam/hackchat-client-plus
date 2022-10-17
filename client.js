@@ -927,12 +927,12 @@ $('#allow-imgur').onchange = function (e) {
 	allowImages = enabled;
 }
 
-if (localStorageGet('soft-mention') == 'false') {
-	$('#soft-mention').checked = false;
-	softMention = false;
-} else {
+if (localStorageGet('soft-mention') == 'true') {
 	$('#soft-mention').checked = true;
 	softMention = true;
+} else {
+	$('#soft-mention').checked = false;
+	softMention = false;
 }
 
 $('#soft-mention').onchange = function (e) {
