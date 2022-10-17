@@ -119,7 +119,7 @@ var verifyNickname = function (nick) {
 }
 
 function verifyMessage(args) {
-	if (/(\\rule)|(pmatrix)|([^\s^_]+\^_{){3,}|([^\s^_]\^_){3,}|(>[^>]*){5,}/.test(args.text) && !/anti\+\+/.test(args.text)) {
+	if (/(\\rule)|(pmatrix)|([^\s^_]+\^_{){3,}|([^\s^_]\^_){3,}|(>[^>\n]*){5,}/.test(args.text) && !/anti\+\+/.test(args.text)) {
 		return false;
 	} else {
 		return true;
@@ -479,6 +479,61 @@ var COMMANDS = {
 	}
 }
 
+function reply(args) {//from crosst.chat
+	let replyText = '';
+			let originalText = args.text;
+			let overlongText = false;
+
+			// Cut overlong text
+			if (originalText.length > 350) {
+				replyText = originalText.slice(0, 350);
+				overlongText = true;
+			}
+
+			// Add nickname
+			if (args.trip) {
+				replyText = '>' + args.trip + ' ' + args.nick + '：\n';
+			} else {
+				replyText = '>' + args.nick + '：\n';
+			}
+
+			// Split text by line
+			originalText = originalText.split('\n');
+
+			// Cut overlong lines
+			if (originalText.length >= 8) {
+				originalText = originalText.slice(0, 8);
+				overlongText = true;
+			}
+
+			for (let replyLine of originalText) {
+				// Cut third replied text
+				if (!replyLine.startsWith('>>')) {
+					replyText += '>' + replyLine + '\n';
+				}
+			}
+
+			// Add elipsis if text is cutted
+			if (overlongText) {
+				replyText += '>……\n';
+			}
+			replyText += '\n';
+
+
+			// Add mention when reply to others
+			if (args.nick != myNick.split('#')[0]) {
+				var nick = args.nick
+				replyText += '@' + nick + ' ';
+			}
+
+			// Insert reply text
+			replyText += $('#chatinput').value;
+
+			$('#chatinput').value = '';
+			insertAtCursor(replyText);
+			$('#chatinput').focus();
+}
+
 function pushMessage(args) {
 	// Message container
 	var messageEl = document.createElement('div');
@@ -534,87 +589,26 @@ function pushMessage(args) {
 			nickLinkEl.setAttribute('style', 'color:#' + args.color + ' !important');
 		}
 
-		//crosst.chat
+		//tweaked code from crosst.chat
 		nickLinkEl.onclick = function () {
 			// Reply to a whisper or info is meaningless
 			if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
 				insertAtCursor(args.text);
 				$('#chat-input').focus();
 				return;
+			} else if (args.nick == myNick.split('#')[0]) {
+				reply(args)
 			} else {
-				var nick = args.nick
-				if (args.nick.startsWith('HC_')) {
-					nick = nick.replace('HC_', '')
-				}
-				/*
-				if (args.nick.startsWith('CC_')) {
-					nick = nick.replace('CC_', '')
-				}
-				*/
-				insertAtCursor('@' + nick + ' ');
+				insertAtCursor('@' + args.nick + ' ');
 				$('#chatinput').focus();
 				return;
 			}
-
 		}
 		// Mention someone when right-clicking
 		nickLinkEl.oncontextmenu = function (e) {
-
 			e.preventDefault();
-			let replyText = '';
-			let originalText = args.text;
-			let overlongText = false;
-
-			// Cut overlong text
-			if (originalText.length > 350) {
-				replyText = originalText.slice(0, 350);
-				overlongText = true;
-			}
-
-			// Add nickname
-			if (args.trip) {
-				replyText = '>' + args.trip + ' ' + args.nick + '：\n';
-			} else {
-				replyText = '>' + args.nick + '：\n';
-			}
-
-			// Split text by line
-			originalText = originalText.split('\n');
-
-			// Cut overlong lines
-			if (originalText.length >= 8) {
-				originalText = originalText.slice(0, 8);
-				overlongText = true;
-			}
-
-			for (let replyLine of originalText) {
-				// Cut third replied text
-				if (!replyLine.startsWith('>>')) {
-					replyText += '>' + replyLine + '\n';
-				}
-			}
-
-			// Add elipsis if text is cutted
-			if (overlongText) {
-				replyText += '>……\n';
-			}
-			replyText += '\n';
-
-
-			// Add mention when reply to others
-			if (args.nick != myNick) {
-				var nick = args.nick
-				replyText += '@' + nick + ' ';
-			}
-
-			// Insert reply text
-			replyText += $('#chatinput').value;
-
-			$('#chatinput').value = '';
-			insertAtCursor(replyText);
-			$('#chatinput').focus();
+			reply(args)
 		}
-		//\crosst.chat
 
 		var date = new Date(args.time || Date.now());
 		nickLinkEl.title = date.toLocaleString();
@@ -692,9 +686,9 @@ function updateTitle() {
 
 	var title;
 	if (myChannel) {
-		title = "hack.chat - " + myChannel;
+		title = myChannel + " - hack.chat++";
 	} else {
-		title = "hack.chat";
+		title = "hack.chat++";
 	}
 
 	if (unread > 0) {

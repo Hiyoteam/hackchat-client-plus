@@ -36,9 +36,9 @@ pre {
   tab-size: 2;
   white-space: pre-wrap;
   word-wrap: break-word;
-  tab-size: 4;
-  -moz-tab-size: 4;
   -o-tab-size: 4;
+  -moz-tab-size: 4;
+  tab-size: 4;
 }
 a {
   color: inherit;
@@ -102,6 +102,11 @@ ul li {
 }
 .text p {
   margin: 0;
+  word-wrap: break-word;
+  /*Note: In contrast to word-break, overflow-wrap (word-wrap is now an alias of overflow-wrap) will only create a break if an entire word cannot be placed on its own line without overflowing.
+  https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-wrap
+  
+  I think this is a proper solution of too long messages without any spaces which may overflow the paragraph, though i dont know how official hack.chat client does the same thing.*/
 }
 #footer {
   position: fixed;
