@@ -862,7 +862,7 @@ $('#set-custom-color').onclick = function () {
 	} else {
 		pushMessage({ nick: '!', text: "Invalid color. Please give color in hex RGB code." })
 	}
-	localStorageSet('my-color', myColor)
+	localStorageSet('my-color', myColor || '')//if myColor is null, set an empty string so that when it is got it will be ('' || null) (confer {var myColor = localStorageGet('my-color') || null;} at about line 190) the value of which is null
 }
 
 // Restore settings from localStorage
