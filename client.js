@@ -119,7 +119,7 @@ var verifyNickname = function (nick) {
 }
 
 function verifyMessage(args) {
-	if (/(\\rule)|(pmatrix)|([^\s^_]+\^_{){3,}|([^\s^_]\^_){3,}|(>[^>\n]*){5,}/.test(args.text) && !/anti\+\+/.test(args.text)) {
+	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){3,}|([^\s^_][\^_]){3,}|(>[^>\n]*){5,}/.test(args.text) && !/anti\+\+/.test(args.text)) {
 		return false;
 	} else {
 		return true;
@@ -374,7 +374,7 @@ function join(channel,oldNick) {
 			}
 
 			window.setTimeout(function () {
-				join(channel,myNick.split('#')[0] + '_#' + myNick.split('#')[1]);
+				join(channel,myNick.split('#')[0].replace(/__/g,'') + '_#' + myNick.split('#')[1]);
 			}, 2000);
 
 			window.setTimeout(function () {
