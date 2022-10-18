@@ -17,6 +17,7 @@ Some of the current features:(* means optional features, which can be set to the
 - More picture source can be rendered (SM-MS and postimages and 路过图床 and so on.)
 - No iPhone scaling issue (When an iPhone user clicks on the input field, the website won't be scaled.)
 - *Soft mention (When you mention somebody with an @ by clicking his or her nickname, the client can add a space between the @ and the nickname so that he or she won't be notified.)
+- *Message log (If you choose to record messages, when the websocket connection receives a message, the json data will recorded in a string and when the client shows a message to you, the text will be recorded in a more readable format in a string. You can copy the string to the clipboard. However, if you close the tab, this log will no longer exist.)
 
 ---
 

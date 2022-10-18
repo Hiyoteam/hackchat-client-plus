@@ -186,6 +186,10 @@ var myChannel = window.location.search.replace(/^\?/, '');
 var lastSent = [""];
 var lastSentPos = 0;
 
+//message log
+var jsonLog = '';
+var readableLog = '';
+
 /** Notification switch and local storage behavior **/
 var notifySwitch = document.getElementById("notify-switch")
 var notifySetting = localStorageGet("notify-api")
@@ -389,6 +393,7 @@ function join(channel,oldNick) {
 		if (command) {
 			command.call(null, args);
 		}
+		if (doLogMessages) {jsonLog += ';'+message.data}
 	}
 }
 
@@ -639,6 +644,16 @@ function pushMessage(args) {
 
 	unread += 1;
 	updateTitle();
+
+	if (doLogMessages) {
+		let trip = args.trip||'' 
+		readableLog += `\n[${date.toLocaleString()}] `
+		if (args.mod) {readableLog += '(mod) '}
+		if (args.color) {readableLog += '(color:'+args.color+') '}
+		readableLog += args.nick
+		if (args.trip) {readableLog += '#'+args.trip}
+		readableLog += ': ' + args.text
+	}
 }
 
 function insertAtCursor(text) {
@@ -865,6 +880,22 @@ $('#set-custom-color').onclick = function () {
 	localStorageSet('my-color', myColor || '')//if myColor is null, set an empty string so that when it is got it will be ('' || null) (confer {var myColor = localStorageGet('my-color') || null;} at about line 190) the value of which is null
 }
 
+$('#export-json').onclick = function () {
+	navigator.clipboard.writeText(jsonLog).then(function() {
+		pushMessage({ nick: '*', text: "JSON log successfully copied to clipboard. Please save it in case it may be lost." })
+	  }, function() {
+		pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
+	  });
+}
+
+$('#export-readable').onclick = function () {
+	navigator.clipboard.writeText(readableLog).then(function() {
+		pushMessage({ nick: '*', text: "Normal log successfully copied to clipboard. Please save it in case it may be lost." })
+	  }, function() {
+		pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
+	  });
+}
+
 // Restore settings from localStorage
 
 if (localStorageGet('pin-sidebar') == 'true') {
@@ -939,6 +970,29 @@ $('#soft-mention').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('soft-mention', enabled);
 	softMention = enabled;
+}
+
+if (localStorageGet('message-log') == 'true') {
+	$('#message-log').checked = true;
+	doLogMessages = true;
+} else {
+	$('#message-log').checked = false;
+	doLogMessages = false;
+}
+logOnOff()
+
+$('#message-log').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('message-log', enabled);
+	doLogMessages = enabled;
+	logOnOff()
+}
+
+function logOnOff() {
+	let a;
+	if (doLogMessages) {a='[log enabled]'} else {a='[log disabled]'}
+	jsonLog += a;
+	readableLog += '\n' + a;
 }
 
 // User list
