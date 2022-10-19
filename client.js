@@ -119,7 +119,7 @@ var verifyNickname = function (nick) {
 }
 
 function verifyMessage(args) {
-	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){3,}|([^\s^_][\^_]){3,}|(>[^>\n]*){5,}/.test(args.text) && !/anti\+\+/.test(args.text)) {
+	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){3,}|(>[^>\n]*){5,}/.test(args.text)) {
 		return false;
 	} else {
 		return true;
