@@ -108,6 +108,22 @@ ul li {
   
   I think this is a proper solution of too long messages without any spaces which may overflow the paragraph, though i dont know how official hack.chat client does the same thing.*/
 }
+.colorful {
+  background: linear-gradient(to right, #6600cc, #9900ff, #9900cc, #660066, #9900cc, #9900ff, #6600cc);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: rainbow_animation 6s ease-in-out infinite;
+  background-size: 400% 100%;
+}
+@keyframes rainbow_animation {
+  0%,100% {
+      background-position: 0 0;
+  }
+  50% {
+      background-position: 100% 0;
+  }
+}
 #footer {
   position: fixed;
   bottom: 0;
