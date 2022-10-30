@@ -380,7 +380,7 @@ function join(channel,oldNick) {
 			window.setTimeout(function () {
 				if (!wasConnected) {
 					shouldAutoReconnect = false;
-					pushMessage({ nick: '!', text: "Failed to reconnect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." })
+					pushMessage({ nick: '!', text: "Failed to connect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." })
 				}
 			}, 2000);
 		}
