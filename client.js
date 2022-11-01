@@ -1122,7 +1122,7 @@ function setScheme(scheme) {
 
 function setHighlight(scheme) {
 	currentHighlight = scheme;
-	$('#highlight-link').href = "vendor/hljs/styles/" + scheme + ".css";
+	$('#highlight-link').href = "vendor/hljs/styles/" + scheme + ".min.css";
 	localStorageSet('highlight', scheme);
 }
 
