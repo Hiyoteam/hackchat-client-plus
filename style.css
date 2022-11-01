@@ -108,6 +108,13 @@ ul li {
   
   I think this is a proper solution of too long messages without any spaces which may overflow the paragraph, though i dont know how official hack.chat client does the same thing.*/
 }
+
+pre.captcha {
+    line-height: 1;
+    width: max-content;
+    font-size: small;
+}
+
 .colorful {
   background: linear-gradient(to right, #6600cc, #9900ff, #9900cc, #660066, #9900cc, #9900ff, #6600cc);
   -webkit-background-clip: text;

@@ -472,8 +472,8 @@ var COMMANDS = {
 		nickSpanEl.appendChild(nickLinkEl);
 
 		var textEl = document.createElement('pre');
-		textEl.style.fontSize = '4px';
 		textEl.classList.add('text');
+		textEl.classList.add('captcha');
 		textEl.innerHTML = args.text;
 
 		messageEl.appendChild(textEl);
@@ -565,7 +565,7 @@ function pushMessage(args) {
 		messageEl.classList.add('admin');
 	} else if (args.mod) {
 		messageEl.classList.add('mod');
-	}
+	} 
 
 	// Nickname
 	var nickSpanEl = document.createElement('span');
