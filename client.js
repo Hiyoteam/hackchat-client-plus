@@ -645,8 +645,7 @@ function pushMessage(args) {
 	unread += 1;
 	updateTitle();
 
-	if (doLogMessages) {
-		let trip = args.trip||'' 
+	if (doLogMessages && args.nick && args.text) {
 		readableLog += `\n[${date.toLocaleString()}] `
 		if (args.mod) {readableLog += '(mod) '}
 		if (args.color) {readableLog += '(color:'+args.color+') '}
