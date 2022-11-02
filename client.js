@@ -328,7 +328,7 @@ var wasConnected = false;
 
 var shouldAutoReconnect = true;
 
-function join(channel,oldNick) {
+function join(channel, oldNick) {
 	ws = new WebSocket('wss://hack.chat/chat-ws');
 
 	wasConnected = false;
@@ -339,7 +339,7 @@ function join(channel,oldNick) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
 			} else if (typeof oldNick == 'string') {
-				if (verifyNickname(oldNick.split('#')[0])){
+				if (verifyNickname(oldNick.split('#')[0])) {
 					myNick = oldNick;
 				}
 			} else {
@@ -363,11 +363,11 @@ function join(channel,oldNick) {
 		} else {
 			ws.close()
 		}
-		
+
 	}
 
 	ws.onclose = function () {
-		if (shouldAutoReconnect){
+		if (shouldAutoReconnect) {
 			if (wasConnected) {
 				wasConnected = false;
 				pushMessage({ nick: '!', text: "Server disconnected. Attempting to reconnect. . ." });
@@ -375,9 +375,9 @@ function join(channel,oldNick) {
 
 			window.setTimeout(function () {
 				if (myNick.split('#')[1]) {
-					join(channel,(myNick.split('#')[0]+ '_').replace(/_{3,}$/g,'') + '#' + myNick.split('#')[1]);
+					join(channel, (myNick.split('#')[0] + '_').replace(/_{3,}$/g, '') + '#' + myNick.split('#')[1]);
 				} else {
-					join(channel,(myNick + '_').replace(/_{3,}$/g,''));
+					join(channel, (myNick + '_').replace(/_{3,}$/g, ''));
 				}
 			}, 2000);
 
@@ -397,7 +397,7 @@ function join(channel,oldNick) {
 		if (command) {
 			command.call(null, args);
 		}
-		if (doLogMessages) {jsonLog += ';'+message.data}
+		if (doLogMessages) { jsonLog += ';' + message.data }
 	}
 }
 
@@ -434,7 +434,7 @@ var COMMANDS = {
 		});
 
 		pushMessage({ nick: '*', text: "Users online: " + nicks.join(", ") })
-		
+
 		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" })
 
 		if (myColor) {
@@ -489,59 +489,59 @@ var COMMANDS = {
 
 function reply(args) {//from crosst.chat
 	let replyText = '';
-			let originalText = args.text;
-			let overlongText = false;
+	let originalText = args.text;
+	let overlongText = false;
 
-			// Cut overlong text
-			if (originalText.length > 350) {
-				replyText = originalText.slice(0, 350);
-				overlongText = true;
-			}
+	// Cut overlong text
+	if (originalText.length > 350) {
+		replyText = originalText.slice(0, 350);
+		overlongText = true;
+	}
 
-			// Add nickname
-			if (args.trip) {
-				replyText = '>' + args.trip + ' ' + args.nick + '：\n';
-			} else {
-				replyText = '>' + args.nick + '：\n';
-			}
+	// Add nickname
+	if (args.trip) {
+		replyText = '>' + args.trip + ' ' + args.nick + '：\n';
+	} else {
+		replyText = '>' + args.nick + '：\n';
+	}
 
-			// Split text by line
-			originalText = originalText.split('\n');
+	// Split text by line
+	originalText = originalText.split('\n');
 
-			// Cut overlong lines
-			if (originalText.length >= 8) {
-				originalText = originalText.slice(0, 8);
-				overlongText = true;
-			}
+	// Cut overlong lines
+	if (originalText.length >= 8) {
+		originalText = originalText.slice(0, 8);
+		overlongText = true;
+	}
 
-			for (let replyLine of originalText) {
-				// Cut third replied text
-				if (!replyLine.startsWith('>>')) {
-					replyText += '>' + replyLine + '\n';
-				}
-			}
+	for (let replyLine of originalText) {
+		// Cut third replied text
+		if (!replyLine.startsWith('>>')) {
+			replyText += '>' + replyLine + '\n';
+		}
+	}
 
-			// Add elipsis if text is cutted
-			if (overlongText) {
-				replyText += '>……\n';
-			}
-			replyText += '\n';
+	// Add elipsis if text is cutted
+	if (overlongText) {
+		replyText += '>……\n';
+	}
+	replyText += '\n';
 
 
-			// Add mention when reply to others
-			if (args.nick != myNick.split('#')[0]) {
-				var nick = args.nick
-				let at = '@'
-				if (softMention) {at += ' '}
-				replyText += at + nick + ' ';
-			}
+	// Add mention when reply to others
+	if (args.nick != myNick.split('#')[0]) {
+		var nick = args.nick
+		let at = '@'
+		if (softMention) { at += ' ' }
+		replyText += at + nick + ' ';
+	}
 
-			// Insert reply text
-			replyText += $('#chatinput').value;
+	// Insert reply text
+	replyText += $('#chatinput').value;
 
-			$('#chatinput').value = '';
-			insertAtCursor(replyText);
-			$('#chatinput').focus();
+	$('#chatinput').value = '';
+	insertAtCursor(replyText);
+	$('#chatinput').focus();
 }
 
 function pushMessage(args) {
@@ -569,7 +569,7 @@ function pushMessage(args) {
 		messageEl.classList.add('admin');
 	} else if (args.mod) {
 		messageEl.classList.add('mod');
-	} 
+	}
 
 	// Nickname
 	var nickSpanEl = document.createElement('span');
@@ -611,7 +611,7 @@ function pushMessage(args) {
 			} else {
 				var nick = args.nick
 				let at = '@'
-				if (softMention) {at += ' '}
+				if (softMention) { at += ' ' }
 				insertAtCursor(at + nick + ' ');
 				$('#chatinput').focus();
 				return;
@@ -651,10 +651,10 @@ function pushMessage(args) {
 
 	if (doLogMessages && args.nick && args.text) {
 		readableLog += `\n[${date.toLocaleString()}] `
-		if (args.mod) {readableLog += '(mod) '}
-		if (args.color) {readableLog += '(color:'+args.color+') '}
+		if (args.mod) { readableLog += '(mod) ' }
+		if (args.color) { readableLog += '(color:' + args.color + ') ' }
 		readableLog += args.nick
-		if (args.trip) {readableLog += '#'+args.trip}
+		if (args.trip) { readableLog += '#' + args.trip }
 		readableLog += ': ' + args.text
 	}
 }
@@ -868,11 +868,11 @@ $('#clear-messages').onclick = function () {
 $('#set-custom-color').onclick = function () {
 	// Set auto changecolor
 	let color = prompt('Your nickname color:(press enter without inputing to reset)')
-	if (color == null){
+	if (color == null) {
 		return;
 	}
 	if (/(#?)((^[0-9A-F]{6}$)|(^[0-9A-F]{3}$))/i.test(color)) {
-		myColor = color.replace(/#/,'');
+		myColor = color.replace(/#/, '');
 		pushMessage({ nick: '*', text: `Suessfully set your auto nickname color to #${myColor}. Rejoin or join a Channel to make it go into effect.` })
 	} else if (color == '') {
 		myColor = null;
@@ -884,19 +884,19 @@ $('#set-custom-color').onclick = function () {
 }
 
 $('#export-json').onclick = function () {
-	navigator.clipboard.writeText(jsonLog).then(function() {
+	navigator.clipboard.writeText(jsonLog).then(function () {
 		pushMessage({ nick: '*', text: "JSON log successfully copied to clipboard. Please save it in case it may be lost." })
-	  }, function() {
+	}, function () {
 		pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
-	  });
+	});
 }
 
 $('#export-readable').onclick = function () {
-	navigator.clipboard.writeText(readableLog).then(function() {
+	navigator.clipboard.writeText(readableLog).then(function () {
 		pushMessage({ nick: '*', text: "Normal log successfully copied to clipboard. Please save it in case it may be lost." })
-	  }, function() {
+	}, function () {
 		pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
-	  });
+	});
 }
 
 // Restore settings from localStorage
@@ -993,7 +993,7 @@ $('#message-log').onchange = function (e) {
 
 function logOnOff() {
 	let a;
-	if (doLogMessages) {a='[log enabled]'} else {a='[log disabled]'}
+	if (doLogMessages) { a = '[log enabled]' } else { a = '[log disabled]' }
 	jsonLog += a;
 	readableLog += '\n' + a;
 }
