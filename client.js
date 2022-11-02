@@ -374,7 +374,11 @@ function join(channel,oldNick) {
 			}
 
 			window.setTimeout(function () {
-				join(channel,(myNick.split('#')[0]+ '_').replace(/_{3,}$/g,'') + '#' + myNick.split('#')[1]);
+				if (myNick.split('#')[1]) {
+					join(channel,(myNick.split('#')[0]+ '_').replace(/_{3,}$/g,'') + '#' + myNick.split('#')[1]);
+				} else {
+					join(channel,(myNick + '_').replace(/_{3,}$/g,''));
+				}
 			}, 2000);
 
 			window.setTimeout(function () {
