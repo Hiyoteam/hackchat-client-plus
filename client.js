@@ -118,6 +118,7 @@ var verifyNickname = function (nick) {
 	return /^[a-zA-Z0-9_]{1,24}$/.test(nick);
 }
 
+//LaTeX weapon and too-much-quote weapon defense
 function verifyMessage(args) {
 	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){3,}|(>[^>\n]*){5,}/.test(args.text)) {
 		return false;
@@ -181,7 +182,7 @@ function localStorageSet(key, val) {
 
 var ws;
 var myNick = localStorageGet('my-nick') || '';
-var myColor = localStorageGet('my-color') || null;
+var myColor = localStorageGet('my-color') || null;//hex color value for autocolor
 var myChannel = window.location.search.replace(/^\?/, '');
 var lastSent = [""];
 var lastSentPos = 0;
@@ -477,7 +478,7 @@ var COMMANDS = {
 
 		var textEl = document.createElement('pre');
 		textEl.classList.add('text');
-		textEl.classList.add('captcha');
+		textEl.classList.add('captcha');//css optimization for captcha
 		textEl.innerHTML = args.text;
 
 		messageEl.appendChild(textEl);
@@ -1004,7 +1005,7 @@ var ignoredUsers = [];
 
 function userAdd(nick) {
 	if (nick.length >= 25) {
-		for (var i = 5; i > 3; i = i + 1) { console.log(i); }
+		pushMessage({ nick: '!', text: "A USER WHOSE NICKNAME HAS MORE THAN 24 CHARACTERS HAS JOINED. THIS INFINITE LOOP SCRIPT WHICH MAY CRASH YOUR BROWSER WOULD BE RUN IN OFFICIAL CLIENT:\n ```Javascript\nfor (var i = 5; i > 3; i = i + 1) { console.log(i); }\n```" })
 	}
 
 	var user = document.createElement('a');
