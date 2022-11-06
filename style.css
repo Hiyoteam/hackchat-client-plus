@@ -100,8 +100,10 @@ ul li {
   margin: 0;
   margin-left: 1em;
 }
-.text * {
+.text p {
   margin: 0;
+}
+.message .text {
   overflow-wrap: break-word;
   /*Note: In contrast to word-break, overflow-wrap (word-wrap is now an alias of overflow-wrap) will only create a break if an entire word cannot be placed on its own line without overflowing.
   https://developer.mozilla.org/en-US/docs/Web/CSS/overflow-wrap
