@@ -961,11 +961,23 @@ $('#special-cmd').onclick = function () {
 				}, function () {
 					pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
 				});
+			},
+		reload:
+			function (...args) {
+				if (args.length != 0) {
+					pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 is needed.` })
+					return
+				}
+				location.reload()
+			},
+		test:
+			function (...args){ 
+				pushMessage({ nick: '!', text: `${args.length} arguments ${args}` })
 			}
 	}
-	cmdArray = cmdText.split(/\b/)
+	cmdArray = cmdText.split(' ')
 	if (run[cmdArray[0]]) {
-		run[cmdArray[0]](cmdArray.slice(1))
+		run[cmdArray[0]](...cmdArray.slice(1))
 	} else {
 		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
 	}
