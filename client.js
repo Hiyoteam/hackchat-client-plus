@@ -1146,7 +1146,7 @@ $('#slash').onclick = function () {
 }
 
 $('#sent-pre').onclick = function () {
-	if ($('#chatinput').selectionStart === 0 && lastSentPos < lastSent.length - 1) {
+	if (lastSentPos < lastSent.length - 1) {
 		if (lastSentPos == 0) {
 			lastSent[0] = $('#chatinput').value;
 		}
@@ -1160,7 +1160,7 @@ $('#sent-pre').onclick = function () {
 }
 
 $('#sent-next').onclick = function () {
-	if ($('#chatinput').selectionStart === $('#chatinput').value.length && lastSentPos > 0) {
+	if (lastSentPos > 0) {
 		lastSentPos -= 1;
 		$('#chatinput').value = lastSent[lastSentPos];
 		$('#chatinput').selectionStart = $('#chatinput').selectionEnd = 0;
