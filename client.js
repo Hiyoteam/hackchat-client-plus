@@ -726,6 +726,11 @@ function isAtBottom() {
 }
 
 function updateTitle() {
+	if (myChannel == '') {
+		unread = 0;
+		return;
+	}
+
 	if (windowActive && isAtBottom()) {
 		unread = 0;
 	}
