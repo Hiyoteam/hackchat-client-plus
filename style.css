@@ -133,12 +133,24 @@ pre.captcha {
       background-position: 100% 0;
   }
 }
+
+button#send {
+  width: max-content;
+  height: 100%;
+}
+
+button#sent-pre,button#sent-next {
+  width:auto;
+  margin: 0%;
+}
+
 #footer {
   position: fixed;
   bottom: 0;
   width: 100%;
 }
 #chatform {
+  width: 100%;
   border-top: 1px solid;
 }
 #chatinput {

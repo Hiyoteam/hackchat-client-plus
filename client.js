@@ -7,6 +7,17 @@
  *
 */
 
+//https://github.com/hack-chat/main/pull/184
+//select "chatinput" on "/"
+document.addEventListener("keydown", e => {
+	if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
+		e.preventDefault();
+		document.getElementById("chatinput").focus();
+	}
+});
+
+/* ---Markdown--- */
+
 // initialize markdown engine
 var markdownOptions = {
 	html: false,
@@ -105,6 +116,8 @@ md.renderer.rules.text = function (tokens, idx) {
 
 md.use(remarkableKatex);
 
+/* ---Some functions and texts to be used later--- */
+
 function verifyLink(link) {
 	var linkHref = Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(link.href));
 	if (linkHref !== link.innerHTML) {
@@ -180,6 +193,8 @@ function localStorageSet(key, val) {
 	} catch (e) { }
 }
 
+/* ---Some variables to be used--- */
+
 var ws;
 var myNick = localStorageGet('my-nick') || '';
 var myColor = localStorageGet('my-color') || null;//hex color value for autocolor
@@ -190,6 +205,8 @@ var lastSentPos = 0;
 //message log
 var jsonLog = '';
 var readableLog = '';
+
+/* ---Notification--- */
 
 /** Notification switch and local storage behavior **/
 var notifySwitch = document.getElementById("notify-switch")
@@ -324,6 +341,8 @@ function notify(args) {
 		}
 	}
 }
+
+/* ---Websocket stuffs--- */
 
 var wasConnected = false;
 
@@ -681,6 +700,8 @@ function send(data) {
 	}
 }
 
+/* ---Window and input field and sidebar stuffs--- */
+
 var windowActive = true;
 var unread = 0;
 
@@ -862,6 +883,8 @@ $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
 	}
 }
 
+/* ---Sidebar buttons--- */
+
 $('#clear-messages').onclick = function () {
 	// Delete children elements
 	var messages = $('#messages');
@@ -903,7 +926,7 @@ $('#export-readable').onclick = function () {
 }
 
 $('#special-cmd').onclick = function () {
-	let cmdText = prompt('Input command: (This is for the developer\'s friend to access some special experimental functions.)');
+	let cmdText = prompt('Input command:(This is for the developer\'s friend to access some special experimental functions.)');
 	if (!cmdText) {
 		return;
 	}
@@ -937,6 +960,8 @@ $('#special-cmd').onclick = function () {
 		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
 	}
 }
+
+/* ---Sidebar settings--- */
 
 // Restore settings from localStorage
 
@@ -1037,6 +1062,115 @@ function logOnOff() {
 	readableLog += '\n' + a;
 }
 
+if (localStorageGet('mobile-btn') == 'true') {
+	$('#mobile-btn').checked = true;
+} else {
+	$('#mobile-btn').checked = false;
+	$('#mobile-btns').classList.add('hidden');
+	$('#more-mobile-btns').classList.add('hidden');
+}
+
+$('#mobile-btn').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('mobile-btn', enabled);
+	if (enabled) {
+		$('#mobile-btns').classList.remove('hidden');
+		$('#more-mobile-btns').classList.remove('hidden');
+	} else {
+		$('#mobile-btns').classList.add('hidden');
+		$('#more-mobile-btns').classList.add('hidden');
+	}
+}
+
+/* ---Buttons for some mobile users--- */
+
+$('#tab').onclick = function () {
+	var pos = $('#chatinput').selectionStart || 0;
+	var text = $('#chatinput').value;
+	var index = text.lastIndexOf('@', pos);
+
+	var autocompletedNick = false;
+
+	if (index >= 0) {
+		var stub = text.substring(index + 1, pos).toLowerCase();
+		// Search for nick beginning with stub
+		var nicks = onlineUsers.filter(function (nick) {
+			return nick.toLowerCase().indexOf(stub) == 0
+		});
+
+		if (nicks.length > 0) {
+			autocompletedNick = true;
+			if (nicks.length == 1) {
+				insertAtCursor(nicks[0].substr(stub.length) + " ");
+			}
+		}
+	}
+
+	// Since we did not insert a nick, we insert a tab character
+	if (!autocompletedNick) {
+		insertAtCursor('\t');
+	}
+}
+
+$('#at').onclick = function () {
+	insertAtCursor('@')
+}
+
+$('#slash').onclick = function () {
+	insertAtCursor('/')
+}
+
+$('#sent-pre').onclick = function () {
+	if ($('#chatinput').selectionStart === 0 && lastSentPos < lastSent.length - 1) {
+		if (lastSentPos == 0) {
+			lastSent[0] = $('#chatinput').value;
+		}
+
+		lastSentPos += 1;
+		$('#chatinput').value = lastSent[lastSentPos];
+		$('#chatinput').selectionStart = $('#chatinput').selectionEnd = $('#chatinput').value.length;
+
+		updateInputSize();
+	}
+}
+
+$('#sent-next').onclick = function () {
+	if ($('#chatinput').selectionStart === $('#chatinput').value.length && lastSentPos > 0) {
+		lastSentPos -= 1;
+		$('#chatinput').value = lastSent[lastSentPos];
+		$('#chatinput').selectionStart = $('#chatinput').selectionEnd = 0;
+
+		updateInputSize();
+	}
+}
+
+$('#send').onclick = function () {
+	if (!wasConnected) {
+		pushMessage({ nick: '*', text: "Attempting to reconnect. . ." })
+		join(myChannel);
+	}
+
+	// Submit message
+	if ($('#chatinput').value != '') {
+		var text = $('#chatinput').value;
+		$('#chatinput').value = '';
+
+		send({ cmd: 'chat', text: text });
+
+		lastSent[0] = text;
+		lastSent.unshift("");
+		lastSentPos = 0;
+
+		updateInputSize();
+	}
+}
+
+$('#feed').onclick = function () {
+	insertAtCursor('\n')
+}
+
+/* ---Sidebar user list--- */
+
 // User list
 var onlineUsers = [];
 var ignoredUsers = [];
@@ -1101,6 +1235,8 @@ function userInvite(nick) {
 function userIgnore(nick) {
 	ignoredUsers.push(nick);
 }
+
+/* ---Sidebar switchers--- */
 
 /* color scheme switcher */
 
@@ -1204,6 +1340,8 @@ if (localStorageGet('highlight')) {
 
 $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
+
+/* ---To begin working--- */
 
 /* main */
 
