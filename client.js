@@ -635,7 +635,9 @@ function pushMessage(args) {
 	if (verifyMessage(args)) {
 		textEl.innerHTML = md.render(args.text);
 	} else {
-		textEl.appendChild(document.createTextNode(args.text))
+		pEl = document.createElement('p')
+		pEl.appendChild(document.createTextNode(args.text))
+		textEl.appendChild(pEl)
 		console.log('norender to dangerous message:', args)
 	}
 	messageEl.appendChild(textEl);
