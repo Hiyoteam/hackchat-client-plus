@@ -645,7 +645,7 @@ function pushMessage(args) {
 	// Scroll to bottom
 	var atBottom = isAtBottom();
 	$('#messages').appendChild(messageEl);
-	if (atBottom) {
+	if (atBottom && myChannel != ''/*Frontpage should not be scrooled*/) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
@@ -900,6 +900,42 @@ $('#export-readable').onclick = function () {
 	}, function () {
 		pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
 	});
+}
+
+$('#special-cmd').onclick = function () {
+	let cmdText = prompt('Input command: (This is for the developer\'s friend to access some special experimental functions.)');
+	if (!cmdText) {
+		return;
+	}
+	let run = {
+		copy:/*copy the x-th last message*/
+			function (...args) {
+				if (args == []) {
+					args = ['0']
+				}
+				if (args.length != 1) {
+					pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 or 1 is needed.` })
+					return
+				}
+				let logList = readableLog.split('\n')
+				if (logList.length <= args[0]) {
+					pushMessage({ nick: '!', text: `No enough logs.` })
+					return
+				}
+				let logItem = logList[logList.length - args[0] - 1]
+				navigator.clipboard.writeText(logItem).then(function () {
+					pushMessage({ nick: '*', text: "Copied: " + logItem })
+				}, function () {
+					pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
+				});
+			}
+	}
+	cmdArray = cmdText.split(/\b/)
+	if (run[cmdArray[0]]) {
+		run[cmdArray[0]](cmdArray.slice(1))
+	} else {
+		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
+	}
 }
 
 // Restore settings from localStorage
@@ -1174,7 +1210,12 @@ $('#highlight-selector').value = currentHighlight;
 if (myChannel == '') {
 	pushMessage({ text: frontpage });
 	$('#footer').classList.add('hidden');
-	//$('#sidebar').classList.add('hidden');
+	/*$('#sidebar').classList.add('hidden');*/
+	/*I want to be able to change the settings without entering a channel*/
+	$('#clear-messages').classList.add('hidden');
+	$('#export-json').classList.add('hidden');
+	$('#export-readable').classList.add('hidden');
+	$('#users-div').classList.add('hidden');
 } else {
 	join(myChannel);
 }
