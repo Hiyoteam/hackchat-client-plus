@@ -918,7 +918,7 @@ $('#special-cmd').onclick = function () {
 					return
 				}
 				let logList = readableLog.split('\n')
-				if (logList.length <= args[0]) {
+				if (logList.length <= args[0] || !doLogMessages) {
 					pushMessage({ nick: '!', text: `No enough logs.` })
 					return
 				}
