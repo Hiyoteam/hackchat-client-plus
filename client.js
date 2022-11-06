@@ -467,8 +467,15 @@ var COMMANDS = {
 
 		userAdd(nick);
 
+		payLoad = { nick: '*', text: nick + " joined" }
+
+		//onlineAdd can contain trip but onlineRemove doesnt contain trip
+		if (args.trip) {
+			payLoad.trip = args.trip
+		}
+
 		if ($('#joined-left').checked) {
-			pushMessage({ nick: '*', text: nick + " joined" });
+			pushMessage(payLoad);
 		}
 	},
 
@@ -998,7 +1005,7 @@ function coderMode() {
 		btn = document.createElement('button')
 		btn.type = 'button'
 		btn.classList.add('char')
-		btn.appendChild(document.createTextNode(char))
+		btn.textContent = char
 		btn.onclick = function () {
 			insertAtCursor(btn.innerHTML)
 		}
