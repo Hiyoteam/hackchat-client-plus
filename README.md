@@ -21,6 +21,7 @@ Some of the current features:(* means optional features, which can be set to the
 - *Message log (If you choose to record messages, when the websocket connection receives a message, the json data will recorded in a string and when the client shows a message to you, the text will be recorded in a more readable format in a string. You can copy the string to the clipboard. However, if you close the tab, this log will no longer exist.)
 - Defend an unknown overflow function (If a moderator tries to crash your browser by sending a join message of a nickname more than 24 characters in length, which is probably a command called `overflow`, it won't work on this client.)
 - Captcha rendering optimization (Makes the captcha a bit easier to read.)
+- Mobile buttons (Mobile users can use ↑, ↓, Tab, and can quickly input @, *, /, #. And a send button is added for users who find enter working as a line feed. A button to close the sidebar is added as well.)
 
 ---
 
@@ -31,3 +32,12 @@ Some of the current features:(* means optional features, which can be set to the
 
 BY USING THIS TOOL, YOU AGREE TO THE FOLLOWING DISCLAIMER.
 The disclaimer shall prevail in Chinese. The functions of this tool are all derived from the interface of the hack-chat server. The functions of this tool can also be implemented by other hack-chat clients. This tool does not have any special operating principle. Any remarks published or read using this tool or any derivative products of this tool are essentially published or read through the hack-chat server, and can also be published or read by using other clients, which has nothing to do with the author of this tool. Any remarks published or read using this tool or any derivative of this tool do not represent the views of the author of this tool and have nothing to do with the author of this tool.
+
+TODO:
+
+- better userlist
+- better button switcher
+- better close sidebar button
+- better whisper
+- whisper mode
+- mode of no picture whitelist
