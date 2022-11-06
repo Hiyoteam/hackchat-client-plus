@@ -970,6 +970,16 @@ $('#special-cmd').onclick = function () {
 				}
 				location.reload()
 			},
+		coderMode:
+			function (...args) {
+				if (!localStorageGet('coder-mode') || localStorageGet('coder-mode') != 'true') {
+					coderMode()
+					localStorageSet('coder-mode',true)
+				} else {
+					localStorageSet('coder-mode',false)
+					pushMessage({ nick: '*', text: `Refresh to hide coder buttons.` })
+				}
+			},
 		test:
 			function (...args){ 
 				pushMessage({ nick: '!', text: `${args.length} arguments ${args}` })
@@ -981,6 +991,23 @@ $('#special-cmd').onclick = function () {
 	} else {
 		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
 	}
+}
+
+function coderMode() {
+	for (char of ['(',')','"']) {
+		btn = document.createElement('button')
+		btn.type = 'button'
+		btn.classList.add('char')
+		btn.appendChild(document.createTextNode(char))
+		btn.onclick = function () {
+			insertAtCursor(btn.innerHTML)
+		}
+		$('#more-mobile-btns').appendChild(btn)
+	}
+}
+
+if (localStorageGet('coder-mode') == 'true') {
+	coderMode()
 }
 
 /* ---Sidebar settings--- */
@@ -1137,13 +1164,11 @@ $('#tab').onclick = function () {
 	}
 }
 
-$('#at').onclick = function () {
-	insertAtCursor('@')
-}
-
-$('#slash').onclick = function () {
-	insertAtCursor('/')
-}
+document.querySelectorAll('button.char').forEach(function (el) {
+	el.onclick = function () {
+		insertAtCursor(el.innerHTML)
+	}
+})
 
 $('#sent-pre').onclick = function () {
 	if (lastSentPos < lastSent.length - 1) {

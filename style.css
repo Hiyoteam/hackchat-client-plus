@@ -144,6 +144,10 @@ button#sent-pre,button#sent-next {
   margin: 0%;
 }
 
+button.char {
+  float: left;
+}
+
 #footer {
   position: fixed;
   bottom: 0;
