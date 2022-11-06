@@ -864,8 +864,6 @@ $('#chatinput').oninput = function () {
 	updateInputSize();
 }
 
-updateInputSize();
-
 /* sidebar */
 
 $('#sidebar').onmouseenter = $('#sidebar').ontouchstart = function (e) {
@@ -874,7 +872,7 @@ $('#sidebar').onmouseenter = $('#sidebar').ontouchstart = function (e) {
 	e.stopPropagation();
 }
 
-$('#sidebar').onmouseleave = document.ontouchstart = function (event) {
+$('#sidebar-close').onclick = $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
 	var e = event.toElement || event.relatedTarget;
 	try {
 		if (e.parentNode == this || e == this) {
@@ -931,7 +929,7 @@ $('#export-readable').onclick = function () {
 }
 
 $('#special-cmd').onclick = function () {
-	let cmdText = prompt('Input command:(This is for the developer\'s friend to access some special experimental functions.)');
+	let cmdText = prompt('Input command:(This is for the developer\'s friends to access some special experimental functions.)');
 	if (!cmdText) {
 		return;
 	}
@@ -1075,6 +1073,8 @@ if (localStorageGet('mobile-btn') == 'true') {
 	$('#more-mobile-btns').classList.add('hidden');
 }
 
+updateInputSize();
+
 $('#mobile-btn').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('mobile-btn', enabled);
@@ -1085,6 +1085,7 @@ $('#mobile-btn').onchange = function (e) {
 		$('#mobile-btns').classList.add('hidden');
 		$('#more-mobile-btns').classList.add('hidden');
 	}
+	updateInputSize();
 }
 
 /* ---Buttons for some mobile users--- */
