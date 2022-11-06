@@ -872,7 +872,7 @@ $('#sidebar').onmouseenter = $('#sidebar').ontouchstart = function (e) {
 	e.stopPropagation();
 }
 
-$('#sidebar-close').onclick = $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
+$('#sidebar').onmouseleave = document.ontouchstart = function (event) {
 	var e = event.toElement || event.relatedTarget;
 	try {
 		if (e.parentNode == this || e == this) {
@@ -880,6 +880,13 @@ $('#sidebar-close').onclick = $('#sidebar').onmouseleave = document.ontouchstart
 		}
 	} catch (e) { return; }
 
+	if (!$('#pin-sidebar').checked) {
+		$('#sidebar-content').classList.add('hidden');
+		$('#sidebar').classList.remove('expand');
+	}
+}
+
+$('#sidebar-close').onclick = function () {
 	if (!$('#pin-sidebar').checked) {
 		$('#sidebar-content').classList.add('hidden');
 		$('#sidebar').classList.remove('expand');
