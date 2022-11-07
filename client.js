@@ -445,15 +445,16 @@ var COMMANDS = {
 	},
 
 	onlineSet: function (args) {
-		var nicks = args.nicks;
+		let users = args.users;
+		let nicks = args.nicks;
 
 		usersClear();
 
-		nicks.forEach(function (nick) {
-			userAdd(nick);
+		users.forEach(function (user) {
+			userAdd(user.nick,user.trip);
 		});
 
-		pushMessage({ nick: '*', text: "Users online: " + nicks.join(", ") })
+		pushMessage({ nick: '*', text: "Users online: " + nicks.join(", ").replace(/_/g,'\_') })
 
 		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" })
 
@@ -465,7 +466,7 @@ var COMMANDS = {
 	onlineAdd: function (args) {
 		var nick = args.nick;
 
-		userAdd(nick);
+		userAdd(nick,args.trip);
 
 		payLoad = { nick: '*', text: nick + " joined" }
 
@@ -1232,7 +1233,7 @@ $('#feed').onclick = function () {
 var onlineUsers = [];
 var ignoredUsers = [];
 
-function userAdd(nick) {
+function userAdd(nick,trip) {
 	if (nick.length >= 25) {
 		pushMessage({ nick: '!', text: "A USER WHOSE NICKNAME HAS MORE THAN 24 CHARACTERS HAS JOINED. THIS INFINITE LOOP SCRIPT WHICH MAY CRASH YOUR BROWSER WOULD BE RUN IN OFFICIAL CLIENT:\n ```Javascript\nfor (var i = 5; i > 3; i = i + 1) { console.log(i); }\n```" })
 		pushMessage({ nick: '!', text: "This is probably caused by a moderator using the `overflow` command on you. Maybe that command is one supposed to crash the browser of the target user..." })
@@ -1247,6 +1248,14 @@ function userAdd(nick) {
 
 	var userLi = document.createElement('li');
 	userLi.appendChild(user);
+
+	if (trip) {
+		let tripEl = document.createElement('span')
+		tripEl.textContent = ' ' + trip
+		tripEl.classList.add('trip')
+		userLi.appendChild(tripEl)
+	}
+
 	$('#users').appendChild(userLi);
 	onlineUsers.push(nick);
 }
