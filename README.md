@@ -37,7 +37,13 @@ TODO:
 
 - better userlist
 - better button switcher
-- better close sidebar button
 - better whisper
 - whisper mode
 - mode of no picture whitelist
+
+---
+
+- better close sidebar button
+- r-string mode
+- auto picture upload
+- elegant mode (auto *Italic*)
