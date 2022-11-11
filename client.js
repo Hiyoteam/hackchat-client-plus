@@ -1266,7 +1266,7 @@ function userRemove(nick) {
 
 	for (var i = 0; i < children.length; i++) {
 		var user = children[i];
-		if (user.textContent == nick) {
+		if (user.firstChild/*hc++ shows tripcodes in userlist, so a user element has two children for the nickname and the tripcode.*/.textContent == nick) {
 			users.removeChild(user);
 		}
 	}
