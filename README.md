@@ -39,7 +39,7 @@ TODO:
 - [ ] better button switcher
 - [ ] better whisper
 - [ ] whisper mode
-- [ ] mode of no picture whitelist
+- [x] mode of no picture whitelist
 
 ---
 

@@ -452,10 +452,17 @@ var COMMANDS = {
 		usersClear();
 
 		users.forEach(function (user) {
-			userAdd(user.nick,user.trip);
+			userAdd(user.nick, user.trip);
 		});
 
-		pushMessage({ nick: '*', text: "Users online: " + nicks.join(", ").replace(/_/g,'\_') })
+		let nicksHTML = nicks.map(function (nick) {
+			div = document.createElement('div')
+			div.innerHTML = md.render(nick)
+			return div.firstChild.innerHTML
+		})
+
+		// respectively render markdown for every nickname in order to prevent the underlines in different nicknames from being rendered as italics or bold for matching markdown syntax. 
+		pushMessage({ nick: '*', text: "Users online: " + nicksHTML.join(", ") }, isHtml = true)
 
 		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" })
 
@@ -467,7 +474,7 @@ var COMMANDS = {
 	onlineAdd: function (args) {
 		var nick = args.nick;
 
-		userAdd(nick,args.trip);
+		userAdd(nick, args.trip);
 
 		payLoad = { nick: '*', text: nick + " joined" }
 
@@ -573,7 +580,7 @@ function reply(args) {//from crosst.chat
 	$('#chatinput').focus();
 }
 
-function pushMessage(args) {
+function pushMessage(args, isHtml/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
 	// Message container
 	var messageEl = document.createElement('div');
 
@@ -660,7 +667,9 @@ function pushMessage(args) {
 	// Text
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
-	if (verifyMessage(args)) {
+	if (isHtml) {
+		textEl.innerHTML = args.text;
+	} else if (verifyMessage(args)) {
 		textEl.innerHTML = md.render(args.text);
 	} else {
 		pEl = document.createElement('p')
@@ -983,14 +992,14 @@ $('#special-cmd').onclick = function () {
 			function (...args) {
 				if (!localStorageGet('coder-mode') || localStorageGet('coder-mode') != 'true') {
 					coderMode()
-					localStorageSet('coder-mode',true)
+					localStorageSet('coder-mode', true)
 				} else {
-					localStorageSet('coder-mode',false)
+					localStorageSet('coder-mode', false)
 					pushMessage({ nick: '*', text: `Refresh to hide coder buttons.` })
 				}
 			},
 		test:
-			function (...args){ 
+			function (...args) {
 				pushMessage({ nick: '!', text: `${args.length} arguments ${args}` })
 			}
 	}
@@ -1003,7 +1012,7 @@ $('#special-cmd').onclick = function () {
 }
 
 function coderMode() {
-	for (char of ['(',')','"']) {
+	for (char of ['(', ')', '"']) {
 		btn = document.createElement('button')
 		btn.type = 'button'
 		btn.classList.add('char')
@@ -1251,7 +1260,7 @@ $('#feed').onclick = function () {
 var onlineUsers = [];
 var ignoredUsers = [];
 
-function userAdd(nick,trip) {
+function userAdd(nick, trip) {
 	if (nick.length >= 25) {
 		pushMessage({ nick: '!', text: "A USER WHOSE NICKNAME HAS MORE THAN 24 CHARACTERS HAS JOINED. THIS INFINITE LOOP SCRIPT WHICH MAY CRASH YOUR BROWSER WOULD BE RUN IN OFFICIAL CLIENT:\n ```Javascript\nfor (var i = 5; i > 3; i = i + 1) { console.log(i); }\n```" })
 		pushMessage({ nick: '!', text: "This is probably caused by a moderator using the `overflow` command on you. Maybe that command is one supposed to crash the browser of the target user..." })
