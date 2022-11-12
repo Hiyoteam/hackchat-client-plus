@@ -1434,6 +1434,18 @@ if (localStorageGet('highlight')) {
 $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
 
+/* ---Add some CSS--- */
+
+if (navigator.userAgent.indexOf('iPhone') > 0) {
+	style = document.createElement('style')
+	style.textContent = `
+	button {
+		border-radius:5%;
+	  }
+	`
+	document.getElementsByTagName('body')[0].appendChild(style)
+}
+
 /* ---To begin working--- */
 
 /* main */
