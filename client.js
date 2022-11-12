@@ -52,6 +52,7 @@ var md = new Remarkable('full', markdownOptions);
 
 // image handler
 var allowImages = false;
+var whitelistDisabled = false;
 var imgHostWhitelist = [
 	'i.imgur.com',
 	'imgur.com',
@@ -73,7 +74,7 @@ function getDomain(link) {
 }
 
 function isWhiteListed(link) {
-	return imgHostWhitelist.indexOf(getDomain(link)) !== -1;
+	return whitelistDisabled || imgHostWhitelist.indexOf(getDomain(link)) !== -1;
 }
 
 md.renderer.rules.image = function (tokens, idx, options) {
@@ -1071,15 +1072,32 @@ $('#syntax-highlight').onchange = function (e) {
 if (localStorageGet('allow-imgur') == 'false') {
 	$('#allow-imgur').checked = false;
 	allowImages = false;
+	$('#allow-all-img').disabled = true;
 } else {
 	$('#allow-imgur').checked = true;
 	allowImages = true;
+}
+
+
+if (localStorageGet('whitelist-disabled') == 'true') {
+	$('#allow-all-img').checked = true;
+	whitelistDisabled = true;
+} else {
+	$('#allow-all-img').checked = false;
+	whitelistDisabled = false;
 }
 
 $('#allow-imgur').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('allow-imgur', enabled);
 	allowImages = enabled;
+	$('#allow-all-img').disabled = !enabled;
+}
+
+$('#allow-all-img').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('whitelist-disabled', enabled);
+	whitelistDisabled = enabled;
 }
 
 if (localStorageGet('soft-mention') == 'true') {
