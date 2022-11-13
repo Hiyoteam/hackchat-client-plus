@@ -1001,6 +1001,11 @@ $('#special-cmd').onclick = function () {
 		test:
 			function (...args) {
 				pushMessage({ nick: '!', text: `${args.length} arguments ${args}` })
+			},
+		about:
+			function (...args) {
+				let a ='HC++ Made by 4n0n4me at hcer.netlify.app'
+				console.log(a)
 			}
 	}
 	cmdArray = cmdText.split(' ')
@@ -1439,9 +1444,10 @@ $('#highlight-selector').value = currentHighlight;
 if (navigator.userAgent.indexOf('iPhone') > 0) {
 	style = document.createElement('style')
 	style.textContent = `
-	button {
-		border-radius:5%;
-	  }
+		button {
+			border-radius:5%;
+			padding:0%;
+		}
 	`
 	document.getElementsByTagName('body')[0].appendChild(style)
 }
@@ -1462,3 +1468,6 @@ if (myChannel == '') {
 } else {
 	join(myChannel);
 }
+
+let a ='HC++ Made by 4n0n4me at hcer.netlify.app'
+console.log(a)
