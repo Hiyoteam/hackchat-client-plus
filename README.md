@@ -25,6 +25,12 @@ Some of the current features:(* means optional features, which can be set to the
 
 ---
 
+## My Links
+
+[ZhangClient](https://client.zhangsoft.cf/) (Chinese Hack.Chat client, very easy for Chinese users to use. Even some server messages translated.) （中文客户端，适合中国用户，甚至服务器消息也翻译了）
+
+---
+
 ## 免责声明/DISCLAIMER
 
 使用本工具即视为同意以下免责声明。

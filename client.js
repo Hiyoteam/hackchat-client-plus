@@ -175,7 +175,7 @@ var frontpage = [
 	"---",
 	"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
 	"Hosted at https://hcer.netlify.app/ and hc.thz.cool(thanks to Maggie, aka THZ, for hosting).",
-	"Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.github.io/history/) | [TanChat](https://chat.thz.cool) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!)"
+	"Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.github.io/history/) | [TanChat](https://chat.thz.cool) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!) | [ZhangClient\(Chinese Client/中文HC客户端\)](https://client.zhangsoft.cf/)"
 ].join("\n");
 
 function $(query) {
@@ -206,6 +206,8 @@ var lastSentPos = 0;
 //message log
 var jsonLog = '';
 var readableLog = '';
+
+var templateStr = '';
 
 /* ---Notification--- */
 
@@ -784,6 +786,12 @@ $('#chatinput').onkeydown = function (e) {
 		if (e.target.value != '') {
 			var text = e.target.value;
 			e.target.value = '';
+			
+			if (templateStr) {
+				if (templateStr.indexOf('%m') > -1) {
+					text = templateStr.replace('%m',text);
+				}
+			}
 
 			send({ cmd: 'chat', text: text });
 
@@ -935,6 +943,24 @@ $('#set-custom-color').onclick = function () {
 		pushMessage({ nick: '!', text: "Invalid color. Please give color in hex RGB code." })
 	}
 	localStorageSet('my-color', myColor || '')//if myColor is null, set an empty string so that when it is got it will be ('' || null) (confer {var myColor = localStorageGet('my-color') || null;} at about line 190) the value of which is null
+}
+
+$('#set-template').onclick = function () {
+	// Set auto changetemplate
+	let template = prompt('Your template string:(use %m to replace your message content. press enter without inputing to reset.)')
+	if (template == null) {
+		return;
+	}
+	if (template.indexOf('%m') > -1) {
+		templateStr = template
+		pushMessage({ nick: '*', text: "Suessfully set template." })
+	} else if (template == '') {
+		templateStr = null;
+		pushMessage({ nick: '*', text: "Suessfully disabled template." })
+	} else {
+		pushMessage({ nick: '!', text: "Invalid template. " })
+	}
+	localStorageSet('my-template', templateStr || '')
 }
 
 $('#export-json').onclick = function () {
