@@ -44,7 +44,7 @@ TODO:
 - [x] better userlist
 - [ ] better button switcher
 - [ ] better whisper
-- [ ] whisper mode
+- [x] whisper mode
 - [x] mode of no picture whitelist
 
 ---

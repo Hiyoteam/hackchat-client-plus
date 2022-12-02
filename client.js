@@ -353,6 +353,7 @@ var shouldAutoReconnect = true;
 
 function join(channel, oldNick) {
 	ws = new WebSocket('wss://hack.chat/chat-ws');
+	//ws = new WebSocket('ws://localhost:6060');
 
 	wasConnected = false;
 
@@ -1059,6 +1060,10 @@ if (localStorageGet('coder-mode') == 'true') {
 	coderMode()
 }
 
+$('#img-upload').onclick = function () {
+	window.open('https://img.thz.cool/upload', 'newwindow', 'height=512, width=256, top=50%,left=50%, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
+}
+
 /* ---Sidebar settings--- */
 
 // Restore settings from localStorage
@@ -1467,6 +1472,7 @@ $('#highlight-selector').value = currentHighlight;
 
 /* ---Add some CSS--- */
 
+/*
 if (navigator.userAgent.indexOf('iPhone') > 0) {
 	style = document.createElement('style')
 	style.textContent = `
@@ -1477,6 +1483,7 @@ if (navigator.userAgent.indexOf('iPhone') > 0) {
 	`
 	document.getElementsByTagName('body')[0].appendChild(style)
 }
+*/
 
 /* ---To begin working--- */
 

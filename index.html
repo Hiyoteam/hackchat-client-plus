@@ -55,7 +55,9 @@
   <nav id="sidebar">
     <div id="sidebar-content" class="hidden">
       <div style="display: flex; justify-content: space-between;">
-        <div><h4>Settings</h4></div>
+        <div>
+          <h4>Settings</h4>
+        </div>
         <a id="sidebar-close" href="javascript:;">x</a>
       </div>
       <p>
@@ -88,7 +90,9 @@
       </p>
       <p>
         <input id="allow-all-img" type="checkbox">
-        <label for="allow-all-img" title="Check allow images to set this. If this is not checked, only images hosted at trusted domain names can be rendered. Note that this may enable IP grabbers to grab your IP address.">Allow All Images (Not Recommended)</label>
+        <label for="allow-all-img"
+          title="Check allow images to set this. If this is not checked, only images hosted at trusted domain names can be rendered. Note that this may enable IP grabbers to grab your IP address.">Allow
+          All Images (Not Recommended)</label>
       </p>
       <p>
         <input id="soft-mention" type="checkbox" checked>
@@ -112,6 +116,10 @@
       <select id="highlight-selector"></select>
       </p>
       <hr>
+      <p>
+        <button id="img-upload" type="button">Upload Image</button>
+      </p>
+      Image host provided by Dataeverything team. 
       <p>
         <button id="clear-messages" type="button">Clear all messages</button>
       </p>
