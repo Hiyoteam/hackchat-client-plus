@@ -1061,6 +1061,14 @@ if (localStorageGet('coder-mode') == 'true') {
 }
 
 $('#img-upload').onclick = function () {
+	if (localStorageGet('image-upload') != 'true') {
+		confirmed = confirm('Image host provided by Dataeverything team. All uploads on your own responsibility.')
+		if (confirmed) {
+			localStorageSet('image-upload',true)
+		} else {
+			return
+		}
+	}
 	window.open('https://img.thz.cool/upload', 'newwindow', 'height=512, width=256, top=50%,left=50%, toolbar=no, menubar=no, scrollbars=no, resizable=no,location=no, status=no')
 }
 
