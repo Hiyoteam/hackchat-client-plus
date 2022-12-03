@@ -141,7 +141,16 @@ function verifyMessage(args) {
 	}
 }
 
-var frontpage = [
+var info = {}
+
+var channels = [
+	`?your-channel ?programming ?lounge`,
+	`?meta ?math ?physics ?chemistry`,
+	`?technology ?games ?banana`,
+	`?test ?your-channell ?china ?chinese ?kt1j8rpc`,
+]
+
+var frontpage = () => [
 	"                            _           _         _       _   ",
 	"                           | |_ ___ ___| |_   ___| |_ ___| |_ ",
 	"                           |   |_ ||  _| '_| |  _|   |_ ||  _|",
@@ -149,15 +158,12 @@ var frontpage = [
 	"---",
 	"Welcome to hack.chat, a minimal, distraction-free chat application.",
 	"You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
-	"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: "+(document.domain != '' ? ('https://'+document.domain+'/') : window.location.href)+"?your-channel",
+	"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: " + (document.domain != '' ? ('https://' + document.domain + '/') : window.location.href) + "?your-channel",
 	"There are no channel lists, so a secret channel name can be used for private discussions.",
 	"---",
-	"Here are some pre-made channels you can join: (with hack.chat\\+\\+!)",
-	"?your-channel ?programming ?lounge",
-	"?meta ?math ?physics ?chemistry",
-	"?technology ?games ?banana",
-	"?test ?your-channell ?china ?chinese ?kt1j8rpc",
-	"And here's a random one generated just for you: ?" + Math.random().toString(36).substr(2, 8),
+	"Here are some pre-made channels you can join: " + (shouldGetInfo ? (info.public ? ("(" + info.users + " users online, " + info.chans + " channels existing when you enter this page)") : "(Getting online counts...)") : "(Online counts disabled)"),
+	...channels,
+	"And here's a random one generated just for you: " + ((!shouldGetInfo)||info.public ? ( "?" + Math.random().toString(36).substr(2, 8)) : ""),
 	"---",
 	"Formatting:",
 	"Notice: Dont send raw source code without using a code block!",
@@ -721,6 +727,44 @@ function send(data) {
 	}
 }
 
+/* ---Session Command--- */
+
+function getInfo() {
+	return new Promise(function (resolve,reject) {
+		ws = new WebSocket('wss://hack.chat/chat-ws');
+	
+		ws.onopen = function () {
+			this.send(JSON.stringify({ cmd: "session", isBot: false }))
+		}
+	
+		ws.onmessage = function (message) {
+			data = JSON.parse(message.data)
+			if (data.cmd != 'session') {
+				return
+			}
+			info.public = data.public
+			info.chans = data.chans
+			info.users = data.users
+			if (shouldGetInfo) {
+				for (let i = 0; i < channels.length; i++) {
+					let line = channels[i]
+					let newLineChannels = []
+					for (let channel of line.split(/ ?\?/g).slice(1)) {
+						if (typeof info.public[channel] === typeof 0) {
+							channel = channel + ' ' + '(' + info.public[channel] + ')'
+						}
+						newLineChannels.push('?' + channel)
+					}
+					console.log(newLineChannels)
+					channels[i] = newLineChannels.join(' ')
+				}
+			}
+			this.close()
+			resolve()
+		}
+	})
+}
+
 /* ---Window and input field and sidebar stuffs--- */
 
 var windowActive = true;
@@ -787,10 +831,10 @@ $('#chatinput').onkeydown = function (e) {
 		if (e.target.value != '') {
 			var text = e.target.value;
 			e.target.value = '';
-			
+
 			if (templateStr) {
 				if (templateStr.indexOf('%m') > -1) {
-					text = templateStr.replace('%m',text);
+					text = templateStr.replace('%m', text);
 				}
 			}
 
@@ -1031,7 +1075,7 @@ $('#special-cmd').onclick = function () {
 			},
 		about:
 			function (...args) {
-				let a ='HC++ Made by 4n0n4me at hcer.netlify.app'
+				let a = 'HC++ Made by 4n0n4me at hcer.netlify.app'
 				console.log(a)
 			}
 	}
@@ -1064,7 +1108,7 @@ $('#img-upload').onclick = function () {
 	if (localStorageGet('image-upload') != 'true') {
 		confirmed = confirm('Image host provided by Dataeverything team. All uploads on your own responsibility.')
 		if (confirmed) {
-			localStorageSet('image-upload',true)
+			localStorageSet('image-upload', true)
 		} else {
 			return
 		}
@@ -1211,6 +1255,20 @@ $('#mobile-btn').onchange = function (e) {
 		$('#more-mobile-btns').classList.add('hidden');
 	}
 	updateInputSize();
+}
+
+if (localStorageGet('should-get-info') == 'true') {
+	$('#should-get-info').checked = true;
+	shouldGetInfo = true;
+} else {
+	$('#should-get-info').checked = false;
+	shouldGetInfo = false;
+}
+
+$('#should-get-info').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('should-get-info', enabled);
+	shouldGetInfo = enabled;
 }
 
 /* ---Buttons for some mobile users--- */
@@ -1493,12 +1551,11 @@ if (navigator.userAgent.indexOf('iPhone') > 0) {
 }
 */
 
-/* ---To begin working--- */
+/* ---Main--- */
 
 /* main */
 
 if (myChannel == '') {
-	pushMessage({ text: frontpage });
 	$('#footer').classList.add('hidden');
 	/*$('#sidebar').classList.add('hidden');*/
 	/*I want to be able to change the settings without entering a channel*/
@@ -1506,9 +1563,16 @@ if (myChannel == '') {
 	$('#export-json').classList.add('hidden');
 	$('#export-readable').classList.add('hidden');
 	$('#users-div').classList.add('hidden');
+	pushMessage({ text: frontpage() });
+	if (shouldGetInfo) {
+		getInfo().then(function () {
+			$('#messages').innerHTML = '';
+			pushMessage({ text: frontpage() })
+		})
+	}
 } else {
 	join(myChannel);
 }
 
-let a ='HC++ Made by 4n0n4me at hcer.netlify.app'
+let a = 'HC++ Made by 4n0n4me at hcer.netlify.app'
 console.log(a)
