@@ -149,7 +149,7 @@ var frontpage = [
 	"---",
 	"Welcome to hack.chat, a minimal, distraction-free chat application.",
 	"You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
-	"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: https://hack.chat/?your-channel (This is to official hack.chat website)",
+	"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: "+(document.domain != '' ? ('https://'+document.domain+'/') : window.location.href)+"?your-channel",
 	"There are no channel lists, so a secret channel name can be used for private discussions.",
 	"---",
 	"Here are some pre-made channels you can join: (with hack.chat\\+\\+!)",

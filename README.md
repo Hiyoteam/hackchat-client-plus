@@ -51,5 +51,5 @@ TODO:
 
 - [ ] better close sidebar button
 - [ ] r-string mode
-- [ ] auto picture upload
+- [x] auto picture upload (shabbily implemented)
 - [ ] elegant mode (auto *Italic*)
