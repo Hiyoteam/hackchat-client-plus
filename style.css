@@ -26,6 +26,7 @@ textarea {
   border: none;
   outline: none;
   resize: none;
+  max-height: 100px;
 }
 h4 {
   font-size: 12px;
