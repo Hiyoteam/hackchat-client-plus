@@ -134,7 +134,7 @@ var verifyNickname = function (nick) {
 
 //LaTeX weapon and too-many-quotes weapon defense
 function verifyMessage(args) {
-	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){3,}/.test(args.text) || /[\n](>[^>\n]*){5,}/.test(args.text) || /^(>[^>\n]*){5,}/.test(args.text)) {
+	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){8,}/.test(args.text) || /[\n](>[^>\n]*){10,}/.test(args.text) || /^(>[^>\n]*){10,}/.test(args.text)) {
 		return false;
 	} else {
 		return true;
@@ -1379,6 +1379,17 @@ function userAdd(nick, trip) {
 		userInvite(nick)
 	}
 
+	user.oncontextmenu = function (e) {
+		e.preventDefault()
+		if (ignoredUsers.indexOf(nick) > -1) {
+			userDeignore(nick)
+			pushMessage({ nick: '*', text: `Cancelled ignoring nick ${nick}.` })
+		} else {
+			userIgnore(nick)
+			pushMessage({ nick: '*', text: `Ignored nick ${nick}.` })
+		}
+	}
+
 	var userLi = document.createElement('li');
 	userLi.appendChild(user);
 
@@ -1432,7 +1443,11 @@ function userInvite(nick) {
 }
 
 function userIgnore(nick) {
-	ignoredUsers.push(nick);
+	ignoredUsers.push(nick)
+}
+
+function userDeignore(nick) {
+	ignoredUsers.splice(ignoredUsers.indexOf(nick))
 }
 
 /* ---Sidebar switchers--- */
