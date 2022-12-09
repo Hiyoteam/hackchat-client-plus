@@ -213,6 +213,8 @@ var myChannel = window.location.search.replace(/^\?/, '');
 var lastSent = [""];
 var lastSentPos = 0;
 
+var kolorful = false
+
 //message log
 var jsonLog = '';
 var readableLog = '';
@@ -480,6 +482,9 @@ var COMMANDS = {
 		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" })
 
 		if (myColor) {
+			if (myColor == 'random') {
+				myColor = Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0")
+			}
 			send({ cmd: 'changecolor', color: myColor })
 		}
 	},
@@ -842,6 +847,12 @@ $('#chatinput').onkeydown = function (e) {
 				}
 			}
 
+			if (kolorful) {
+				if (myColor) {
+					send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
+				}
+			}
+
 			send({ cmd: 'chat', text: text });
 
 			lastSent[0] = text;
@@ -978,11 +989,14 @@ $('#clear-messages').onclick = function () {
 
 $('#set-custom-color').onclick = function () {
 	// Set auto changecolor
-	let color = prompt('Your nickname color:(press enter without inputing to reset)')
+	let color = prompt('Your nickname color:(press enter without inputing to reset; input "random" to set it to random)')
 	if (color == null) {
 		return;
 	}
-	if (/(#?)((^[0-9A-F]{6}$)|(^[0-9A-F]{3}$))/i.test(color)) {
+	if (color == 'random') {
+		myColor = 'random';
+		pushMessage({ nick: '*', text: "Suessfully set your auto nickname color to random. Rejoin or join a Channel to make it go into effect." })
+	} else if (/(#?)((^[0-9A-F]{6}$)|(^[0-9A-F]{3}$))/i.test(color)) {
 		myColor = color.replace(/#/, '');
 		pushMessage({ nick: '*', text: `Suessfully set your auto nickname color to #${myColor}. Rejoin or join a Channel to make it go into effect.` })
 	} else if (color == '') {
@@ -1081,6 +1095,10 @@ $('#special-cmd').onclick = function () {
 			function (...args) {
 				let a = 'HC++ Made by 4n0n4me at hcer.netlify.app'
 				console.log(a)
+			},
+		colorful:
+			function (...args) {
+				kolorful = true
 			}
 	}
 	cmdArray = cmdText.split(' ')
