@@ -361,6 +361,8 @@ function notify(args) {
 
 var wasConnected = false;
 
+var isInChannel = false;
+
 var shouldAutoReconnect = true;
 
 function join(channel, oldNick) {
@@ -403,6 +405,8 @@ function join(channel, oldNick) {
 	}
 
 	ws.onclose = function () {
+		isInChannel = false
+
 		if (shouldAutoReconnect) {
 			if (wasConnected) {
 				wasConnected = false;
@@ -430,6 +434,20 @@ function join(channel, oldNick) {
 		var args = JSON.parse(message.data);
 		var cmd = args.cmd;
 		var command = COMMANDS[cmd];
+		if (args.channel) {
+			if (args.channel != myChannel && isInChannel) {
+				isInChannel = false
+				if (args.channel != 'purgatory') {
+					usersClear()
+					p = document.createElement('p')
+					p.textContent = `You may be kicked or moved to this channel by force to channel ?${args.channel}. Unable to get full user list. `
+					$('#users').appendChild(p)
+					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` })
+				} else {
+					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be locked out from ?${myChannel} . You may also be kicked or moved to this channel by force. ` })
+				}
+			}
+		}
 		if (command) {
 			command.call(null, args);
 		}
@@ -487,6 +505,8 @@ var COMMANDS = {
 			}
 			send({ cmd: 'changecolor', color: myColor })
 		}
+
+		isInChannel = true
 	},
 
 	onlineAdd: function (args) {
