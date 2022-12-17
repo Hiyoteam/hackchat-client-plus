@@ -878,9 +878,7 @@ $('#chatinput').onkeydown = function (e) {
 			}
 
 			if (kolorful) {
-				if (myColor) {
-					send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
-				}
+				send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
 			}
 
 			if (purgatory) {
