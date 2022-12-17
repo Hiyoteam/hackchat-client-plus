@@ -362,6 +362,7 @@ function notify(args) {
 var wasConnected = false;
 
 var isInChannel = false;
+var purgatory = false;
 
 var shouldAutoReconnect = true;
 
@@ -438,13 +439,22 @@ function join(channel, oldNick) {
 			if (args.channel != myChannel && isInChannel) {
 				isInChannel = false
 				if (args.channel != 'purgatory') {
+					purgatory = false
 					usersClear()
 					p = document.createElement('p')
 					p.textContent = `You may be kicked or moved to this channel by force to channel ?${args.channel}. Unable to get full user list. `
 					$('#users').appendChild(p)
 					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` })
 				} else {
+					purgatory = true
 					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be locked out from ?${myChannel} . You may also be kicked or moved to this channel by force. ` })
+				}
+			} else if (isInChannel) {
+				if (purgatory && myChannel != 'purgatory') {// you are moved by a mod from purgatory to where you want to be at
+					purgatory = false
+					pushMessage({ nick: '!', text: `You are now at ?${args.channel} . A mod has moved you. ` })
+				} else if (args.channel == 'purgatory') {
+					purgatory = true
 				}
 			}
 		}
@@ -873,7 +883,11 @@ $('#chatinput').onkeydown = function (e) {
 				}
 			}
 
-			send({ cmd: 'chat', text: text });
+			if (purgatory) {
+				send({ cmd: 'emote', text: text });
+			} else {
+				send({ cmd: 'chat', text: text });
+			}
 
 			lastSent[0] = text;
 			lastSent.unshift("");
