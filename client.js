@@ -77,6 +77,10 @@ function isWhiteListed(link) {
 	return whitelistDisabled || imgHostWhitelist.indexOf(getDomain(link)) !== -1;
 }
 
+function mdUnescape(str) {
+	return str.replace(/(?=(\\|`|\*|_|\{|\}|\[|\]|\(|\)|#|\+|-|\.|!|\||=|\^|~|\$|>|'))/g, '\\')
+}
+
 md.renderer.rules.image = function (tokens, idx, options) {
 	var src = Remarkable.utils.escapeHtml(tokens[idx].src);
 
@@ -1132,6 +1136,10 @@ $('#special-cmd').onclick = function () {
 		colorful:
 			function (...args) {
 				kolorful = true
+			},
+		raw:
+			function (...args) {
+				pushMessage({ nick: '*', text: `\`\`\`\n${mdUnescape(cmdText.slice(4))}\n\`\`\`` })
 			}
 	}
 	cmdArray = cmdText.split(' ')
