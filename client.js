@@ -720,8 +720,9 @@ function pushMessage(args, isHtml/*This is only for better controll to rendering
 	} else if (verifyMessage(args)) {
 		textEl.innerHTML = md.render(args.text);
 	} else {
-		pEl = document.createElement('p')
+		let pEl = document.createElement('p')
 		pEl.appendChild(document.createTextNode(args.text))
+		pEl.classList.add('break') //make lines broken at newline characters, as this text is not rendered and may contain raw newline characters
 		textEl.appendChild(pEl)
 		console.log('norender to dangerous message:', args)
 	}

@@ -275,6 +275,10 @@ ul ul, ol ol {
   padding-left: 2em;
 }
 
+.break {
+  white-space: pre-line;
+}
+
 @media only screen and (max-width: 600px) {
   .messages {
     border: none;
