@@ -65,6 +65,7 @@ var imgHostWhitelist = [
 	'i.postimg.cc',		//postimages图床
 	'mrpig.eu.org',		//慕容猪的图床
 	'gimg2.baidu.com',	//百度
+	'files.catbox.moe'  //catbox
 ];
 
 function getDomain(link) {
