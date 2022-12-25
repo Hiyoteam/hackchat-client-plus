@@ -111,6 +111,10 @@ ul li {
   
   I think this is a proper solution of too long messages without any spaces which may overflow the paragraph, though i dont know how official hack.chat client does the same thing.*/
 }
+.katex-display {
+  overflow-x: hidden;
+  overflow-y: hidden;
+}
 
 pre.captcha {
     line-height: 1;
