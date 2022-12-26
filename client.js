@@ -78,8 +78,8 @@ function isWhiteListed(link) {
 	return whitelistDisabled || imgHostWhitelist.indexOf(getDomain(link)) !== -1;
 }
 
-function mdUnescape(str) {
-	return str.replace(/(?=(\\|`|\*|_|\{|\}|\[|\]|\(|\)|#|\+|-|\.|!|\||=|\^|~|\$|>|'))/g, '\\')
+function mdEscape(str) {
+	return str.replace(/(?=(\\|`|\*|_|\{|\}|\[|\]|\(|\)|#|\+|-|\.|!|\||=|\^|~|\$|>|<|'))/g, '\\')
 }
 
 md.renderer.rules.image = function (tokens, idx, options) {
@@ -88,7 +88,7 @@ md.renderer.rules.image = function (tokens, idx, options) {
 	if (isWhiteListed(src) && allowImages) {
 		var imgSrc = ' src="' + Remarkable.utils.escapeHtml(tokens[idx].src) + '"';
 		var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
-		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
+		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.EscapeMd(tokens[idx].alt))) : '') + '"';
 		var suffix = options.xhtmlOut ? ' /' : '';
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
 		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' referrerpolicy="no-referrer"></a>';
@@ -1140,7 +1140,13 @@ $('#special-cmd').onclick = function () {
 			},
 		raw:
 			function (...args) {
-				pushMessage({ nick: '*', text: `\`\`\`\n${mdUnescape(cmdText.slice(4))}\n\`\`\`` })
+				let escaped = mdEscape(cmdText.slice(4))
+				pushMessage({ nick: '*', text: `\`\`\`\n${escaped}\n\`\`\`` })
+				navigator.clipboard.writeText(escaped).then(function () {
+					pushMessage({ nick: '*', text: "Escaped text copied to clipboard." })
+				}, function () {
+					pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
+				});
 			}
 	}
 	cmdArray = cmdText.split(' ')
