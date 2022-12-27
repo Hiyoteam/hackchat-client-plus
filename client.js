@@ -529,14 +529,13 @@ var COMMANDS = {
 
 		userAdd(nick, args.trip);
 
-		payLoad = { nick: '*', text: nick + " joined" }
-
-		//onlineAdd can contain trip but onlineRemove doesnt contain trip
-		if (args.trip) {
-			payLoad.trip = args.trip
-		}
-
 		if ($('#joined-left').checked) {
+			payLoad = { nick: '*', text: nick + " joined" }
+
+			//onlineAdd can contain trip but onlineRemove doesnt contain trip
+			if (args.trip) {
+				payLoad.trip = args.trip
+			}
 			pushMessage(payLoad);
 		}
 	},
@@ -731,6 +730,18 @@ function pushMessage(args, isHtml/*This is only for better controll to rendering
 		textEl.appendChild(pEl)
 		console.log('norender to dangerous message:', args)
 	}
+	// Optimize CSS of code blocks which have no specified language name: add a hjls class for them
+	textEl.querySelectorAll('code').forEach((element) => {
+		let doElementHasClass = false
+		element.classList.forEach((cls) => {
+			if (cls.name.startsWith('language-') || cls.name == 'hljs') {
+				doElementHasClass = true
+			}
+		})
+		if (!doElementHasClass) {
+			element.classList.add('hljs')
+		}
+	})
 	messageEl.appendChild(textEl);
 
 	// Scroll to bottom
