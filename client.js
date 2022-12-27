@@ -88,7 +88,7 @@ md.renderer.rules.image = function (tokens, idx, options) {
 	if (isWhiteListed(src) && allowImages) {
 		var imgSrc = ' src="' + Remarkable.utils.escapeHtml(tokens[idx].src) + '"';
 		var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
-		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.EscapeMd(tokens[idx].alt))) : '') + '"';
+		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
 		var suffix = options.xhtmlOut ? ' /' : '';
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
 		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' referrerpolicy="no-referrer"></a>';
