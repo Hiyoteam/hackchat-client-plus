@@ -732,15 +732,19 @@ function pushMessage(args, isHtml/*This is only for better controll to rendering
 	}
 	// Optimize CSS of code blocks which have no specified language name: add a hjls class for them
 	textEl.querySelectorAll('code').forEach((element) => {
+		console.log('现在走到',element)
 		let doElementHasClass = false
+		console.log(element.classList)
 		element.classList.forEach((cls) => {
-			if (cls.name.startsWith('language-') || cls.name == 'hljs') {
+			console.log('类是',cls)
+			if (cls.startsWith('language-') || cls == 'hljs') {
 				doElementHasClass = true
 			}
 		})
 		if (!doElementHasClass) {
 			element.classList.add('hljs')
 		}
+		console.log('走完了',element)
 	})
 	messageEl.appendChild(textEl);
 
