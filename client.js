@@ -731,7 +731,7 @@ function pushMessage(args, isHtml/*This is only for better controll to rendering
 		console.log('norender to dangerous message:', args)
 	}
 	// Optimize CSS of code blocks which have no specified language name: add a hjls class for them
-	textEl.querySelectorAll('code').forEach((element) => {
+	textEl.querySelectorAll('pre > code').forEach((element) => {
 		console.log('现在走到',element)
 		let doElementHasClass = false
 		console.log(element.classList)
