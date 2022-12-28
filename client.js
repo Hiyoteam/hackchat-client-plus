@@ -713,6 +713,11 @@ function pushMessage(args, isHtml/*This is only for better controll to rendering
 
 		var date = new Date(args.time || Date.now());
 		nickLinkEl.title = date.toLocaleString();
+
+		if (args.color) {
+			nickLinkEl.title = nickLinkEl.title + ' #' + args.color
+		}
+		
 		nickSpanEl.appendChild(nickLinkEl);
 	}
 
