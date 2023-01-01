@@ -504,6 +504,9 @@ var COMMANDS = {
 		});
 
 		let nicksHTML = nicks.map(function (nick) {
+			if (nick.match(/^_+$/)) {
+				return nick
+			}
 			div = document.createElement('div')
 			div.innerHTML = md.render(nick)
 			return div.firstChild.innerHTML
