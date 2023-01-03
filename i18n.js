@@ -11,7 +11,9 @@ let i18n = new Map([
             ['Allow LaTeX', '显示LaTeX公式'],
             ['Allow Highlight', '代码高亮'],
             ['Allow Images', '显示图片'],
+            ['Embed images like: ![Title](https://i.imgur.com/image.png)', '发图格式：![标题](图片地址)'],
             ['Allow All Images (Not Recommended)', '关闭图片域名限制（不推荐）'],
+            ['Check allow images to set this. If this is not checked, only images hosted at trusted domain names can be rendered. Note that this may enable IP grabbers to grab your IP address.', '勾选显示图片以设置这个选项。如果没有勾选这个选项，只有受信任的域名上的图片会被显示。请注意，勾选这个选项会产生被IP记录器记录IP地址的风险。'],
             ['Soft @Mention', '@中间加空格'],
             ['Record Messages', '客户端记录信息'],
             ['Mobile buttons', '手机版按钮'],
@@ -64,6 +66,11 @@ let i18n = new Map([
             [/Unexpected Channel \?(.+) \. You may be locked out from \?(.+) \. You may also be kicked or moved to this channel by force\. /, '异常：你现在在频道 ?$1 。可能是 ?$2 锁房了，把你屏蔽在了 ?$1 。也可能是你被踢出了，或者被强制移动了。'],
             [/You are now at \?(.+) \. A mod has moved you、. /, '你现在在 ?$1 了。一名管理员移动了你。'],
             ['Please refresh to apply language. Multi language is in test and not perfect yet. ', '请刷新来应用语言设置。多语言支持目前还在测试当中，并不完美。'],
+            [/Ignored nick ([a-zA-Z0-9_]{1,24})\./, '已忽略$1的消息。'],
+            [/Cancelled ignoring nick ([a-zA-Z0-9_]{1,24})\./, '已取消忽略$1的消息。'],
+            ['', ''],
+            ['', ''],
+            ['', ''],
 
             /* Chatroom info */
             [/You whispered to @([a-zA-Z0-9_]{1,24}): /, '你对 @$1 私聊：'],
