@@ -127,7 +127,7 @@ md.use(remarkableKatex);
 function verifyLink(link) {
 	var linkHref = Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(link.href));
 	if (linkHref !== link.innerHTML) {
-		return confirm('Warning, please verify this is where you want to go: ' + linkHref);
+		return confirm(i18ntranslate('Warning, please verify this is where you want to go: ' + linkHref));
 	}
 
 	return true;
@@ -188,7 +188,7 @@ Object.defineProperty(this, 'frontpage', {
 		"No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages.",
 		"---",
 		"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
-		"Hosted at https://hcer.netlify.app/ and hc.thz.cool(thanks to Maggie, aka THZ, for hosting).",
+		"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for hosting).",
 		"Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.github.io/history/) | [TanChat](https://chat.thz.cool) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!) | [ZhangClient\(Chinese Client/中文HC客户端\)](https://client.zhangsoft.cf/)"
 	].join("\n")
 })
@@ -1202,7 +1202,7 @@ if (localStorageGet('coder-mode') == 'true') {
 
 $('#img-upload').onclick = function () {
 	if (localStorageGet('image-upload') != 'true') {
-		confirmed = confirm('Image host provided by Dataeverything team. All uploads on your own responsibility.')
+		confirmed = confirm(i18ntranslate('Image host provided by Dataeverything team. All uploads on your own responsibility.'))
 		if (confirmed) {
 			localStorageSet('image-upload', true)
 		} else {
