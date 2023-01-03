@@ -475,22 +475,22 @@ var COMMANDS = {
 		if (ignoredUsers.indexOf(args.nick) >= 0) {
 			return;
 		}
-		pushMessage(args);
+		pushMessage(args, false);
 	},
 
 	info: function (args) {
 		args.nick = '*';
-		pushMessage(args);
+		pushMessage(args, true);
 	},
 
 	emote: function (args) {
 		args.nick = '*';
-		pushMessage(args);
+		pushMessage(args, false);
 	},
 
 	warn: function (args) {
 		args.nick = '!';
-		pushMessage(args);
+		pushMessage(args, true);
 	},
 
 	onlineSet: function (args) {
@@ -513,9 +513,9 @@ var COMMANDS = {
 		})
 
 		// respectively render markdown for every nickname in order to prevent the underlines in different nicknames from being rendered as italics or bold for matching markdown syntax. 
-		pushMessage({ nick: '*', text: "Users online: " + nicksHTML.join(", ") }, isHtml = true)
+		pushMessage({ nick: '*', text: i18ntranslate("Users online: ") + nicksHTML.join(", ") }, false, true)
 
-		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" })
+		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" }, true)
 
 		if (myColor) {
 			if (myColor == 'random') {
@@ -539,7 +539,7 @@ var COMMANDS = {
 			if (args.trip) {
 				payLoad.trip = args.trip
 			}
-			pushMessage(payLoad);
+			pushMessage(payLoad, true);
 		}
 	},
 
@@ -549,7 +549,7 @@ var COMMANDS = {
 		userRemove(nick);
 
 		if ($('#joined-left').checked) {
-			pushMessage({ nick: '*', text: nick + " left" });
+			pushMessage({ nick: '*', text: nick + " left" }, true);
 		}
 	},
 
@@ -635,7 +635,11 @@ function reply(args) {//from crosst.chat
 	$('#chatinput').focus();
 }
 
-function pushMessage(args, isHtml/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/, i18n) {
+function pushMessage(args, i18n, isHtml/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
+	if (i18n === undefined) {
+		i18n = true
+	}
+
 	if (i18n && args.text) {
 		args.text = i18ntranslate(args.text)
 	}
@@ -1616,7 +1620,7 @@ function setHighlight(scheme) {
 function setLanguage(language) {
 	lang = language
 	localStorageSet('i18n', lang);
-	pushMessage({ nick: '!', text: 'Please refresh to apply language. Multi language is in test and not perfect yet. ' }, false, true)
+	pushMessage({ nick: '!', text: 'Please refresh to apply language. Multi language is in test and not perfect yet. ' }, true)
 }
 
 // Add scheme options to dropdown selector
@@ -1693,11 +1697,11 @@ if (myChannel == '') {
 	$('#export-json').classList.add('hidden');
 	$('#export-readable').classList.add('hidden');
 	$('#users-div').classList.add('hidden');
-	pushMessage({ text: frontpage }, false, true);
+	pushMessage({ text: frontpage }, true);
 	if (shouldGetInfo) {
 		getInfo().then(function () {
 			$('#messages').innerHTML = '';
-			pushMessage({ text: frontpage }, false, true)
+			pushMessage({ text: frontpage }, true)
 		})
 	}
 } else {

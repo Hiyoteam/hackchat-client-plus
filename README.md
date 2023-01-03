@@ -48,6 +48,8 @@ TODO:
 - [ ] better whisper
 - [x] whisper mode
 - [x] mode of no picture whitelist
+- [ ] better ignore
+- [ ] better system message
 
 ---
 
