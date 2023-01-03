@@ -68,9 +68,6 @@ let i18n = new Map([
             ['Please refresh to apply language. Multi language is in test and not perfect yet. ', '请刷新来应用语言设置。多语言支持目前还在测试当中，并不完美。'],
             [/Ignored nick ([a-zA-Z0-9_]{1,24})\./, '已忽略$1的消息。'],
             [/Cancelled ignoring nick ([a-zA-Z0-9_]{1,24})\./, '已取消忽略$1的消息。'],
-            ['', ''],
-            ['', ''],
-            ['', ''],
 
             /* Chatroom info */
             [/You whispered to @([a-zA-Z0-9_]{1,24}): /, '你对 @$1 私聊：'],
@@ -86,6 +83,32 @@ let i18n = new Map([
             ['You are changing colors too fast. Wait a moment before trying again.', '你更改颜色太快了，请稍后再试。'],
             ['You are being rate-limited or blocked.', '你被暂时限制了，或者被封禁了。'],
             ['Wait a moment and try again.', '请稍后再试。'],
+
+            /* Help */
+            ['All commands:', '全部命令：'],
+            ['Category:', '分\ufeff类\ufeff：'],
+            ['Name:', '名\ufeff字\ufeff：'],
+            ['Admin:', '站\ufeff长\ufeff：'],
+            ['Core:', '核\ufeff心\ufeff：'],
+            ['Internal:', '内\ufeff部\ufeff：'],
+            ['Mod:', '管\ufeff理\ufeff员\ufeff：'],
+            ['For specific help on certain commands, use either:\nText: `/help <command name>`\nAPI: `{cmd: \'help\', command: \'<command name>\'}`', '要得到关于特定命令的帮助，你可以使用以下任一方法：\n文字：`/help <命令名字>`\nAPI：`{cmd: \'help\'}, command: \'<命令名字>\'`'],
+            ['Unknown command: ', '未知命令：'],
+            ['Unknown command', '未知命令'],
+            [/ command:$/m, '命令：'],
+            ['**Name:**', '**名字：**'],
+            ['**Aliases:**', '**别名：**'],
+            ['|None|', '|无|'],
+            ['Name', '名字'],
+            ['|Admin|', '|站长|'],
+            ['|Core|', '|核心|'],
+            ['|Internal|', '|内部|'],
+            ['|Mod|', '|管理员|'],
+            ['**Description:**', '**描述：**'],
+            ['**Usage:** ', '**用法：**'],
+            ['API: ', 'API：'],
+            ['Text: ', '文字：'],
+            ['**Required Parameters:**', '**参数：**'],
 
             /* Frontpage text */
             ['Welcome to hack.chat, a minimal, distraction-free chat application.', '欢迎来到hack.chat，最小化、无干扰的聊天室。'],
