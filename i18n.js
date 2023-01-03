@@ -83,7 +83,7 @@ let i18n = new Map([
             ['You are changing colors too fast. Wait a moment before trying again.', '你更改颜色太快了，请稍后再试。'],
             ['You are being rate-limited or blocked.', '你被暂时限制了，或者被封禁了。'],
             ['Wait a moment and try again.', '请稍后再试。'],
-            [/([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})/, '$1 改名为 $2']
+            [/([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})/, '$1 改名为 $2'],
 
             /* Help */
             ['All commands:', '全部命令：'],
