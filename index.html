@@ -48,7 +48,7 @@
         <textarea id="chatinput" type="text" autocomplete="off" autofocus></textarea>
       </form>
       <div id="mobile-btns">
-        <button id="send" type="submit">Send</button>
+        <button id="send" type="submit" tr>Send</button>
       </div>
     </div>
   </footer>
@@ -56,99 +56,104 @@
     <div id="sidebar-content" class="hidden">
       <div style="display: flex; justify-content: space-between;">
         <div>
-          <h4>Settings</h4>
+          <h4 tr>Settings</h4>
         </div>
         <a id="sidebar-close" href="javascript:;">x</a>
       </div>
       <p>
         <input id="pin-sidebar" type="checkbox">
-        <label for="pin-sidebar">Pin sidebar</label>
+        <label for="pin-sidebar" tr>Pin sidebar</label>
       </p>
       <p>
         <input id="sound-switch" type="checkbox">
-        <label for="sound-switch">Sound notifications</label>
+        <label for="sound-switch" tr>Sound notifications</label>
       </p>
       <p>
         <input id="notify-switch" type="checkbox">
-        <label for="notify-switch">Screen notifications</label>
+        <label for="notify-switch" tr>Screen notifications</label>
       </p>
       <p>
         <input id="joined-left" type="checkbox" checked>
-        <label for="joined-left">Join/left notify</label>
+        <label for="joined-left" tr>Join/left notify</label>
       </p>
       <p>
         <input id="parse-latex" type="checkbox" checked>
-        <label for="parse-latex">Allow LaTeX</label>
+        <label for="parse-latex" tr>Allow LaTeX</label>
       </p>
       <p>
         <input id="syntax-highlight" type="checkbox" checked>
-        <label for="syntax-highlight">Allow Highlight</label>
+        <label for="syntax-highlight" tr>Allow Highlight</label>
       </p>
       <p>
         <input id="allow-imgur" type="checkbox">
-        <label for="allow-imgur" title="Embed images like: ![Title](https://i.imgur.com/image.png)">Allow Images</label>
+        <label for="allow-imgur" title="Embed images like: ![Title](https://i.imgur.com/image.png)" tr>Allow Images</label>
       </p>
       <p>
         <input id="allow-all-img" type="checkbox">
         <label for="allow-all-img"
-          title="Check allow images to set this. If this is not checked, only images hosted at trusted domain names can be rendered. Note that this may enable IP grabbers to grab your IP address.">Allow
-          All Images (Not Recommended)</label>
+          title="Check allow images to set this. If this is not checked, only images hosted at trusted domain names can be rendered. Note that this may enable IP grabbers to grab your IP address."
+          tr>Allow All Images (Not Recommended)</label>
       </p>
       <p>
         <input id="soft-mention" type="checkbox" checked>
-        <label for="soft-mention">Soft @Mention</label>
+        <label for="soft-mention" tr>Soft @Mention</label>
       </p>
       <p>
         <input id="message-log" type="checkbox" checked>
-        <label for="message-log">Record Messages</label>
+        <label for="message-log" tr>Record Messages</label>
       </p>
       <p>
         <input id="mobile-btn" type="checkbox" checked>
-        <label for="mobile-btn">Mobile buttons</label>
+        <label for="mobile-btn" tr>Mobile buttons</label>
       </p>
       <p>
         <input id="should-get-info" type="checkbox" checked>
-        <label for="should-get-info">Index Online Count</label>
+        <label for="should-get-info" tr>Index Online Count</label>
       </p>
       <hr>
       <p>
-      <h4>Color scheme</h4>
+      <p>
+      <h4 tr>Language</h4>
+      <select id="i18n-selector"></select>
+      </p>
+      <h4 tr>Color scheme</h4>
       <select id="scheme-selector"></select>
       </p>
       <p>
-      <h4>Highlight scheme</h4>
+      <h4 tr>Highlight scheme</h4>
       <select id="highlight-selector"></select>
       </p>
       <hr>
       <p>
-        <button id="img-upload" type="button">Upload Image</button>
+        <button id="img-upload" type="button" tr>Upload Image</button>
       </p>
       <p>
-        <button id="clear-messages" type="button">Clear all messages</button>
+        <button id="clear-messages" type="button" tr>Clear all messages</button>
       </p>
       <p>
-        <button id="set-custom-color" type="button">Set auto color</button>
+        <button id="set-custom-color" type="button" tr>Set auto color</button>
       </p>
       <p>
-        <button id="set-template" type="button">Set Massage Template</button>
+        <button id="set-template" type="button" tr>Set Massage Template</button>
       </p>
       <p>
-        <button id="export-json" type="button">Copy JSON Record</button>
+        <button id="export-json" type="button" tr>Copy JSON Record</button>
       </p>
       <p>
-        <button id="export-readable" type="button">Copy Message Record</button>
+        <button id="export-readable" type="button" tr>Copy Message Record</button>
       </p>
       <p>
-        <button id="special-cmd" type="button">Don't Click</button>
+        <button id="special-cmd" type="button" tr>Don't Click</button>
       </p>
       <div id="users-div">
         <hr>
-        <h4>Users online</h4>
-        <p>(Click user to invite; rightclick to ignore.)</p>
+        <h4 tr>Users online</h4>
+        <p tr>(Click user to invite; rightclick to ignore.)</p>
         <ul id="users"></ul>
       </div>
     </div>
   </nav>
+  <script src="i18n.js"></script>
   <script src="client.js"></script>
 </body>
 

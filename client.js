@@ -167,7 +167,7 @@ Object.defineProperty(this, 'frontpage', {
 		"Welcome to hack.chat, a minimal, distraction-free chat application.",
 		"You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
 		"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: " + (document.domain != '' ? ('https://' + document.domain + '/') : window.location.href) + "?your-channel",
-		"There are no channel lists, so a secret channel name can be used for private discussions.",
+		"There are no channel lists *for normal users*, so a secret channel name can be used for private discussions.",
 		"---",
 		"Here are some pre-made channels you can join: " + (shouldGetInfo ? (info.public ? ("(" + info.users + " users online, " + info.chans + " channels existing when you enter this page)") : "(Getting online counts...)") : "(Online counts disabled)"),
 		...channels,
@@ -505,7 +505,7 @@ var COMMANDS = {
 
 		let nicksHTML = nicks.map(function (nick) {
 			if (nick.match(/^_+$/)) {
-				return nick
+				return nick // such nicknames made up of only underlines will be rendered into a horizontal rule. 
 			}
 			div = document.createElement('div')
 			div.innerHTML = md.render(nick)
@@ -635,7 +635,11 @@ function reply(args) {//from crosst.chat
 	$('#chatinput').focus();
 }
 
-function pushMessage(args, isHtml/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
+function pushMessage(args, isHtml/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/, i18n) {
+	if (i18n && args.text) {
+		args.text = i18ntranslate(args.text)
+	}
+
 	// Message container
 	var messageEl = document.createElement('div');
 
@@ -720,7 +724,7 @@ function pushMessage(args, isHtml/*This is only for better controll to rendering
 		if (args.color) {
 			nickLinkEl.title = nickLinkEl.title + ' #' + args.color
 		}
-		
+
 		nickSpanEl.appendChild(nickLinkEl);
 	}
 
@@ -1589,6 +1593,11 @@ var highlights = [
 	'zenburn'
 ]
 
+var languages = [
+	['English', 'en-US'],
+	['简体中文', 'zh-CN']
+]
+
 var currentScheme = 'atelier-dune';
 var currentHighlight = 'darcula';
 
@@ -1602,6 +1611,12 @@ function setHighlight(scheme) {
 	currentHighlight = scheme;
 	$('#highlight-link').href = "vendor/hljs/styles/" + scheme + ".min.css";
 	localStorageSet('highlight', scheme);
+}
+
+function setLanguage(language) {
+	lang = language
+	localStorageSet('i18n', lang);
+	pushMessage({ nick: '!', text: 'Please refresh to apply language. Multi language is in test and not perfect yet. ' }, false, true)
 }
 
 // Add scheme options to dropdown selector
@@ -1619,12 +1634,23 @@ highlights.forEach(function (scheme) {
 	$('#highlight-selector').appendChild(option);
 });
 
+languages.forEach(function (item) {
+	var option = document.createElement('option');
+	option.textContent = item[0];
+	option.value = item[1];
+	$('#i18n-selector').appendChild(option);
+});
+
 $('#scheme-selector').onchange = function (e) {
 	setScheme(e.target.value);
 }
 
 $('#highlight-selector').onchange = function (e) {
 	setHighlight(e.target.value);
+}
+
+$('#i18n-selector').onchange = function (e) {
+	setLanguage(e.target.value)
 }
 
 // Load sidebar configaration values from local storage if available
@@ -1638,6 +1664,7 @@ if (localStorageGet('highlight')) {
 
 $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
+$('#i18n-selector').value = lang;
 
 /* ---Add some CSS--- */
 
@@ -1666,11 +1693,11 @@ if (myChannel == '') {
 	$('#export-json').classList.add('hidden');
 	$('#export-readable').classList.add('hidden');
 	$('#users-div').classList.add('hidden');
-	pushMessage({ text: frontpage });
+	pushMessage({ text: frontpage }, false, true);
 	if (shouldGetInfo) {
 		getInfo().then(function () {
 			$('#messages').innerHTML = '';
-			pushMessage({ text: frontpage })
+			pushMessage({ text: frontpage }, false, true)
 		})
 	}
 } else {
