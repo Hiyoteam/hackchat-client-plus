@@ -68,6 +68,8 @@ let i18n = new Map([
             ['Please refresh to apply language. Multi language is in test and not perfect yet. ', '请刷新来应用语言设置。多语言支持目前还在测试当中，并不完美。'],
             [/Ignored nick ([a-zA-Z0-9_]{1,24})\./, '已忽略$1的消息。'],
             [/Cancelled ignoring nick ([a-zA-Z0-9_]{1,24})\./, '已取消忽略$1的消息。'],
+            [/^Kicked ([a-zA-Z0-9_]{1,24})/, '已踢出 $1'],
+            [/^Banned ([a-zA-Z0-9_]{1,24})/, '已封禁 $1'],
 
             /* Chatroom info */
             [/You whispered to @([a-zA-Z0-9_]{1,24}): /, '你对 @$1 私聊：'],
