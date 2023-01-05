@@ -137,9 +137,9 @@ var verifyNickname = function (nick) {
 	return /^[a-zA-Z0-9_]{1,24}$/.test(nick);
 }
 
-//LaTeX weapon and too-many-quotes weapon defense
+//LaTeX weapon and too-many-quotes weapon defence
 function verifyMessage(args) {
-	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){8,}/.test(args.text) || /[\n](>[^>\n]*){10,}/.test(args.text) || /^(>[^>\n]*){10,}/.test(args.text)) {
+	if (/\d+(mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em)|([^\s^_]+[\^_]{){8,}|(?<=^|\n)(>[^>\n]*){5,}/.test(args.text)) {
 		return false;
 	} else {
 		return true;
