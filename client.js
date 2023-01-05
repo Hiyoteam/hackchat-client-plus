@@ -381,6 +381,8 @@ var purgatory = false;
 
 var shouldAutoReconnect = true;
 
+var isAnsweringCaptcha = false;
+
 function join(channel, oldNick) {
 	ws = new WebSocket('wss://hack.chat/chat-ws');
 	//ws = new WebSocket('ws://localhost:6060');
@@ -504,6 +506,8 @@ var COMMANDS = {
 	},
 
 	onlineSet: function (args) {
+		isAnsweringCaptcha = false
+
 		let users = args.users;
 		let nicks = args.nicks;
 
@@ -564,6 +568,8 @@ var COMMANDS = {
 	},
 
 	captcha: function (args) {
+		isAnsweringCaptcha = true
+
 		const NS = 'http://www.w3.org/2000/svg'
 
 		let messageEl = document.createElement('div');
@@ -956,6 +962,8 @@ $('#chatinput').onkeydown = function (e) {
 			if (kolorful) {
 				send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
 			}
+
+			if (isAnsweringCaptcha) text = text.toUpperCase()
 
 			if (purgatory) {
 				send({ cmd: 'emote', text: text });
