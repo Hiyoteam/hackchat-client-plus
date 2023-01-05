@@ -139,7 +139,8 @@ var verifyNickname = function (nick) {
 
 //LaTeX weapon and too-many-quotes weapon defence
 function verifyMessage(args) {
-	if (/\d+(mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em)|([^\s^_]+[\^_]{){8,}|(?<=^|\n)(>[^>\n]*){5,}/.test(args.text)) {
+	// Shabby iOS Safari doesn't support zero-width assertion
+	if (/(\d+(mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em))|([^\s^_]+[\^_]{){8,}|(^|\n)(>[^>\n]*){5,}/.test(args.text)) {
 		return false;
 	} else {
 		return true;
