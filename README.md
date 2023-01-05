@@ -22,7 +22,7 @@ Some of the current features:(* means optional features, which can be set to the
 - *Soft mention (When you mention somebody with an @ by clicking his or her nickname, the client can add a space between the @ and the nickname so that he or she won't be notified.)
 - *Message log (If you choose to record messages, when the websocket connection receives a message, the json data will recorded in a string and when the client shows a message to you, the text will be recorded in a more readable format in a string. You can copy the string to the clipboard. However, if you close the tab, this log will no longer exist.)
 - Defend an unknown overflow function (If a moderator tries to crash your browser by sending a join message of a nickname more than 24 characters in length, which is probably a command called `overflow`, it won't work on this client.)
-- Captcha rendering optimization (Makes the captcha a bit easier to read.)
+- Captcha rendering optimization (Makes the captcha ~~a bit easier to read~~ way easier to read now I guess. And mobile users can ~~enjoy~~ read captcha too.)
 - Mobile buttons (Mobile users can use ↑, ↓, Tab, and can quickly input @, *, /, #. And a send button is added for users who find enter working as a line feed. A button to close the sidebar is added as well.)
 
 ---

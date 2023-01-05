@@ -563,24 +563,46 @@ var COMMANDS = {
 	},
 
 	captcha: function (args) {
-		var messageEl = document.createElement('div');
-		messageEl.classList.add('info');
+		const NS = 'http://www.w3.org/2000/svg'
+
+		let messageEl = document.createElement('div');
+		messageEl.classList.add('info', 'message');
 
 
-		var nickSpanEl = document.createElement('span');
+		let nickSpanEl = document.createElement('span');
 		nickSpanEl.classList.add('nick');
 		messageEl.appendChild(nickSpanEl);
 
-		var nickLinkEl = document.createElement('a');
+		let nickLinkEl = document.createElement('a');
 		nickLinkEl.textContent = '#';
 		nickSpanEl.appendChild(nickLinkEl);
 
-		var textEl = document.createElement('pre');
-		textEl.classList.add('text');
-		textEl.classList.add('captcha');//css optimization for captcha
-		textEl.innerHTML = args.text;
+		let pEl = document.createElement('p')
+		pEl.classList.add('text')
 
-		messageEl.appendChild(textEl);
+		let lines = args.text.split(/\n/g)
+
+		let svgEl = document.createElementNS(NS, 'svg')
+		svgEl.setAttribute('white-space', 'pre')
+		svgEl.style.backgroundColor = '#4e4e4e'
+		svgEl.style.width = '100%'
+		svgEl.style.fontSize = `${$('#messages').clientWidth / 150 * 2}px`
+		svgEl.style.height = '40em'
+
+		for (let i = 0; i < lines.length; i++) {
+			let line = lines[i]
+			let textEl = document.createElementNS(NS, 'text')
+			textEl.innerHTML = line
+			textEl.setAttribute('y', `${i}em`)
+			textEl.setAttribute('font-size', `${$('#messages').clientWidth / 150 * 2}px`)
+			textEl.setAttribute('fill', 'white')
+			textEl.style.whiteSpace = 'pre'
+			svgEl.appendChild(textEl)
+		}
+
+		pEl.appendChild(svgEl)
+
+		messageEl.appendChild(pEl);
 		$('#messages').appendChild(messageEl);
 
 		window.scrollTo(0, document.body.scrollHeight);
