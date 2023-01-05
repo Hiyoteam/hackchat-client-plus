@@ -963,7 +963,10 @@ $('#chatinput').onkeydown = function (e) {
 				send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
 			}
 
-			if (isAnsweringCaptcha) text = text.toUpperCase()
+			if (isAnsweringCaptcha && text != text.toUpperCase()) {
+				text = text.toUpperCase()
+				pushMessage({ nick: '*', text: 'Automatically converted into upper case by client.' })
+			}
 
 			if (purgatory) {
 				send({ cmd: 'emote', text: text });
@@ -1495,10 +1498,26 @@ $('#send').onclick = function () {
 
 	// Submit message
 	if ($('#chatinput').value != '') {
-		var text = $('#chatinput').value;
-		$('#chatinput').value = '';
+		if (templateStr) {
+			if (templateStr.indexOf('%m') > -1) {
+				text = templateStr.replace('%m', text);
+			}
+		}
 
-		send({ cmd: 'chat', text: text });
+		if (kolorful) {
+			send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
+		}
+
+		if (isAnsweringCaptcha && text != text.toUpperCase()) {
+			text = text.toUpperCase()
+			pushMessage({ nick: '*', text: 'Automatically converted into upper case by client.' })
+		}
+
+		if (purgatory) {
+			send({ cmd: 'emote', text: text });
+		} else {
+			send({ cmd: 'chat', text: text });
+		}
 
 		lastSent[0] = text;
 		lastSent.unshift("");
