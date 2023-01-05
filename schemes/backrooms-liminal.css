@@ -1,0 +1,55 @@
+/* Color stolen from Lynch & Etoile 's Liminal Theme http://backrooms-wiki.wikidot.com/component:theme. This CSS is under CC-BY-SA 3.0. */
+body {
+	color: #15110d;
+	background-color:rgb(201, 198, 189);
+	background-image: radial-gradient(circle, rgb(72, 69, 60, 0.05) 50%, transparent 0);
+    background-repeat: repeat;
+    background-size: 0.3em 0.3em;
+    background-attachment: fixed;
+}
+input,
+textarea {
+	color: #15110d;
+}
+.message {
+	border-left: 1px solid #3d3a33;
+}
+.refmessage {
+	border-left: 1px solid rgb(27, 27, 27);
+}
+.nick {
+	color: rgb(230, 23, 68);
+}
+.trip {
+	color: rgb(72, 69, 60);
+}
+.text a {
+	color: rgb(230, 23, 68);
+}
+.admin .nick {
+	color: #ec4300;
+}
+.mod .nick {
+	color: #ec4300;
+}
+.me .nick {
+	color: #8b00ff;
+}
+.info .nick,
+.info .text {
+	color: #780000;
+}
+.warn .nick,
+.warn .text {
+	color: rgb(230, 23, 68);
+}
+#footer {
+	background: #77736b;
+}
+#sidebar {
+	background: #c9c6bd;
+	border-color: #3d3a33;
+}
+#chatform {
+	border-color: #3d3a33;
+}

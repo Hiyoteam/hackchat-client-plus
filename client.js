@@ -1603,7 +1603,8 @@ var schemes = [
 	'old-paper',
 	'chemistory-blue',
 	// 'crosst-chat-night',
-	// 'crosst-chat-city'
+	// 'crosst-chat-city',
+	'backrooms-liminal',
 ];
 
 var highlights = [
