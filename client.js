@@ -1588,7 +1588,7 @@ var schemes = [
 	'rainbow',
 	'turbid-jade',
 	'old-paper',
-	'chemstory-blue',
+	'chemistory-blue',
 	// 'crosst-chat-night',
 	// 'crosst-chat-city'
 ];
