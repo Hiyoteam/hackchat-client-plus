@@ -1,0 +1,51 @@
+/* Color stolen from http://www.wikidot.com/user:info/hanzhuying 's http://chemistory.wikidot.com/test1. This CSS is under CC-BY-SA 3.0. */
+body {
+	background: #bbcce7;
+	color: #657b83;
+}
+input,
+textarea {
+	color: #657b83;
+}
+.message {
+	border-left: 1px solid #3f6192;
+}
+.refmessage {
+	border-left: 1px solid rgb(27, 27, 27);
+}
+.nick {
+	color: #0066ff;
+}
+.trip {
+	color: #3f6192;
+}
+.text a {
+	color: #0066ff;
+}
+.admin .nick {
+	color: #0387d1;
+}
+.mod .nick {
+	color: #0388d2;
+}
+.me .nick {
+	color: #8b00ff;
+}
+.info .nick,
+.info .text {
+	color: #0b7400;
+}
+.warn .nick,
+.warn .text {
+	color: #f00;
+}
+#footer {
+}
+#sidebar {
+	background: #bbcce7;
+	border-color: #3f6192;
+}
+#chatform {
+	border-color: #3f6192;
+	background: #e5eaf3;
+}
