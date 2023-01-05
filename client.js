@@ -137,7 +137,7 @@ var verifyNickname = function (nick) {
 	return /^[a-zA-Z0-9_]{1,24}$/.test(nick);
 }
 
-//LaTeX weapon and too-many-quotes weapon defense
+//LaTeX weapon and too-many-quotes weapon defence
 function verifyMessage(args) {
 	if (/(\\rule)|(pmatrix)|([^\s^_]+[\^_]{){8,}/.test(args.text) || /[\n](>[^>\n]*){10,}/.test(args.text) || /^(>[^>\n]*){10,}/.test(args.text)) {
 		return false;
@@ -225,6 +225,10 @@ var jsonLog = '';
 var readableLog = '';
 
 var templateStr = '';
+
+var replacement = '\*\*'
+var hide = ''
+var replace = ''
 
 /* ---Notification--- */
 
@@ -1581,7 +1585,12 @@ var schemes = [
 	'Ubuntu',
 	'gruvbox-light',
 	'fried-egg',
-	'rainbow'
+	'rainbow',
+	'turbid-jade',
+	'old-paper',
+	'chemstory-blue',
+	// 'crosst-chat-night',
+	// 'crosst-chat-city'
 ];
 
 var highlights = [
@@ -1686,8 +1695,6 @@ if (navigator.userAgent.indexOf('iPhone') > 0) {
 */
 
 /* ---Main--- */
-
-/* main */
 
 if (myChannel == '') {
 	$('#footer').classList.add('hidden');
