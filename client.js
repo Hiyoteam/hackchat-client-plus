@@ -606,9 +606,9 @@ var COMMANDS = {
 			textEl.setAttribute('font-size', `${$('#messages').clientWidth / 150 * 2}px`)
 			textEl.setAttribute('fill', 'white')
 
-			// Reserve spaces.
+			// Preserve spaces.
 			textEl.style.whiteSpace = 'pre'
-			
+
 			svgEl.appendChild(textEl)
 		}
 
