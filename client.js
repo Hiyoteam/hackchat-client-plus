@@ -156,42 +156,47 @@ var channels = [
 	`?test ?your-channell ?china ?chinese ?kt1j8rpc`,
 ]
 
+let spaceAmount = $('#messages').clientWidth * 0.9 * 0.3
+
 //make frontpage have a getter
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get#%E4%BD%BF%E7%94%A8defineproperty%E5%9C%A8%E7%8E%B0%E6%9C%89%E5%AF%B9%E8%B1%A1%E4%B8%8A%E5%AE%9A%E4%B9%89_getter
 Object.defineProperty(this, 'frontpage', {
-	get: () => [
-		"                            _           _         _       _   ",
-		"                           | |_ ___ ___| |_   ___| |_ ___| |_ ",
-		"                           |   |_ ||  _| '_| |  _|   |_ ||  _|",
-		"                           |_|_|__/|___|_,_|.|___|_|_|__/|_|  ",
-		"---",
-		"Welcome to hack.chat, a minimal, distraction-free chat application.",
-		"You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
-		"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: " + (document.domain != '' ? ('https://' + document.domain + '/') : window.location.href) + "?your-channel",
-		"There are no channel lists *for normal users*, so a secret channel name can be used for private discussions.",
-		"---",
-		"Here are some pre-made channels you can join: " + (shouldGetInfo ? (info.public ? ("(" + info.users + " users online, " + info.chans + " channels existing when you enter this page)") : "(Getting online counts...)") : "(Online counts disabled)"),
-		...channels,
-		"And here's a random one generated just for you: " + ((!shouldGetInfo) || info.public ? ("?" + Math.random().toString(36).substr(2, 8)) : ""),
-		"---",
-		"Formatting:",
-		"Notice: Dont send raw source code without using a code block!",
-		"Surround LaTeX with a dollar sign for inline style $\\zeta(2) = \\pi^2/6$, and two dollars for display. ",
-		"For syntax highlight, wrap the code like: \\`\\`\\`<language> <the code>\\`\\`\\` where <language> is any known programming language.",
-		"---",
-		"Current Github: https://github.com/hack-chat",
-		"Legacy GitHub: https://github.com/AndrewBelt/hack.chat",
-		"---",
-		"Bots, Android clients, desktop clients, browser extensions, docker images, programming libraries, server modules and more:",
-		"https://github.com/hack-chat/3rd-party-software-list",
-		"---",
-		"Server and web client released under the WTFPL and MIT open source license.",
-		"No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages.",
-		"---",
-		"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
-		"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for hosting).",
-		"Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.github.io/history/) | [TanChat](https://chat.thz.cool) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!) | [ZhangClient\(Chinese Client/中文HC客户端\)](https://client.zhangsoft.cf/)"
-	].join("\n")
+	get: () =>
+		["<pre><code><div style=\"margin: auto; width: fit-content;\">" +
+			" _           _         _       _   ",
+			"| |_ ___ ___| |_   ___| |_ ___| |_ ",
+			"|   |_ ||  _| '_| |  _|   |_ ||  _|",
+			"|_|_|__/|___|_,_|.|___|_|_|__/|_|  ",
+			"</div></code></pre>"].join('\n') +
+		md.render([
+			"---",
+			"Welcome to hack.chat, a minimal, distraction-free chat application.",
+			"You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
+			"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: " + (location.host != '' ? ('https://' + location.host + '/') : window.location.href) + "?your-channel",
+			"There are no channel lists *for normal users*, so a secret channel name can be used for private discussions.",
+			"---",
+			"Here are some pre-made channels you can join: " + (shouldGetInfo ? (info.public ? ("(" + info.users + " users online, " + info.chans + " channels existing when you enter this page)") : "(Getting online counts...)") : "(Online counts disabled)"),
+			...channels,
+			"And here's a random one generated just for you: " + ((!shouldGetInfo) || info.public ? ("?" + Math.random().toString(36).substr(2, 8)) : ""),
+			"---",
+			"Formatting:",
+			"Notice: Dont send raw source code without using a code block!",
+			"Surround LaTeX with a dollar sign for inline style $\\zeta(2) = \\pi^2/6$, and two dollars for display. ",
+			"For syntax highlight, wrap the code like: \\`\\`\\`<language> <the code>\\`\\`\\` where <language> is any known programming language.",
+			"---",
+			"Current Github: https://github.com/hack-chat",
+			"Legacy GitHub: https://github.com/AndrewBelt/hack.chat",
+			"---",
+			"Bots, Android clients, desktop clients, browser extensions, docker images, programming libraries, server modules and more:",
+			"https://github.com/hack-chat/3rd-party-software-list",
+			"---",
+			"Server and web client released under the WTFPL and MIT open source license.",
+			"No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages.",
+			"---",
+			"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
+			"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for hosting).",
+			"Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.github.io/history/) | [TanChat](https://chat.thz.cool) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!) | [ZhangClient\(Chinese Client/中文HC客户端\)](https://client.zhangsoft.cf/)"
+		].join("\n"))
 })
 
 /**
@@ -1786,11 +1791,11 @@ if (myChannel == '') {
 	$('#export-json').classList.add('hidden');
 	$('#export-readable').classList.add('hidden');
 	$('#users-div').classList.add('hidden');
-	pushMessage({ text: frontpage }, true);
+	pushMessage({ text: frontpage }, true, true);
 	if (shouldGetInfo) {
 		getInfo().then(function () {
 			$('#messages').innerHTML = '';
-			pushMessage({ text: frontpage }, true)
+			pushMessage({ text: frontpage }, true, true)
 		})
 	}
 } else {
