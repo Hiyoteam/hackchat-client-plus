@@ -1501,6 +1501,9 @@ $('#send').onclick = function () {
 
 	// Submit message
 	if ($('#chatinput').value != '') {
+		var text = $('#chatinput').value;
+		$('#chatinput').value = '';
+
 		if (templateStr) {
 			if (templateStr.indexOf('%m') > -1) {
 				text = templateStr.replace('%m', text);
