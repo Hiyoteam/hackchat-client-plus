@@ -597,8 +597,8 @@ var COMMANDS = {
 
 		// In order to make 40em work right.
 		svgEl.style.fontSize = `${$('#messages').clientWidth / 150 * 2}px`
-		// Captcha text is about 40 lines.
-		svgEl.style.height = '40em'
+		// Captcha text is about 41 lines.
+		svgEl.style.height = '41em'
 
 		// I have tried `white-space: pre` but it didn't work, so I write each line in individual text tags.
 		for (let i = 0; i < lines.length; i++) {
@@ -1071,7 +1071,10 @@ $('#chatinput').oninput = function () {
 
 /* sidebar */
 
-$('#sidebar').onmouseenter = $('#sidebar').ontouchstart = function (e) {
+$('#sidebar').onmouseenter = $('#sidebar').onclick = function (e) {
+	if (e.target == $('#sidebar-close')) {
+		return
+	}
 	$('#sidebar-content').classList.remove('hidden');
 	$('#sidebar').classList.add('expand');
 	e.stopPropagation();

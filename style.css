@@ -361,6 +361,8 @@ ol ol {
   white-space: pre-line;
 }
 
+/* Mobile style */
+
 @media only screen and (max-width: 600px) {
   .messages {
     border: none;
@@ -390,5 +392,9 @@ ol ol {
     bottom: auto;
     right: 0.5em;
     border: none;
+  }
+
+  #sidebar:not(.expand) {
+    border: red solid;
   }
 }

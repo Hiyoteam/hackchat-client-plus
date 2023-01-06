@@ -53,7 +53,7 @@ TODO:
 
 ---
 
-- [ ] better close sidebar button
+- [x] better close sidebar button (Now I know what is click through)
 - [x] r-string mode
 - [x] auto picture upload (shabbily implemented)
 - [ ] elegant mode (auto *Italic*)
