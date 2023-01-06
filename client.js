@@ -168,7 +168,7 @@ Object.defineProperty(this, 'frontpage', {
 			"|   |_ ||  _| '_| |  _|   |_ ||  _|",
 			"|_|_|__/|___|_,_|.|___|_|_|__/|_|  ",
 			"</div></code></pre>"].join('\n') +
-		md.render([
+		md.render(i18ntranslate([
 			"---",
 			"Welcome to hack.chat, a minimal, distraction-free chat application.",
 			"You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
@@ -196,8 +196,12 @@ Object.defineProperty(this, 'frontpage', {
 			"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
 			"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for hosting).",
 			"Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.github.io/history/) | [TanChat](https://chat.thz.cool) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!) | [ZhangClient\(Chinese Client/中文HC客户端\)](https://client.zhangsoft.cf/)"
-		].join("\n"))
+		].join("\n")))
 })
+
+function pushFrontPage() {
+	pushMessage({ text: frontpage }, false, true)
+}
 
 /**
  * 
@@ -1791,11 +1795,11 @@ if (myChannel == '') {
 	$('#export-json').classList.add('hidden');
 	$('#export-readable').classList.add('hidden');
 	$('#users-div').classList.add('hidden');
-	pushMessage({ text: frontpage }, true, true);
+	pushFrontPage()
 	if (shouldGetInfo) {
 		getInfo().then(function () {
 			$('#messages').innerHTML = '';
-			pushMessage({ text: frontpage }, true, true)
+			pushFrontPage()
 		})
 	}
 } else {

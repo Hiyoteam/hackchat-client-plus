@@ -124,7 +124,7 @@ let i18n = new Map([
             ['(Getting online counts...)', '（正在获取在线人数……）'],
             [/\((\d+) users online, /, '（当你进入这个首页时，全站在线用户数为$1，'],
             [/(\d+) channels existing when you enter this page\)/, '全站频道数为$1）'],
-            ['And here\'s a random one generated just for you: ', '这是一个为你准备的随机频道：'],
+            ['And here\'s a random one generated just for you: ', '这是一个为你准备的随机频道： '],
             ['Formatting:', '排版：'],
             ['Notice: Dont send raw source code without using a code block!', '注意：不要不带代码块直接发源代码！'],
             ['Surround LaTeX with a dollar sign for inline style $\\zeta(2) = \\pi^2/6$, and two dollars for display. ', '用美元符号包裹行内公式： $\\zeta(2) = \\pi^2/6$，用两个美元符号包裹块级公式。'],
