@@ -596,7 +596,7 @@ var COMMANDS = {
 		svgEl.style.width = '100%'
 
 		// In order to make 40em work right.
-		svgEl.style.fontSize = `${$('#messages').clientWidth / lines[0].length * 2}px`
+		svgEl.style.fontSize = `${$('#messages').clientWidth / lines[0].length * 1.5}px`
 		// Captcha text is about 41 lines.
 		svgEl.style.height = '41em'
 
@@ -610,7 +610,7 @@ var COMMANDS = {
 			textEl.setAttribute('y', `${i + 1}em`)
 
 			// Captcha text shouldn't overflow #messages element, so I divide the width of the messages container with the overvalued length of each line in order to get an undervalued max width of each character, and than multiply it by 2 (The overvalued aspect ratio of a character) because the font-size attribute means the height of a character. 
-			textEl.setAttribute('font-size', `${$('#messages').clientWidth / lines[0].length * 2}px`)
+			textEl.setAttribute('font-size', `${$('#messages').clientWidth / lines[0].length * 1.5}px`)
 			textEl.setAttribute('fill', 'white')
 
 			// Preserve spaces.
