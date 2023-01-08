@@ -1146,7 +1146,7 @@ $('#set-template').onclick = function () {
 		return;
 	}
 	if (template.indexOf('%m') > -1) {
-		templateStr = template
+		templateStr = template.replace(/\\n/g, '\n').replace(/\t/g, '\t')
 		pushMessage({ nick: '*', text: "Suessfully set template." })
 	} else if (template == '') {
 		templateStr = null;
