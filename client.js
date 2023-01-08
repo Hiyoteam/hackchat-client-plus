@@ -1146,8 +1146,12 @@ $('#set-template').onclick = function () {
 		return;
 	}
 	if (template.indexOf('%m') > -1) {
-		let foo = String(Math.random()).slice(2)
-		templateStr = template.replace(/\\\\/g, foo).replace(/\\n/g, '\n').replace(/\t/g, '\t').replace(new RegExp(foo, 'g'), '\\\\')
+		const rand = String(Math.random()).slice(2)
+		templateStr = template
+			.replace(/\\\\/g, rand)
+			.replace(/\\n/g, '\n')
+			.replace(/\\t/g, '\t')
+			.replace(new RegExp(rand, 'g'), '\\\\')
 		pushMessage({ nick: '*', text: "Suessfully set template." })
 	} else if (template == '') {
 		templateStr = null;
