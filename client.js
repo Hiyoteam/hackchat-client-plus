@@ -393,6 +393,10 @@ var shouldAutoReconnect = true;
 var isAnsweringCaptcha = false;
 
 function join(channel, oldNick) {
+	try {
+		ws.close()
+	} catch (e) { }
+
 	ws = new WebSocket('wss://hack.chat/chat-ws');
 	//ws = new WebSocket('ws://localhost:6060');
 
@@ -582,7 +586,7 @@ var COMMANDS = {
 		const NS = 'http://www.w3.org/2000/svg'
 
 		let messageEl = document.createElement('div');
-		messageEl.classList.add('info', 'message');
+		messageEl.classList.add('message', 'info');
 
 
 		let nickSpanEl = document.createElement('span');
