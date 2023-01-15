@@ -122,7 +122,7 @@ ul li {
 .text {
   margin: 0;
   margin-left: 1em;
-  overflow-x: hidden;
+  overflow: hidden;
 }
 
 .text p {
