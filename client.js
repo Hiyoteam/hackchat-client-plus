@@ -857,6 +857,19 @@ function insertAtCursor(text) {
 	updateInputSize();
 }
 
+function backspaceAtCursor(length = 1) {
+	var input = $('#chatinput');
+	var start = input.selectionStart || 0;
+	var before = input.value.substr(0, start);
+	var after = input.value.substr(start);
+
+	before = before.slice(0, -length);
+	input.value = before + after;
+	input.selectionStart = input.selectionEnd = before.length;
+
+	updateInputSize();
+}
+
 function send(data) {
 	if (ws && ws.readyState == ws.OPEN) {
 		ws.send(JSON.stringify(data));
@@ -1044,8 +1057,13 @@ $('#chatinput').onkeydown = function (e) {
 
 		var autocompletedNick = false;
 
-		if (index >= 0) {
+		if (index >= 1 && index == pos - 1 && text.slice(index - 1, pos).match(/^@@$/)) {
+			autocompletedNick = true;
+			backspaceAtCursor(1);
+			insertAtCursor(onlineUsers.join(' @'));
+		} else if (index >= 0) {
 			var stub = text.substring(index + 1, pos).toLowerCase();
+
 			// Search for nick beginning with stub
 			var nicks = onlineUsers.filter(function (nick) {
 				return nick.toLowerCase().indexOf(stub) == 0
@@ -1054,7 +1072,8 @@ $('#chatinput').onkeydown = function (e) {
 			if (nicks.length > 0) {
 				autocompletedNick = true;
 				if (nicks.length == 1) {
-					insertAtCursor(nicks[0].substr(stub.length) + " ");
+					backspaceAtCursor(stub.length);
+					insertAtCursor(nicks[0] + " ");
 				}
 			}
 		}
