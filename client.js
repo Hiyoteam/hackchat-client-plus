@@ -246,6 +246,8 @@ var replacement = '\*\*'
 var hide = ''
 var replace = ''
 
+var input = $('#chatinput');
+
 /* ---Notification--- */
 
 /** Notification switch and local storage behavior **/
@@ -966,19 +968,17 @@ $('#footer').onclick = function () {
 	$('#chatinput').focus();
 }
 
-$('#chatinput').onkeydown = function (e) {
-	if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
-		e.preventDefault();
-
+var keyActions = {
+	send() {
 		if (!wasConnected) {
 			pushMessage({ nick: '*', text: "Attempting to reconnect. . ." })
 			join(myChannel);
 		}
 
 		// Submit message
-		if (e.target.value != '') {
-			var text = e.target.value;
-			e.target.value = '';
+		if (input.value != '') {
+			var text = input.value;
+			input.value = '';
 
 			if (templateStr) {
 				if (templateStr.indexOf('%m') > -1) {
@@ -1007,52 +1007,31 @@ $('#chatinput').onkeydown = function (e) {
 
 			updateInputSize();
 		}
-	} else if (e.keyCode == 38 /* UP */) {
-		// Restore previous sent messages
-		if (e.target.selectionStart === 0 && lastSentPos < lastSent.length - 1) {
-			e.preventDefault();
+	},
 
-			if (lastSentPos == 0) {
-				lastSent[0] = e.target.value;
-			}
-
-			lastSentPos += 1;
-			e.target.value = lastSent[lastSentPos];
-			e.target.selectionStart = e.target.selectionEnd = e.target.value.length;
-
-			updateInputSize();
+	up() {
+		if (lastSentPos == 0) {
+			lastSent[0] = input.value;
 		}
-	} else if (e.keyCode == 40 /* DOWN */) {
-		if (e.target.selectionStart === e.target.value.length && lastSentPos > 0) {
-			e.preventDefault();
 
-			lastSentPos -= 1;
-			e.target.value = lastSent[lastSentPos];
-			e.target.selectionStart = e.target.selectionEnd = 0;
-
-			updateInputSize();
-		}
-	} else if (e.keyCode == 27 /* ESC */) {
-		e.preventDefault();
-
-		// Clear input field
-		e.target.value = "";
-		lastSentPos = 0;
-		lastSent[lastSentPos] = "";
+		lastSentPos += 1;
+		input.value = lastSent[lastSentPos];
+		input.selectionStart = input.selectionEnd = input.value.length;
 
 		updateInputSize();
-	} else if (e.keyCode == 9 /* TAB */) {
-		// Tab complete nicknames starting with @
+	},
 
-		if (e.ctrlKey) {
-			// Skip autocompletion and tab insertion if user is pressing ctrl
-			// ctrl-tab is used by browsers to cycle through tabs
-			return;
-		}
-		e.preventDefault();
+	down() {
+		lastSentPos -= 1;
+		input.value = lastSent[lastSentPos];
+		input.selectionStart = input.selectionEnd = 0;
 
-		var pos = e.target.selectionStart || 0;
-		var text = e.target.value;
+		updateInputSize();
+	},
+
+	tab() {
+		var pos = input.selectionStart || 0;
+		var text = input.value;
 		var index = text.lastIndexOf('@', pos);
 
 		var autocompletedNick = false;
@@ -1082,6 +1061,47 @@ $('#chatinput').onkeydown = function (e) {
 		if (!autocompletedNick) {
 			insertAtCursor('\t');
 		}
+	},
+}
+
+$('#chatinput').onkeydown = function (e) {
+	if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
+		e.preventDefault();
+
+		keyActions.send();
+	} else if (e.keyCode == 38 /* UP */) {
+		// Restore previous sent messages
+		if (input.selectionStart === 0 && lastSentPos < lastSent.length - 1) {
+			e.preventDefault();
+
+			keyActions.up();
+		}
+	} else if (e.keyCode == 40 /* DOWN */) {
+		if (input.selectionStart === input.value.length && lastSentPos > 0) {
+			e.preventDefault();
+
+			keyActions.down();
+		}
+	} else if (e.keyCode == 27 /* ESC */) {
+		e.preventDefault();
+
+		// Clear input field
+		input.value = "";
+		lastSentPos = 0;
+		lastSent[lastSentPos] = "";
+
+		updateInputSize();
+	} else if (e.keyCode == 9 /* TAB */) {
+		// Tab complete nicknames starting with @
+
+		if (e.ctrlKey) {
+			// Skip autocompletion and tab insertion if user is pressing ctrl
+			// ctrl-tab is used by browsers to cycle through tabs
+			return;
+		}
+		e.preventDefault();
+
+		keyActions.tab();
 	}
 }
 
@@ -1474,31 +1494,7 @@ $('#should-get-info').onchange = function (e) {
 /* ---Buttons for some mobile users--- */
 
 $('#tab').onclick = function () {
-	var pos = $('#chatinput').selectionStart || 0;
-	var text = $('#chatinput').value;
-	var index = text.lastIndexOf('@', pos);
-
-	var autocompletedNick = false;
-
-	if (index >= 0) {
-		var stub = text.substring(index + 1, pos).toLowerCase();
-		// Search for nick beginning with stub
-		var nicks = onlineUsers.filter(function (nick) {
-			return nick.toLowerCase().indexOf(stub) == 0
-		});
-
-		if (nicks.length > 0) {
-			autocompletedNick = true;
-			if (nicks.length == 1) {
-				insertAtCursor(nicks[0].substr(stub.length) + " ");
-			}
-		}
-	}
-
-	// Since we did not insert a nick, we insert a tab character
-	if (!autocompletedNick) {
-		insertAtCursor('\t');
-	}
+	keyActions.tab()
 }
 
 document.querySelectorAll('button.char').forEach(function (el) {
@@ -1509,66 +1505,18 @@ document.querySelectorAll('button.char').forEach(function (el) {
 
 $('#sent-pre').onclick = function () {
 	if (lastSentPos < lastSent.length - 1) {
-		if (lastSentPos == 0) {
-			lastSent[0] = $('#chatinput').value;
-		}
-
-		lastSentPos += 1;
-		$('#chatinput').value = lastSent[lastSentPos];
-		$('#chatinput').selectionStart = $('#chatinput').selectionEnd = $('#chatinput').value.length;
-
-		updateInputSize();
+		keyActions.up()
 	}
 }
 
 $('#sent-next').onclick = function () {
 	if (lastSentPos > 0) {
-		lastSentPos -= 1;
-		$('#chatinput').value = lastSent[lastSentPos];
-		$('#chatinput').selectionStart = $('#chatinput').selectionEnd = 0;
-
-		updateInputSize();
+		keyActions.down()
 	}
 }
 
 $('#send').onclick = function () {
-	if (!wasConnected) {
-		pushMessage({ nick: '*', text: "Attempting to reconnect. . ." })
-		join(myChannel);
-	}
-
-	// Submit message
-	if ($('#chatinput').value != '') {
-		var text = $('#chatinput').value;
-		$('#chatinput').value = '';
-
-		if (templateStr) {
-			if (templateStr.indexOf('%m') > -1) {
-				text = templateStr.replace('%m', text);
-			}
-		}
-
-		if (kolorful) {
-			send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
-		}
-
-		if (isAnsweringCaptcha && text != text.toUpperCase()) {
-			text = text.toUpperCase()
-			pushMessage({ nick: '*', text: 'Automatically converted into upper case by client.' })
-		}
-
-		if (purgatory) {
-			send({ cmd: 'emote', text: text });
-		} else {
-			send({ cmd: 'chat', text: text });
-		}
-
-		lastSent[0] = text;
-		lastSent.unshift("");
-		lastSentPos = 0;
-
-		updateInputSize();
-	}
+	keyActions.send()
 }
 
 $('#feed').onclick = function () {
