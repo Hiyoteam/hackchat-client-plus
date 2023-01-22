@@ -248,6 +248,15 @@ var replace = ''
 
 var input = $('#chatinput');
 
+var seconds = {
+	'join': {
+		'times': [],
+		'last': (new Date).getTime(),
+	},
+}
+
+var lastMentioned = ''
+
 /* ---Notification--- */
 
 /** Notification switch and local storage behavior **/
@@ -488,6 +497,31 @@ function join(channel, oldNick) {
 					pushMessage({ nick: '!', text: `You are now at ?${args.channel} . A mod has moved you. ` })
 				} else if (args.channel == 'purgatory') {
 					purgatory = true
+				}
+			}
+		}
+		if (cmd == 'join') {
+			let limiter = seconds['join']
+			let time = (new Date()).getTime()
+			limiter.times.push(time - limiter.last)
+			limiter.last = time
+			let sum = 0
+			let count = 0
+			for (let d = 1; d <= limiter.times.length; d++) {
+				sum += limiter.times[limiter.times.length - d]
+				if (sum > 1000) {
+					count = d
+					break
+				}
+			}
+			limiter.times = limiter.times.slice(-count)
+			if (localStorageGet('joined-left') != 'false') {
+				if (count > 5 && $('#joined-left').checked) {
+					$('#joined-left').checked = false // temporarily disable join/left notice
+					pushMessage({ nick: '*', text: 'Frequent joining detected. Now temporarily disabling join/left notice.' })
+				} else if (count < 5 && !($('#joined-left').checked)) {
+					$('#joined-left').checked = true
+					pushMessage({ nick: '*', text: 'Now enabling join/left notice.' })
 				}
 			}
 		}
@@ -1039,20 +1073,33 @@ var keyActions = {
 		if (index >= 1 && index == pos - 1 && text.slice(index - 1, pos).match(/^@@$/)) {
 			autocompletedNick = true;
 			backspaceAtCursor(1);
-			insertAtCursor(onlineUsers.join(' @'));
+			insertAtCursor(onlineUsers.join(' @') + " ");
+		} else if (index >= 0 && index == pos - 1) {
+			autocompletedNick = true;
+			if (lastMentioned.length > 0) {
+				insertAtCursor(lastMentioned + " ");
+			} else {
+				insertAtCursor(myNick.split('#')[0] + " ");
+				lastMentioned = myNick.split('#')[0]
+			}
 		} else if (index >= 0) {
-			var stub = text.substring(index + 1, pos).toLowerCase();
+			var stub = text.substring(index + 1, pos);
 
 			// Search for nick beginning with stub
-			var nicks = onlineUsers.filter(function (nick) {
-				return nick.toLowerCase().indexOf(stub) == 0
-			});
+			var nicks = onlineUsers.filter(nick => nick.indexOf(stub) == 0);
+
+			if (nicks.length == 0) {
+				nicks = onlineUsers.filter(
+					nick => nick.toLowerCase().indexOf(stub.toLowerCase()) == 0
+				)
+			}
 
 			if (nicks.length > 0) {
 				autocompletedNick = true;
 				if (nicks.length == 1) {
 					backspaceAtCursor(stub.length);
 					insertAtCursor(nicks[0] + " ");
+					lastMentioned = nicks[0]
 				}
 			}
 		}
