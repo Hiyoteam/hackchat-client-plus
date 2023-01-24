@@ -1182,12 +1182,16 @@ $('#chatinput').onkeydown = function (e) {
 }
 
 function updateInputSize() {
+	var atBottom = isAtBottom();
+
 	var input = $('#chatinput');
 	input.style.height = 0;
 	input.style.height = input.scrollHeight + 'px';
 	document.body.style.marginBottom = $('#footer').offsetHeight + 'px';
 
-	scrollToBottom()
+	if (atBottom) {
+		window.scrollTo(0, document.body.scrollHeight);
+	}
 }
 
 function scrollToBottom() {
