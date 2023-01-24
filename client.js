@@ -91,7 +91,7 @@ md.renderer.rules.image = function (tokens, idx, options) {
 		var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
 		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
 		var suffix = options.xhtmlOut ? ' /' : '';
-		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
+		var scrollOnload = ' onload="scrollToBottom()"';
 		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' referrerpolicy="no-referrer"></a>';
 	}
 
@@ -201,7 +201,7 @@ Object.defineProperty(this, 'frontpage', {
 })
 
 function pushFrontPage() {
-	pushMessage({ text: frontpage }, false, true)
+	pushMessage({ text: frontpage }, { isHtml: true, i18n: false })
 }
 
 /**
@@ -235,6 +235,7 @@ var lastSent = [""];
 var lastSentPos = 0;
 
 var kolorful = false
+var devMode = false
 
 //message log
 var jsonLog = '';
@@ -526,36 +527,36 @@ function join(channel, oldNick) {
 			}
 		}
 		if (command) {
-			command.call(null, args);
+			command.call(null, args, message.data);
 		}
 		if (doLogMessages) { jsonLog += ';' + message.data }
 	}
 }
 
 var COMMANDS = {
-	chat: function (args) {
+	chat: function (args, raw) {
 		if (ignoredUsers.indexOf(args.nick) >= 0) {
 			return;
 		}
-		pushMessage(args, false);
+		pushMessage(args, { i18n: false, raw });
 	},
 
-	info: function (args) {
+	info: function (args, raw) {
 		args.nick = '*';
-		pushMessage(args, true);
+		pushMessage(args, { i18n: true, raw });
 	},
 
-	emote: function (args) {
+	emote: function (args, raw) {
 		args.nick = '*';
-		pushMessage(args, false);
+		pushMessage(args, { i18n: false, raw });
 	},
 
-	warn: function (args) {
+	warn: function (args, raw) {
 		args.nick = '!';
-		pushMessage(args, true);
+		pushMessage(args, { i18n: true, raw });
 	},
 
-	onlineSet: function (args) {
+	onlineSet: function (args, raw) {
 		isAnsweringCaptcha = false
 
 		let users = args.users;
@@ -577,9 +578,9 @@ var COMMANDS = {
 		})
 
 		// respectively render markdown for every nickname in order to prevent the underlines in different nicknames from being rendered as italics or bold for matching markdown syntax. 
-		pushMessage({ nick: '*', text: i18ntranslate("Users online: ") + nicksHTML.join(", ") }, false, true)
+		pushMessage({ nick: '*', text: i18ntranslate("Users online: ") + nicksHTML.join(", ") }, { i18n: false, isHtml: true, raw })
 
-		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" }, true)
+		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" }, { i18n: true })
 
 		if (myColor) {
 			if (myColor == 'random') {
@@ -591,7 +592,7 @@ var COMMANDS = {
 		isInChannel = true
 	},
 
-	onlineAdd: function (args) {
+	onlineAdd: function (args, raw) {
 		var nick = args.nick;
 
 		userAdd(nick, args.trip);
@@ -603,17 +604,17 @@ var COMMANDS = {
 			if (args.trip) {
 				payLoad.trip = args.trip
 			}
-			pushMessage(payLoad, true);
+			pushMessage(payLoad, { i18n: true, raw });
 		}
 	},
 
-	onlineRemove: function (args) {
+	onlineRemove: function (args, raw) {
 		var nick = args.nick;
 
 		userRemove(nick);
 
 		if ($('#joined-left').checked) {
-			pushMessage({ nick: '*', text: nick + " left" }, true);
+			pushMessage({ nick: '*', text: nick + " left" }, { i18n: true, raw });
 		}
 	},
 
@@ -735,7 +736,11 @@ function reply(args) {//from crosst.chat
 	$('#chatinput').focus();
 }
 
-function pushMessage(args, i18n, isHtml/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
+function pushMessage(args, options/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
+	let i18n = options.i18n
+	let isHtml = options.isHtml
+	let raw = options.raw
+
 	if (i18n === undefined) {
 		i18n = true
 	}
@@ -846,6 +851,32 @@ function pushMessage(args, i18n, isHtml/*This is only for better controll to ren
 		textEl.appendChild(pEl)
 		console.log('norender to dangerous message:', args)
 	}
+	if (raw) {
+		textEl.dataset.raw = raw
+		textEl.dataset.displayingRaw = 'false'
+		textEl.oncontextmenu = function (e) {
+			if (!devMode) {
+				return
+			}
+			e.preventDefault()
+			if (textEl.dataset.displayingRaw == 'true') {
+				textEl.lastElementChild.remove()
+				textEl.dataset.displayingRaw = 'false'
+				textEl.onmouseleave = null
+			} else {
+				let pEl = document.createElement('p')
+				pEl.innerHTML = md.render('```json\n' + raw + '\n```')
+				textEl.appendChild(pEl)
+				textEl.dataset.displayingRaw = 'true'
+				textEl.onmouseleave = function (e) {
+					textEl.lastElementChild.remove()
+					textEl.dataset.displayingRaw = 'false'
+					textEl.onmouseleave = null
+				}
+			}
+			scrollToBottom()
+		}
+	}
 	// Optimize CSS of code blocks which have no specified language name: add a hjls class for them
 	textEl.querySelectorAll('pre > code').forEach((element) => {
 		let doElementHasClass = false
@@ -863,9 +894,7 @@ function pushMessage(args, i18n, isHtml/*This is only for better controll to ren
 	// Scroll to bottom
 	var atBottom = isAtBottom();
 	$('#messages').appendChild(messageEl);
-	if (atBottom && myChannel != ''/*Frontpage should not be scrooled*/) {
-		window.scrollTo(0, document.body.scrollHeight);
-	}
+	scrollToBottom()
 
 	unread += 1;
 	updateTitle();
@@ -1153,15 +1182,17 @@ $('#chatinput').onkeydown = function (e) {
 }
 
 function updateInputSize() {
-	var atBottom = isAtBottom();
-
 	var input = $('#chatinput');
 	input.style.height = 0;
 	input.style.height = input.scrollHeight + 'px';
 	document.body.style.marginBottom = $('#footer').offsetHeight + 'px';
 
-	if (atBottom) {
-		window.scrollTo(0, document.body.scrollHeight);
+	scrollToBottom()
+}
+
+function scrollToBottom() {
+	if (isAtBottom() && myChannel/*Frontpage should not be scrooled*/) {
+		window.scrollTo(0, document.body.scrollHeight)
 	}
 }
 
@@ -1231,7 +1262,7 @@ $('#set-custom-color').onclick = function () {
 }
 
 $('#set-template').onclick = function () {
-	// Set auto changetemplate
+	// Set template
 	let template = prompt(i18ntranslate('Your template string:(use %m to replace your message content. press enter without inputing to reset.)'))
 	if (template == null) {
 		return;
@@ -1275,76 +1306,68 @@ $('#special-cmd').onclick = function () {
 		return;
 	}
 	let run = {
-		copy:/*copy the x-th last message*/
-			function (...args) {
-				if (args == []) {
-					args = ['0']
-				}
-				if (args.length != 1) {
-					pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 or 1 is needed.` })
-					return
-				}
-				let logList = readableLog.split('\n')
-				if (logList.length <= args[0] || !doLogMessages) {
-					pushMessage({ nick: '!', text: `No enough logs.` })
-					return
-				}
-				let logItem = logList[logList.length - args[0] - 1]
-				navigator.clipboard.writeText(logItem).then(function () {
-					pushMessage({ nick: '*', text: "Copied: " + logItem })
-				}, function () {
-					pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
-				});
-			},
-		reload:
-			function (...args) {
-				if (args.length != 0) {
-					pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 is needed.` })
-					return
-				}
-				location.reload()
-			},
-		coderMode:
-			function (...args) {
-				if (!localStorageGet('coder-mode') || localStorageGet('coder-mode') != 'true') {
-					coderMode()
-					localStorageSet('coder-mode', true)
-				} else {
-					localStorageSet('coder-mode', false)
-					pushMessage({ nick: '*', text: `Refresh to hide coder buttons.` })
-				}
-			},
-		test:
-			function (...args) {
-				pushMessage({ nick: '!', text: `${args.length} arguments ${args}` })
-			},
-		about:
-			function (...args) {
-				let a = 'HC++ Made by 4n0n4me at hcer.netlify.app'
-				console.log(a)
-			},
-		colorful:
-			function (...args) {
-				kolorful = true
-			},
-		raw:
-			function (...args) {
-				let escaped = mdEscape(cmdText.slice(4))
-				pushMessage({ nick: '*', text: `\`\`\`\n${escaped}\n\`\`\`` })
-				navigator.clipboard.writeText(escaped).then(function () {
-					pushMessage({ nick: '*', text: "Escaped text copied to clipboard." })
-				}, function () {
-					pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
-				});
-			},
-		preview:
-			function (...args) {
-				$('#messages').innerHTML = '';
-				pushMessage({ nick: '*', text: '信息测试' })
-				pushMessage({ nick: '!', text: '警告测试' })
-				pushMessage({ nick: '[test]', text: '# 标题测试\n\n正文测试\n\n[链接测试](https://hcwiki.github.io/)\n\n> 引用测试' })
-				$('#footer').classList.remove('hidden')
+		copy(...args) {//copy the x-th last message
+			if (args == []) {
+				args = ['0']
 			}
+			if (args.length != 1) {
+				pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 or 1 is needed.` })
+				return
+			}
+			let logList = readableLog.split('\n')
+			if (logList.length <= args[0] || !doLogMessages) {
+				pushMessage({ nick: '!', text: `No enough logs.` })
+				return
+			}
+			let logItem = logList[logList.length - args[0] - 1]
+			navigator.clipboard.writeText(logItem).then(function () {
+				pushMessage({ nick: '*', text: "Copied: " + logItem })
+			}, function () {
+				pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
+			});
+		},
+		reload(...args) {
+			if (args.length != 0) {
+				pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 is needed.` })
+				return
+			}
+			location.reload()
+		},
+		coderMode(...args) {
+			if (!localStorageGet('coder-mode') || localStorageGet('coder-mode') != 'true') {
+				coderMode()
+				localStorageSet('coder-mode', true)
+			} else {
+				localStorageSet('coder-mode', false)
+				pushMessage({ nick: '*', text: `Refresh to hide coder buttons.` })
+			}
+		},
+		test(...args) {
+			pushMessage({ nick: '!', text: `${args.length} arguments ${args}` })
+		},
+		about(...args) {
+			let a = 'HC++ Made by 4n0n4me at hcer.netlify.app'
+			console.log(a)
+		},
+		colorful(...args) {
+			kolorful = true
+		},
+		raw(...args) {
+			let escaped = mdEscape(cmdText.slice(4))
+			pushMessage({ nick: '*', text: `\`\`\`\n${escaped}\n\`\`\`` })
+			navigator.clipboard.writeText(escaped).then(function () {
+				pushMessage({ nick: '*', text: "Escaped text copied to clipboard." })
+			}, function () {
+				pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
+			});
+		},
+		preview(...args) {
+			$('#messages').innerHTML = '';
+			pushMessage({ nick: '*', text: '信息测试' })
+			pushMessage({ nick: '!', text: '警告测试' })
+			pushMessage({ nick: '[test]', text: '# 标题测试\n\n正文测试\n\n[链接测试](https://hcwiki.github.io/)\n\n> 引用测试' })
+			$('#footer').classList.remove('hidden')
+		},
 	}
 	cmdArray = cmdText.split(' ')
 	if (run[cmdArray[0]]) {
@@ -1744,7 +1767,7 @@ function setHighlight(scheme) {
 function setLanguage(language) {
 	lang = language
 	localStorageSet('i18n', lang);
-	pushMessage({ nick: '!', text: 'Please refresh to apply language. Multi language is in test and not perfect yet. ' }, true)
+	pushMessage({ nick: '!', text: 'Please refresh to apply language. Multi language is in test and not perfect yet. ' }, { i18n: true })
 }
 
 // Add scheme options to dropdown selector
