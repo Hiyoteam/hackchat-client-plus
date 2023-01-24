@@ -736,7 +736,7 @@ function reply(args) {//from crosst.chat
 	$('#chatinput').focus();
 }
 
-function pushMessage(args, options/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
+function pushMessage(args, options = {}/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
 	let i18n = options.i18n
 	let isHtml = options.isHtml
 	let raw = options.raw
