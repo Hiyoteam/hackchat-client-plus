@@ -522,7 +522,7 @@ function join(channel, oldNick) {
 					pushMessage({ nick: '*', text: 'Frequent joining detected. Now temporarily disabling join/left notice.' })
 				} else if (count < 5 && !($('#joined-left').checked)) {
 					$('#joined-left').checked = true
-					pushMessage({ nick: '*', text: 'Now enabling join/left notice.' })
+					pushMessage({ nick: '*', text: 'Auto enabled join/left notice.' })
 				}
 			}
 		}
@@ -580,7 +580,7 @@ var COMMANDS = {
 		// respectively render markdown for every nickname in order to prevent the underlines in different nicknames from being rendered as italics or bold for matching markdown syntax. 
 		pushMessage({ nick: '*', text: i18ntranslate("Users online: ") + nicksHTML.join(", ") }, { i18n: false, isHtml: true, raw })
 
-		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source at: https://github.com/xjzh123/hackchat-client-plus" }, { i18n: true })
+		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source code at: https://github.com/xjzh123/hackchat-client-plus" }, { i18n: true })
 
 		if (myColor) {
 			if (myColor == 'random') {
@@ -1248,7 +1248,7 @@ $('#clear-messages').onclick = function () {
 
 $('#set-custom-color').onclick = function () {
 	// Set auto changecolor
-	let color = prompt(i18ntranslate('Your nickname color:(press enter without inputing to reset; input "random" to set it to random)'))
+	let color = prompt(i18ntranslate('Your nickname color:(leave blank to reset; input "random" to set it to random color)'))
 	if (color == null) {
 		return;
 	}
@@ -1260,9 +1260,9 @@ $('#set-custom-color').onclick = function () {
 		pushMessage({ nick: '*', text: `Suessfully set your auto nickname color to #${myColor}. Rejoin or join a Channel to make it go into effect.` })
 	} else if (color == '') {
 		myColor = null;
-		pushMessage({ nick: '*', text: "Suessfully disabled autocolor." })
+		pushMessage({ nick: '*', text: "Successfully disabled autocolor." })
 	} else {
-		pushMessage({ nick: '!', text: "Invalid color. Please give color in hex RGB code." })
+		pushMessage({ nick: '!', text: "Invalid color. Please set color in hex code." })
 	}
 	localStorageSet('my-color', myColor || '')//if myColor is null, set an empty string so that when it is got it will be ('' || null) (confer {var myColor = localStorageGet('my-color') || null;} at about line 190) the value of which is null
 }
@@ -1369,9 +1369,9 @@ $('#special-cmd').onclick = function () {
 		},
 		preview(...args) {
 			$('#messages').innerHTML = '';
-			pushMessage({ nick: '*', text: '信息测试' })
-			pushMessage({ nick: '!', text: '警告测试' })
-			pushMessage({ nick: '[test]', text: '# 标题测试\n\n正文测试\n\n[链接测试](https://hcwiki.github.io/)\n\n> 引用测试' })
+			pushMessage({ nick: '*', text: 'Info test' })
+			pushMessage({ nick: '!', text: 'Warn test' })
+			pushMessage({ nick: '[test]', text: '# Title test\n\ntext test\n\n[Link test](https://hcwiki.github.io/)\n\n> Quote test' })
 			$('#footer').classList.remove('hidden')
 		},
 	}
@@ -1402,7 +1402,7 @@ if (localStorageGet('coder-mode') == 'true') {
 
 $('#img-upload').onclick = function () {
 	if (localStorageGet('image-upload') != 'true') {
-		confirmed = confirm(i18ntranslate('Image host provided by Dataeverything team. All uploads on your own responsibility.'))
+		confirmed = confirm(i18ntranslate('Image host provided by DataEverything team. All uploads on your own responsibility.'))
 		if (confirmed) {
 			localStorageSet('image-upload', true)
 		} else {
