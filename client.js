@@ -230,7 +230,8 @@ function localStorageSet(key, val) {
 var ws;
 var myNick = localStorageGet('my-nick') || '';
 var myColor = localStorageGet('my-color') || null;//hex color value for autocolor
-var myChannel = window.location.search.replace(/^\?/, '');
+var myChannel = window.location.search.replace(/^\?/, '').split(/(?<!@)@(?!@)/)[0].replace(/@@/g, '@')
+const WS_URL = window.location.search.replace(/^\?/, '').split(/(?<!@)@(?!@)/)[1] ?? 'wss://hack.chat/chat-ws';
 var lastSent = [""];
 var lastSentPos = 0;
 
@@ -410,8 +411,7 @@ function join(channel, oldNick) {
 		ws.close()
 	} catch (e) { }
 
-	ws = new WebSocket('wss://hack.chat/chat-ws');
-	//ws = new WebSocket('ws://localhost:6060');
+	ws = new WebSocket(WS_URL);
 
 	wasConnected = false;
 
@@ -947,7 +947,7 @@ function send(data) {
 
 function getInfo() {
 	return new Promise(function (resolve, reject) {
-		ws = new WebSocket('wss://hack.chat/chat-ws');
+		ws = new WebSocket(WS_URL);
 
 		ws.onopen = function () {
 			this.send(JSON.stringify({ cmd: "session", isBot: false }))

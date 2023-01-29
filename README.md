@@ -12,7 +12,8 @@ Some of the current features:(* means optional features, which can be set to the
 - Open source and safe (No message or password recording)
 - Defend known latex weapons (Malicious latex messages wont be rendered but will be shown in plain text)
 - Repair the display of yourself's messages (Now no matter whether you use a tripcode, you can see the nickname of yourself in a different color from others', if you haven't set a custom nickname color with `/color` or `changecolor` command.)
-- *Custom invite (Now you can invite another user to a certain channel decided by you instead of a random channel.)
+- Custom invite (Now you can invite another user to a certain channel decided by you instead of a random channel.)
+  - You can just press enter to send a normal invite.
 - Fast quote (To reply to a certain message, just rightclick the sender's nickname) (thanks to <https://crosst.chat> for this part of code)
 - *Autocolor (When joining a channel, the client will automatically change your nickname color to what you want with a `changecolor` command. As you dont need to set color mannually every time, your nickname wont be colorless any more.)
 - Better reconnect (When you are disconnected from the server, the client will reconnect with your nickname with an extra underline to avoid being blocked because of having the same nickname as your former connection which still exists in the server. And if it fails to reconnect, when you try to send something the client will try reconnecting again.)
@@ -23,7 +24,10 @@ Some of the current features:(* means optional features, which can be set to the
 - *Message log (If you choose to record messages, when the websocket connection receives a message, the json data will recorded in a string and when the client shows a message to you, the text will be recorded in a more readable format in a string. You can copy the string to the clipboard. However, if you close the tab, this log will no longer exist.)
 - Defend an unknown overflow function (If a moderator tries to crash your browser by sending a join message of a nickname more than 24 characters in length, which is probably a command called `overflow`, it won't work on this client.)
 - Captcha rendering optimization (Makes the captcha ~~a bit easier to read~~ way easier to read now I guess. And mobile users can ~~enjoy~~ read captcha too.)
-- Mobile buttons (Mobile users can use ↑, ↓, Tab, and can quickly input @, *, /, #. And a send button is added for users who find enter working as a line feed. A button to close the sidebar is added as well.)
+- \*Mobile buttons (Mobile users can use ↑, ↓, Tab, and can quickly input @, *, /, #. And a send button is added for users who find enter working as a line feed. A button to close the sidebar is added as well.)
+- Custom websocket url. To use it, add the ws url in the url like <hcer.netlify.app/?your-channel@wss://example-ws-url.com>. If you need character `@` in your channel name, use `@@` instead.
+  - Notice that this client is not designed to connect to multi versions of servers, so it is very likely to work wierdly connecting other chatrooms, like [Crosst-Chat](https://github.com/CrosSt-Chat/CSC-main) or [ZhangChat](https://github.com/ZhangChat-Dev-Group/ZhangChat).
+  - This feature is originally made to support reverse proxy connections, in order to help those who have difficulties connecting to hack.chat.
 
 ---
 
