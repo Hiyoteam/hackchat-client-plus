@@ -205,7 +205,7 @@ Object.defineProperty(this, 'frontpage', {
 })
 
 function pushFrontPage() {
-	pushMessage({ text: frontpage }, { isHtml: true, i18n: false, nofold: true })
+	pushMessage({ text: frontpage }, { isHtml: true, i18n: false, noFold: true })
 }
 
 /**
@@ -744,7 +744,7 @@ function pushMessage(args, options = {}) {
 	let i18n = options.i18n ?? true
 	let isHtml = options.isHtml ?? false // This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.
 	let raw = options.raw ?? false
-	let nofold = options.nofold ?? false
+	let noFold = options.noFold ?? false
 
 	if (i18n && args.text) {
 		args.text = i18ntranslate(args.text)
@@ -841,7 +841,7 @@ function pushMessage(args, options = {}) {
 	// Text
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
-	let folded = checkLong(args.text)
+	let folded = autoFold && checkLong(args.text) && !noFold
 	if (isHtml) {
 		textEl.innerHTML = args.text;
 	} else if (verifyMessage(args)) {
@@ -1551,6 +1551,19 @@ $('#auto-precaution').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('auto-precaution', enabled);
 	autoPrecaution = enabled;
+}
+if (localStorageGet('auto-fold') == 'true') {
+	$('#auto-fold').checked = true;
+	autoFold = true;
+} else {
+	$('#auto-fold').checked = false;
+	autoFold = false;
+}
+
+$('#auto-fold').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('auto-fold', enabled);
+	autoFold = enabled;
 }
 
 if (localStorageGet('message-log') == 'true') {
