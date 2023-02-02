@@ -148,6 +148,10 @@ function verifyMessage(args) {
 	}
 }
 
+function checkLong(text) {
+	return text.split('\n').length > 30 || text.length > 1000
+}
+
 var info = {}
 
 var channels = [
@@ -201,7 +205,7 @@ Object.defineProperty(this, 'frontpage', {
 })
 
 function pushFrontPage() {
-	pushMessage({ text: frontpage }, { isHtml: true, i18n: false })
+	pushMessage({ text: frontpage }, { isHtml: true, i18n: false, nofold: true })
 }
 
 /**
@@ -736,14 +740,11 @@ function reply(args) {//from crosst.chat
 	$('#chatinput').focus();
 }
 
-function pushMessage(args, options = {}/*This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.*/) {
-	let i18n = options.i18n
-	let isHtml = options.isHtml
-	let raw = options.raw
-
-	if (i18n === undefined) {
-		i18n = true
-	}
+function pushMessage(args, options = {}) {
+	let i18n = options.i18n ?? true
+	let isHtml = options.isHtml ?? false // This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.
+	let raw = options.raw ?? false
+	let nofold = options.nofold ?? false
 
 	if (i18n && args.text) {
 		args.text = i18ntranslate(args.text)
@@ -840,6 +841,7 @@ function pushMessage(args, options = {}/*This is only for better controll to ren
 	// Text
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
+	let folded = checkLong(args.text)
 	if (isHtml) {
 		textEl.innerHTML = args.text;
 	} else if (verifyMessage(args)) {
@@ -850,6 +852,17 @@ function pushMessage(args, options = {}/*This is only for better controll to ren
 		pEl.classList.add('break') //make lines broken at newline characters, as this text is not rendered and may contain raw newline characters
 		textEl.appendChild(pEl)
 		console.log('norender to dangerous message:', args)
+	}
+	if (folded) {
+		textEl.classList.add('folded')
+		textEl.onclick = function (e) {
+			e.preventDefault()
+			if (textEl.classList.contains('folded')) {
+				textEl.classList.remove('folded')
+			} else {
+				textEl.classList.add('folded')
+			}
+		}
 	}
 	if (raw) {
 		textEl.dataset.raw = raw
@@ -1042,35 +1055,13 @@ var keyActions = {
 
 		// Submit message
 		if (input.value != '') {
-			var text = input.value;
-			input.value = '';
-
-			if (templateStr) {
-				if (templateStr.indexOf('%m') > -1) {
-					text = templateStr.replace('%m', text);
-				}
-			}
-
-			if (kolorful) {
-				send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") })
-			}
-
-			if (isAnsweringCaptcha && text != text.toUpperCase()) {
-				text = text.toUpperCase()
-				pushMessage({ nick: '*', text: 'Automatically converted into upper case by client.' })
-			}
-
-			if (purgatory) {
-				send({ cmd: 'emote', text: text });
+			let text = input.value
+			if (autoPrecaution && checkLong(text) && (!text.startsWith('/') || text.startsWith('/me') || text.startsWith('//'))) {
+				send({ cmd: 'emote', text: 'Warning: Long message after 3 second | 警告：3秒后将发送长消息' })
+				sendInputContent(3000)
 			} else {
-				send({ cmd: 'chat', text: text });
+				sendInputContent()
 			}
-
-			lastSent[0] = text;
-			lastSent.unshift("");
-			lastSentPos = 0;
-
-			updateInputSize();
 		}
 	},
 
@@ -1181,6 +1172,47 @@ $('#chatinput').onkeydown = function (e) {
 
 		keyActions.tab();
 	}
+}
+
+function sendInputContent(delay) {
+	let text = input.value;
+	input.value = '';
+
+	if (templateStr && !isAnsweringCaptcha) {
+		if (templateStr.indexOf('%m') > -1) {
+			text = templateStr.replace('%m', text);
+		}
+	}
+
+	if (!delay) {
+		silentSendText(text)
+	} else {
+		setTimeout(silentSendText, delay, text)
+	}
+
+	lastSent[0] = text;
+	lastSent.unshift("");
+	lastSentPos = 0;
+
+	updateInputSize();
+}
+
+function silentSendText(text) {
+	if (kolorful) {
+		send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") });
+	}
+
+	if (isAnsweringCaptcha && text != text.toUpperCase()) {
+		text = text.toUpperCase();
+		pushMessage({ nick: '*', text: 'Automatically converted into upper case by client.' });
+	}
+
+	if (purgatory) {
+		send({ cmd: 'emote', text: text });
+	} else {
+		send({ cmd: 'chat', text: text });
+	}
+	return text;
 }
 
 function updateInputSize() {
@@ -1505,6 +1537,20 @@ $('#soft-mention').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('soft-mention', enabled);
 	softMention = enabled;
+}
+
+if (localStorageGet('auto-precaution') == 'true') {
+	$('#auto-precaution').checked = true;
+	autoPrecaution = true;
+} else {
+	$('#auto-precaution').checked = false;
+	autoPrecaution = false;
+}
+
+$('#auto-precaution').onchange = function (e) {
+	var enabled = !!e.target.checked;
+	localStorageSet('auto-precaution', enabled);
+	autoPrecaution = enabled;
 }
 
 if (localStorageGet('message-log') == 'true') {
