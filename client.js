@@ -101,7 +101,7 @@ md.renderer.rules.image = function (tokens, idx, options) {
 md.renderer.rules.link_open = function (tokens, idx, options) {
 	var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
 	var target = options.linkTarget ? (' target="' + options.linkTarget + '"') : '';
-	return '<a rel="noreferrer" onclick="return verifyLink(this)" href="' + Remarkable.utils.escapeHtml(tokens[idx].href) + '"' + title + target + '>';
+	return '<a rel="noreferrer" onclick="return mdClick(event)" href="' + Remarkable.utils.escapeHtml(tokens[idx].href) + '"' + title + target + '>';
 };
 
 md.renderer.rules.text = function (tokens, idx) {
@@ -124,6 +124,14 @@ md.renderer.rules.text = function (tokens, idx) {
 md.use(remarkableKatex);
 
 /* ---Some functions and texts to be used later--- */
+
+function mdClick(e) {
+	e.stopPropagation();
+	e = e || window.event;
+	var targ = e.target || e.srcElement || e;
+	if (targ.nodeType == 3) targ = targ.parentNode;
+	return verifyLink(targ);
+}
 
 function verifyLink(link) {
 	var linkHref = Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(link.href));

@@ -131,11 +131,11 @@ ul li {
 
 p.folded {
   max-height: 10em;
-  overflow: hidden;
+  overflow: auto;
 }
 
 p.folded::before {
-  content: "Folded, Click to See more...";
+  content: "Folded, Click or scroll to See more...";
   color: grey
 }
 
