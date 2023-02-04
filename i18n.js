@@ -3,8 +3,6 @@ let i18n = new Map([
         'zh-CN', {
             ui: new Map([
                 /* UI text */
-                ['>Send<', '>发送<'],
-                ['Settings', '设置'],
                 ['Pin sidebar', '固定侧边栏'],
                 ['Sound notifications', '提示音'],
                 ['Screen notifications', '浏览器通知'],
@@ -32,7 +30,9 @@ let i18n = new Map([
                 ['Users online', '在线列表'],
                 ['(Click user to invite; rightclick to ignore.)', '(点击邀请,右键拉黑)'],
                 ['Advance Notice Before Sending Long Messages', '发送长消息自动预警'],
-                ['Fold Long Messages', '折叠长消息']
+                ['Fold Long Messages', '折叠长消息'],
+                ['Send', '发送'],
+                ['Settings', '设置'],
             ]),
             prompt: new Map([
                 /* Alerts and prompts */
@@ -144,7 +144,7 @@ let i18n = new Map([
                 ['Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for hosting).', '托管在 https://hcer.netlify.app/ 和 https://hc.thz.cool/（感谢Maggie，即THZ，提供托管）。'],
                 ['Links: ', '友情链接：'],
                 [' (Thanks for providing replying script!) ', '（感谢提供回复功能的代码）']
-            ])
+            ]),
         }
     ]
 ])
@@ -184,6 +184,7 @@ if (localStorageGet('i18n') && localStorageGet('i18n') != 'en-US') {
         document.querySelector('html').lang = lang
         lang = localStorageGet('i18n')
         document.querySelectorAll('[tr]').forEach((el) => {
+            if (el.tagName == 'button') debugger
             el.innerHTML = i18ntranslate(el.innerHTML, 'ui')
         })
     } else {
