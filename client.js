@@ -243,7 +243,7 @@ var ws;
 var myNick = localStorageGet('my-nick') || '';
 var myColor = localStorageGet('my-color') || null;//hex color value for autocolor
 var myChannel = window.location.search.replace(/^\?/, '').split(/(?<!@)@(?!@)/)[0].replace(/@@/g, '@')
-const WS_URL = window.location.search.replace(/^\?/, '').split(/(?<!@)@(?!@)/)[1] ?? 'wss://hack.chat/chat-ws';
+
 var lastSent = [""];
 var lastSentPos = 0;
 
@@ -1345,6 +1345,38 @@ $('#export-readable').onclick = function () {
 		pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
 	});
 }
+$('#add-tunnel').onclick = function () {
+	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)","prompt"));
+	if (!tunneladdr){
+		return;
+	}
+	if (tunneladdr.indexOf('ws') == -1) {
+		alert(i18ntranslate("Invaild tunnel URL.","prompt"))
+		return;
+	}
+	tunnels.push(tunneladdr);
+	localStorageSet('tunnels', JSON.stringify(tunnels))
+	pushMessage({ nick: '*', text: "Sucessfully added tunnel." })
+}
+
+$('#remove-tunnel').onclick = function () {
+	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)","prompt"));
+	if (!tunneladdr){
+		return;
+	}
+	if (tunnels.indexOf(tunneladdr) == -1){
+		alert(i18ntranslate("Invaild tunnel URL.","prompt"))
+		return;
+	}
+	tunnels.splice(tunnels.indexOf(tunneladdr),1);
+	localStorageSet('tunnels', JSON.stringify(tunnels))
+	pushMessage({ nick: '*', text: "Sucessfully removed tunnel." })
+}
+
+$("#tunnel-selector").onchange = function (e) {
+	localStorageSet("current-tunnel",e.target.value)
+	pushMessage({ nick: "*", text: "Sucessfully changed tunnel, refresh to apply the changes."})
+}
 
 $('#special-cmd').onclick = function () {
 	let cmdText = prompt(i18ntranslate('Input command:(This is for the developer\'s friends to access some special experimental functions.)', 'prompt'));
@@ -1842,7 +1874,31 @@ function setLanguage(language) {
 	localStorageSet('i18n', lang);
 	pushMessage({ nick: '!', text: 'Please refresh to apply language. Multi language is in test and not perfect yet. ' }, { i18n: true })
 }
+// load tunnels
+var tunnels = localStorageGet('tunnels');
+if(tunnels){
+	tunnels = JSON.parse(tunnels);
+}else{
+	tunnels = ["wss://hack.chat/chat-ws"]
+	localStorageSet('tunnels',JSON.stringify(tunnels))
+}
+var currentTunnel = localStorageGet("current-tunnel");
+if(currentTunnel){
+	WS_URL=currentTunnel
+}else{
+	localStorageSet("current-tunnel","wss://hack.chat/chat-ws")
+	WS_URL="wss://hack.chat/chat-ws"
+}
 
+// Add tunnels options to tunnels selector
+tunnels.forEach(function (tunnelurl){
+	var tunnel = document.createElement("option");
+	var link = document.createElement("a");
+	link.setAttribute("href",tunnelurl);
+	tunnel.textContent=link.hostname
+	tunnel.value=tunnelurl
+	$('#tunnel-selector').appendChild(tunnel)
+})
 // Add scheme options to dropdown selector
 schemes.forEach(function (scheme) {
 	var option = document.createElement('option');
@@ -1865,6 +1921,7 @@ languages.forEach(function (item) {
 	$('#i18n-selector').appendChild(option);
 });
 
+
 $('#scheme-selector').onchange = function (e) {
 	setScheme(e.target.value);
 }
@@ -1885,10 +1942,16 @@ if (localStorageGet('scheme')) {
 if (localStorageGet('highlight')) {
 	setHighlight(localStorageGet('highlight'));
 }
+if (localStorageGet('current-tunnel')) {
+	ctunnel=localStorageGet('current-tunnel')
+}else{
+	ctunnel="wss://hack.chat/chat-ws"
+}
 
 $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
 $('#i18n-selector').value = lang;
+$("#tunnel-selector").value = ctunnel;
 
 /* ---Add some CSS--- */
 

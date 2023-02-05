@@ -20,6 +20,9 @@ let i18n = new Map([
                 ['Language', '语言'],
                 ['Color scheme', '配色方案'],
                 ['Highlight scheme', '代码高亮方案'],
+                ['Connect tunnel','连接地址'],
+                ['Add tunnel',"添加加速隧道"],
+                ['Remove tunnel',"移除加速隧道"],
                 ['Upload Image', '上传图片'],
                 ['Clear all messages', '清空本页聊天记录'],
                 ['Set auto color', '设置用户名自动改色'],
@@ -56,6 +59,8 @@ let i18n = new Map([
                 ['Image host provided by Dataeverything team. All uploads on your own responsibility.', '由Dataeverything Team提供图床。使用该图床做出的所有行为由你自负责任。'],
                 ['Warning, please verify this is where you want to go: ', '警告，请确认以下链接是你要去的：'],
                 ['Automatically converted into upper case by client.', '客户端已自动转换为大写。'],
+                ["Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)","请输入隧道URL.(如果你不知道这是做什么的，请点击取消。)"],
+                ["Invaild tunnel URL.","非法的隧道URL."]
             ]),
             system: new Map([
                 /* System messages */
@@ -76,6 +81,9 @@ let i18n = new Map([
                 [/Cancelled ignoring nick ([a-zA-Z0-9_]{1,24})\./, '已取消忽略$1的消息。'],
                 [/^Kicked ([a-zA-Z0-9_]{1,24})/, '已踢出 $1'],
                 [/^Banned ([a-zA-Z0-9_]{1,24})/, '已封禁 $1'],
+                ["Sucessfully added tunnel.","成功增加隧道。"],
+                ["Sucessfully removed tunnel.","成功移除隧道。"],
+                ["Sucessfully changed tunnel, refresh to apply the changes.","成功更改隧道设置，刷新来应用更改。"]
             ]),
             info: new Map([
                 /* Chatroom info */
