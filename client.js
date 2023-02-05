@@ -169,8 +169,6 @@ var channels = [
 	`?test ?your-channell ?china ?chinese ?kt1j8rpc`,
 ]
 
-let spaceAmount = $('#messages').clientWidth * 0.9 * 0.3
-
 //make frontpage have a getter
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get#%E4%BD%BF%E7%94%A8defineproperty%E5%9C%A8%E7%8E%B0%E6%9C%89%E5%AF%B9%E8%B1%A1%E4%B8%8A%E5%AE%9A%E4%B9%89_getter
 Object.defineProperty(this, 'frontpage', {
@@ -216,27 +214,6 @@ function pushFrontPage() {
 	pushMessage({ text: frontpage }, { isHtml: true, i18n: false, noFold: true })
 }
 
-/**
- * 
- * @param {String} query 
- * @returns {Element}
- */
-function $(query) {
-	return document.querySelector(query);
-}
-
-function localStorageGet(key) {
-	try {
-		return window.localStorage[key]
-	} catch (e) { }
-}
-
-function localStorageSet(key, val) {
-	try {
-		window.localStorage[key] = val
-	} catch (e) { }
-}
-
 /* ---Some variables to be used--- */
 
 var ws;
@@ -270,142 +247,6 @@ var seconds = {
 }
 
 var lastMentioned = ''
-
-/* ---Notification--- */
-
-/** Notification switch and local storage behavior **/
-var notifySwitch = document.getElementById("notify-switch")
-var notifySetting = localStorageGet("notify-api")
-var notifyPermissionExplained = 0; // 1 = granted msg shown, -1 = denied message shown
-
-// Inital request for notifications permission
-function RequestNotifyPermission() {
-	try {
-		var notifyPromise = Notification.requestPermission();
-		if (notifyPromise) {
-			notifyPromise.then(function (result) {
-				console.log("Hack.Chat notification permission: " + result);
-				if (result === "granted") {
-					if (notifyPermissionExplained === 0) {
-						pushMessage({
-							cmd: "chat",
-							nick: "*",
-							text: "Notifications permission granted.",
-							time: null
-						});
-						notifyPermissionExplained = 1;
-					}
-					return false;
-				} else {
-					if (notifyPermissionExplained === 0) {
-						pushMessage({
-							cmd: "chat",
-							nick: "*",
-							text: "Notifications permission denied, you won't be notified if someone @mentions you.",
-							time: null
-						});
-						notifyPermissionExplained = -1;
-					}
-					return true;
-				}
-			});
-		}
-	} catch (error) {
-		pushMessage({
-			cmd: "chat",
-			nick: "*",
-			text: "Unable to create a notification.",
-			time: null
-		});
-		console.error("An error occured trying to request notification permissions. This browser might not support desktop notifications.\nDetails:")
-		console.error(error)
-		return false;
-	}
-}
-
-// Update localStorage with value of checkbox
-notifySwitch.addEventListener('change', (event) => {
-	if (event.target.checked) {
-		RequestNotifyPermission();
-	}
-	localStorageSet("notify-api", notifySwitch.checked)
-})
-// Check if localStorage value is set, defaults to OFF
-if (notifySetting === null) {
-	localStorageSet("notify-api", "false")
-	notifySwitch.checked = false
-}
-// Configure notifySwitch checkbox element
-if (notifySetting === "true" || notifySetting === true) {
-	notifySwitch.checked = true
-} else if (notifySetting === "false" || notifySetting === false) {
-	notifySwitch.checked = false
-}
-
-/** Sound switch and local storage behavior **/
-var soundSwitch = document.getElementById("sound-switch")
-var notifySetting = localStorageGet("notify-sound")
-
-// Update localStorage with value of checkbox
-soundSwitch.addEventListener('change', (event) => {
-	localStorageSet("notify-sound", soundSwitch.checked)
-})
-// Check if localStorage value is set, defaults to OFF
-if (notifySetting === null) {
-	localStorageSet("notify-sound", "false")
-	soundSwitch.checked = false
-}
-// Configure soundSwitch checkbox element
-if (notifySetting === "true" || notifySetting === true) {
-	soundSwitch.checked = true
-} else if (notifySetting === "false" || notifySetting === false) {
-	soundSwitch.checked = false
-}
-
-// Create a new notification after checking if permission has been granted
-function spawnNotification(title, body) {
-	// Let's check if the browser supports notifications
-	if (!("Notification" in window)) {
-		console.error("This browser does not support desktop notification");
-	} else if (Notification.permission === "granted") { // Check if notification permissions are already given
-		// If it's okay let's create a notification
-		var options = {
-			body: body,
-			icon: "/favicon-96x96.png"
-		};
-		var n = new Notification(title, options);
-	}
-	// Otherwise, we need to ask the user for permission
-	else if (Notification.permission !== "denied") {
-		if (RequestNotifyPermission()) {
-			var options = {
-				body: body,
-				icon: "/favicon-96x96.png"
-			};
-			var n = new Notification(title, options);
-		}
-	} else if (Notification.permission == "denied") {
-		// At last, if the user has denied notifications, and you
-		// want to be respectful, there is no need to bother them any more.
-	}
-}
-
-function notify(args) {
-	// Spawn notification if enabled
-	if (notifySwitch.checked) {
-		spawnNotification("?" + myChannel + "  �  " + args.nick, args.text)
-	}
-
-	// Play sound if enabled
-	if (soundSwitch.checked) {
-		var soundPromise = document.getElementById("notify-sound").play();
-		if (soundPromise) {
-			soundPromise.catch(function (error) {
-				console.error("Problem playing sound:\n" + error);
-			});
-		}
-	}
-}
 
 /* ---Websocket stuffs--- */
 
@@ -895,7 +736,9 @@ function pushMessage(args, options = {}) {
 					textEl.onmouseleave = null
 				}
 			}
-			scrollToBottom()
+			if (isAtBottom() && myChannel/*Frontpage should not be scrolled*/) {
+				window.scrollTo(0, document.body.scrollHeight)
+			}
 		}
 	}
 	// Optimize CSS of code blocks which have no specified language name: add a hjls class for them
@@ -1236,12 +1079,6 @@ function updateInputSize() {
 	}
 }
 
-function scrollToBottom() {
-	if (isAtBottom() && myChannel/*Frontpage should not be scrooled*/) {
-		window.scrollTo(0, document.body.scrollHeight)
-	}
-}
-
 $('#chatinput').oninput = function () {
 	updateInputSize();
 }
@@ -1346,12 +1183,12 @@ $('#export-readable').onclick = function () {
 	});
 }
 $('#add-tunnel').onclick = function () {
-	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)","prompt"));
-	if (!tunneladdr){
+	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "prompt"));
+	if (!tunneladdr) {
 		return;
 	}
 	if (tunneladdr.indexOf('ws') == -1) {
-		alert(i18ntranslate("Invaild tunnel URL.","prompt"))
+		alert(i18ntranslate("Invaild tunnel URL.", "prompt"))
 		return;
 	}
 	tunnels.push(tunneladdr);
@@ -1360,116 +1197,22 @@ $('#add-tunnel').onclick = function () {
 }
 
 $('#remove-tunnel').onclick = function () {
-	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)","prompt"));
-	if (!tunneladdr){
+	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "prompt"));
+	if (!tunneladdr) {
 		return;
 	}
-	if (tunnels.indexOf(tunneladdr) == -1){
-		alert(i18ntranslate("Invaild tunnel URL.","prompt"))
+	if (tunnels.indexOf(tunneladdr) == -1) {
+		alert(i18ntranslate("Invaild tunnel URL.", "prompt"))
 		return;
 	}
-	tunnels.splice(tunnels.indexOf(tunneladdr),1);
+	tunnels.splice(tunnels.indexOf(tunneladdr), 1);
 	localStorageSet('tunnels', JSON.stringify(tunnels))
 	pushMessage({ nick: '*', text: "Sucessfully removed tunnel." })
 }
 
 $("#tunnel-selector").onchange = function (e) {
-	localStorageSet("current-tunnel",e.target.value)
-	pushMessage({ nick: "*", text: "Sucessfully changed tunnel, refresh to apply the changes."})
-}
-
-$('#special-cmd').onclick = function () {
-	let cmdText = prompt(i18ntranslate('Input command:(This is for the developer\'s friends to access some special experimental functions.)', 'prompt'));
-	if (!cmdText) {
-		return;
-	}
-	let run = {
-		copy(...args) {//copy the x-th last message
-			if (args == []) {
-				args = ['0']
-			}
-			if (args.length != 1) {
-				pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 or 1 is needed.` })
-				return
-			}
-			let logList = readableLog.split('\n')
-			if (logList.length <= args[0] || !doLogMessages) {
-				pushMessage({ nick: '!', text: `No enough logs.` })
-				return
-			}
-			let logItem = logList[logList.length - args[0] - 1]
-			navigator.clipboard.writeText(logItem).then(function () {
-				pushMessage({ nick: '*', text: "Copied: " + logItem })
-			}, function () {
-				pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
-			});
-		},
-		reload(...args) {
-			if (args.length != 0) {
-				pushMessage({ nick: '!', text: `${args.length} arguments are given while 0 is needed.` })
-				return
-			}
-			location.reload()
-		},
-		coderMode(...args) {
-			if (!localStorageGet('coder-mode') || localStorageGet('coder-mode') != 'true') {
-				coderMode()
-				localStorageSet('coder-mode', true)
-			} else {
-				localStorageSet('coder-mode', false)
-				pushMessage({ nick: '*', text: `Refresh to hide coder buttons.` })
-			}
-		},
-		test(...args) {
-			pushMessage({ nick: '!', text: `${args.length} arguments ${args}` })
-		},
-		about(...args) {
-			let a = 'HC++ Made by 4n0n4me at hcer.netlify.app'
-			console.log(a)
-		},
-		colorful(...args) {
-			kolorful = true
-		},
-		raw(...args) {
-			let escaped = mdEscape(cmdText.slice(4))
-			pushMessage({ nick: '*', text: `\`\`\`\n${escaped}\n\`\`\`` })
-			navigator.clipboard.writeText(escaped).then(function () {
-				pushMessage({ nick: '*', text: "Escaped text copied to clipboard." })
-			}, function () {
-				pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
-			});
-		},
-		preview(...args) {
-			$('#messages').innerHTML = '';
-			pushMessage({ nick: '*', text: 'Info test' })
-			pushMessage({ nick: '!', text: 'Warn test' })
-			pushMessage({ nick: '[test]', text: '# Title test\n\ntext test\n\n[Link test](https://hcwiki.github.io/)\n\n> Quote test' })
-			$('#footer').classList.remove('hidden')
-		},
-	}
-	cmdArray = cmdText.split(' ')
-	if (run[cmdArray[0]]) {
-		run[cmdArray[0]](...cmdArray.slice(1))
-	} else {
-		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
-	}
-}
-
-function coderMode() {
-	for (char of ['(', ')', '"']) {
-		btn = document.createElement('button')
-		btn.type = 'button'
-		btn.classList.add('char')
-		btn.textContent = char
-		btn.onclick = function () {
-			insertAtCursor(btn.innerHTML)
-		}
-		$('#more-mobile-btns').appendChild(btn)
-	}
-}
-
-if (localStorageGet('coder-mode') == 'true') {
-	coderMode()
+	localStorageSet("current-tunnel", e.target.value)
+	pushMessage({ nick: "*", text: "Sucessfully changed tunnel, refresh to apply the changes." })
 }
 
 $('#img-upload').onclick = function () {
@@ -1876,27 +1619,27 @@ function setLanguage(language) {
 }
 // load tunnels
 var tunnels = localStorageGet('tunnels');
-if(tunnels){
+if (tunnels) {
 	tunnels = JSON.parse(tunnels);
-}else{
+} else {
 	tunnels = ["wss://hack.chat/chat-ws"]
-	localStorageSet('tunnels',JSON.stringify(tunnels))
+	localStorageSet('tunnels', JSON.stringify(tunnels))
 }
 var currentTunnel = localStorageGet("current-tunnel");
-if(currentTunnel){
-	WS_URL=currentTunnel
-}else{
-	localStorageSet("current-tunnel","wss://hack.chat/chat-ws")
-	WS_URL="wss://hack.chat/chat-ws"
+if (currentTunnel) {
+	WS_URL = currentTunnel
+} else {
+	localStorageSet("current-tunnel", "wss://hack.chat/chat-ws")
+	WS_URL = "wss://hack.chat/chat-ws"
 }
 
 // Add tunnels options to tunnels selector
-tunnels.forEach(function (tunnelurl){
+tunnels.forEach(function (tunnelurl) {
 	var tunnel = document.createElement("option");
 	var link = document.createElement("a");
-	link.setAttribute("href",tunnelurl);
-	tunnel.textContent=link.hostname
-	tunnel.value=tunnelurl
+	link.setAttribute("href", tunnelurl);
+	tunnel.textContent = link.hostname
+	tunnel.value = tunnelurl
 	$('#tunnel-selector').appendChild(tunnel)
 })
 // Add scheme options to dropdown selector
@@ -1939,34 +1682,22 @@ if (localStorageGet('scheme')) {
 	setScheme(localStorageGet('scheme'));
 }
 
+let ctunnel
+
 if (localStorageGet('highlight')) {
 	setHighlight(localStorageGet('highlight'));
 }
+
 if (localStorageGet('current-tunnel')) {
-	ctunnel=localStorageGet('current-tunnel')
-}else{
-	ctunnel="wss://hack.chat/chat-ws"
+	ctunnel = localStorageGet('current-tunnel')
+} else {
+	ctunnel = "wss://hack.chat/chat-ws"
 }
 
 $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
 $('#i18n-selector').value = lang;
 $("#tunnel-selector").value = ctunnel;
-
-/* ---Add some CSS--- */
-
-/*
-if (navigator.userAgent.indexOf('iPhone') > 0) {
-	style = document.createElement('style')
-	style.textContent = `
-		button {
-			border-radius:5%;
-			padding:0%;
-		}
-	`
-	document.getElementsByTagName('body')[0].appendChild(style)
-}
-*/
 
 /* ---Main--- */
 
