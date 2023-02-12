@@ -219,7 +219,7 @@ function pushFrontPage() {
 var ws;
 var myNick = localStorageGet('my-nick') || '';
 var myColor = localStorageGet('my-color') || null;//hex color value for autocolor
-var myChannel = window.location.search.replace(/^\?/, '').split(/(?<!@)@(?!@)/)[0].replace(/@@/g, '@')
+var myChannel = window.location.search.replace(/^\?/, '')
 
 var lastSent = [""];
 var lastSentPos = 0;
