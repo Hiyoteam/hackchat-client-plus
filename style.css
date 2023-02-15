@@ -399,13 +399,12 @@ ol ol {
   }
 
   #sidebar {
-    top: 0.5em;
+    /* 
+      http://chat.zhangsoft.cf/
+      https://github.com/ZhangChat-Dev-Group/ZhangChat/blob/main/client/style.css
+      The Style above is under MIT License 
+    */
     bottom: auto;
-    right: 0.5em;
-    border: none;
-  }
-
-  #sidebar:not(.expand) {
-    border: red solid;
+    border-bottom: solid 1px;
   }
 }
