@@ -184,7 +184,7 @@ var COMMANDS = {
 			if (nick.match(/^_+$/)) {
 				return nick // such nicknames made up of only underlines will be rendered into a horizontal rule. 
 			}
-			div = document.createElement('div')
+			let div = document.createElement('div')
 			div.innerHTML = md.render(nick)
 			return div.firstChild.innerHTML
 		})
