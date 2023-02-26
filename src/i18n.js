@@ -183,8 +183,8 @@ let lang = 'en-US'
 
 if (localStorageGet('i18n') && localStorageGet('i18n') != 'en-US') {
     if (i18n.has(localStorageGet('i18n'))) {
-        document.querySelector('html').lang = lang
         lang = localStorageGet('i18n')
+        document.querySelector('html').lang = lang
         document.querySelectorAll('[tr]').forEach((el) => {
             if (el.tagName == 'button') debugger
             el.innerHTML = i18ntranslate(el.innerHTML, 'ui')

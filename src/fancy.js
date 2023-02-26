@@ -68,7 +68,7 @@ $('#special-cmd').onclick = function () {
 	if (!cmdText) {
 		return;
 	}
-	cmdArray = cmdText.split(' ')
+	let cmdArray = cmdText.split(' ')
 	if (run[cmdArray[0]]) {
 		run[cmdArray[0]](...cmdArray.slice(1))
 	} else {
@@ -78,7 +78,7 @@ $('#special-cmd').onclick = function () {
 
 function coderMode() {
 	for (let char of ['(', ')', '"']) {
-		btn = document.createElement('button')
+		let btn = document.createElement('button')
 		btn.type = 'button'
 		btn.classList.add('char')
 		btn.textContent = char

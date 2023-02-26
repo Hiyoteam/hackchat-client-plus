@@ -223,30 +223,26 @@ $('#allow-all-img').onchange = function (e) {
 
 if (localStorageGet('soft-mention') == 'true') {
 	$('#soft-mention').checked = true;
-	softMention = true;
 } else {
 	$('#soft-mention').checked = false;
-	softMention = false;
 }
 
 $('#soft-mention').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('soft-mention', enabled);
-	softMention = enabled;
 }
 
 if (localStorageGet('auto-precaution') == 'true') {
 	$('#auto-precaution').checked = true;
-	autoPrecaution = true;
 } else {
 	$('#auto-precaution').checked = false;
-	autoPrecaution = false;
 }
+
+var autoFold
 
 $('#auto-precaution').onchange = function (e) {
 	var enabled = !!e.target.checked;
 	localStorageSet('auto-precaution', enabled);
-	autoPrecaution = enabled;
 }
 if (localStorageGet('auto-fold') == 'true') {
 	$('#auto-fold').checked = true;
@@ -261,6 +257,8 @@ $('#auto-fold').onchange = function (e) {
 	localStorageSet('auto-fold', enabled);
 	autoFold = enabled;
 }
+
+var doLogMessages
 
 if (localStorageGet('message-log') == 'true') {
 	$('#message-log').checked = true;
@@ -307,6 +305,8 @@ $('#mobile-btn').onchange = function (e) {
 	}
 	updateInputSize();
 }
+
+var shouldGetInfo
 
 if (localStorageGet('should-get-info') == 'true') {
 	$('#should-get-info').checked = true;
@@ -540,11 +540,12 @@ if (tunnels) {
 	localStorageSet('tunnels', JSON.stringify(tunnels))
 }
 var currentTunnel = localStorageGet("current-tunnel");
+var ws_url
 if (currentTunnel) {
-	WS_URL = currentTunnel
+	ws_url = currentTunnel
 } else {
 	localStorageSet("current-tunnel", "wss://hack.chat/chat-ws")
-	WS_URL = "wss://hack.chat/chat-ws"
+	ws_url = "wss://hack.chat/chat-ws"
 }
 
 // Add tunnels options to tunnels selector

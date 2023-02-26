@@ -23,7 +23,7 @@ function join(channel, oldNick) {
 		ws.close()
 	} catch (e) { }
 
-	ws = new WebSocket(WS_URL);
+	ws = new WebSocket(ws_url);
 
 	wasConnected = false;
 
@@ -210,7 +210,7 @@ var COMMANDS = {
 		userAdd(nick, args.trip);
 
 		if ($('#joined-left').checked) {
-			payLoad = { nick: '*', text: nick + " joined" }
+			let payLoad = { nick: '*', text: nick + " joined" }
 
 			//onlineAdd can contain trip but onlineRemove doesnt contain trip
 			if (args.trip) {
@@ -368,7 +368,7 @@ function pushMessage(args, options = {}) {
 			} else {
 				var nick = args.nick
 				let at = '@'
-				if (softMention) { at += ' ' }
+				if ($('#soft-mention').checked) { at += ' ' }
 				insertAtCursor(at + nick + ' ');
 				input.focus();
 				return;
@@ -506,5 +506,5 @@ if (myChannel == '') {
 	join(myChannel);
 }
 
-let a = 'HC++ Made by 4n0n4me at hcer.netlify.app'
-console.log(a)
+const HCER_INFO = 'HC++ Made by 4n0n4me at hcer.netlify.app, source at: https://github.com/xjzh123/hackchat-client-plus'
+console.log(HCER_INFO)

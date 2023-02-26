@@ -141,7 +141,7 @@ function reply(args) {//from crosst.chat
     if (args.nick != myNick.split('#')[0]) {
         var nick = args.nick
         let at = '@'
-        if (softMention) { at += ' ' }
+        if ($('#soft-mention').checked) { at += ' ' }
         replyText += at + nick + ' ';
     }
 
@@ -157,14 +157,14 @@ function reply(args) {//from crosst.chat
 
 function getInfo() {
     return new Promise(function (resolve, reject) {
-        ws = new WebSocket(WS_URL);
+        ws = new WebSocket(ws_url);
 
         ws.onopen = function () {
             this.send(JSON.stringify({ cmd: "session", isBot: false }))
         }
 
         ws.onmessage = function (message) {
-            data = JSON.parse(message.data)
+            let data = JSON.parse(message.data)
             if (data.cmd != 'session') {
                 return
             }
@@ -253,7 +253,7 @@ var keyActions = {
 		// Submit message
 		if (input.value != '') {
 			let text = input.value
-			if (autoPrecaution && checkLong(text) && (!text.startsWith('/') || text.startsWith('/me') || text.startsWith('//'))) {
+			if ($('#auto-precaution').checked && checkLong(text) && (!text.startsWith('/') || text.startsWith('/me') || text.startsWith('//'))) {
 				send({ cmd: 'emote', text: 'Warning: Long message after 3 second | 警告：3秒后将发送长消息' })
 				sendInputContent(3000)
 			} else {
