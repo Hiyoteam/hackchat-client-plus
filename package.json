@@ -1,0 +1,26 @@
+{
+  "name": "hackchat-client-plus",
+  "version": "1.0.0",
+  "description": "**New update: shabby i18n (Simplified Chinese) now available!!!**",
+  "scripts": {
+    "build": "parcel build src/*.js --out-file dist/dist.js --no-cache --no-optimize \"*.woff, *.woff2, *.ttf, *.png, *.jpg, *.jpeg, *.gif, *.mp3\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xjzh123/hackchat-client-plus.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/xjzh123/hackchat-client-plus/issues"
+  },
+  "homepage": "https://github.com/xjzh123/hackchat-client-plus#readme",
+  "dependencies": {
+    "esbuild": "^0.17.10"
+  },
+  "devDependencies": {
+    "@parcel/packager-raw-url": "^2.8.3",
+    "@parcel/transformer-webmanifest": "^2.8.3",
+    "parcel": "^2.8.3"
+  }
+}

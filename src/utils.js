@@ -54,7 +54,6 @@ var markdownOptions = {
 	html: false,
 	xhtmlOut: false,
 	breaks: true,
-	langPrefix: '',
 	linkify: true,
 	linkTarget: '_blank" rel="noreferrer',
 	typographer: true,
