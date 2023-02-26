@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "**New update: shabby i18n (Simplified Chinese) now available!!!**",
   "scripts": {
-    "build": "parcel build src/index.html --dist-dir dist --no-cache --no-optimize \"*.woff, *.woff2, *.ttf, *.png, *.jpg, *.jpeg, *.gif, *.mp3\""
+    "build": "grunt"
   },
   "repository": {
     "type": "git",
