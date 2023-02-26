@@ -360,7 +360,9 @@ $('#feed').onclick = function () {
 var onlineUsers = [];
 var ignoredUsers = [];
 
-function userAdd(nick, trip) {
+function userAdd(nick, user_info) {
+	let trip = user_info.trip
+
 	if (nick.length >= 25) {
 		pushMessage({ nick: '!', text: "A USER WHOSE NICKNAME HAS MORE THAN 24 CHARACTERS HAS JOINED. THIS INFINITE LOOP SCRIPT WHICH MAY CRASH YOUR BROWSER WOULD BE RUN IN OFFICIAL CLIENT:\n ```Javascript\nfor (var i = 5; i > 3; i = i + 1) { console.log(i); }\n```" })
 		pushMessage({ nick: '!', text: "This is probably caused by a moderator using the `overflow` command on you. Maybe that command is one supposed to crash the browser of the target user..." })
@@ -387,6 +389,12 @@ function userAdd(nick, trip) {
 	var userLi = document.createElement('li');
 	userLi.appendChild(user);
 
+	if (user_info.hash) {
+		userLi.title = user_info.hash
+	}
+
+	userLi.id = `user-li-${nick}`
+
 	if (trip) {
 		let tripEl = document.createElement('span')
 		tripEl.textContent = ' ' + trip
@@ -398,7 +406,19 @@ function userAdd(nick, trip) {
 	onlineUsers.push(nick);
 }
 
-function userRemove(nick) {
+function userRemove(nick, user_info) {
+	var users = $('#users');
+	var children = users.children;
+
+	users.removeChild(document.getElementById(`user-li-${nick}`))
+
+	var index = onlineUsers.indexOf(nick);
+	if (index >= 0) {
+		onlineUsers.splice(index, 1);
+	}
+}
+
+function userUpdate(nick, user_info) {
 	var users = $('#users');
 	var children = users.children;
 

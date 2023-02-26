@@ -177,7 +177,7 @@ var COMMANDS = {
 		usersClear();
 
 		users.forEach(function (user) {
-			userAdd(user.nick, user.trip);
+			userAdd(user.nick, user);
 		});
 
 		let nicksHTML = nicks.map(function (nick) {
@@ -207,7 +207,7 @@ var COMMANDS = {
 	onlineAdd: function (args, raw) {
 		var nick = args.nick;
 
-		userAdd(nick, args.trip);
+		userAdd(nick, args);
 
 		if ($('#joined-left').checked) {
 			let payLoad = { nick: '*', text: nick + " joined" }
