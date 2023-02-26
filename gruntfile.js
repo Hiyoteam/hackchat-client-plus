@@ -80,5 +80,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-htmlmin');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
 
-    grunt.registerTask('default', ['clean', 'copy', 'concat', 'babel', 'uglify', 'processhtml', 'htmlmin', 'cssmin']);
+    grunt.registerTask('default', ['clean', 'copy', 'concat', /*'babel'*/, 'uglify', 'processhtml', 'htmlmin', 'cssmin']);
 };

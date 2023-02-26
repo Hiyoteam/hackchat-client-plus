@@ -9,7 +9,7 @@ document.addEventListener("keydown", e => {
 
 //make frontpage have a getter
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get#%E4%BD%BF%E7%94%A8defineproperty%E5%9C%A8%E7%8E%B0%E6%9C%89%E5%AF%B9%E8%B1%A1%E4%B8%8A%E5%AE%9A%E4%B9%89_getter
-Object.defineProperty(this, 'frontpage', {
+Object.defineProperty(window, 'frontpage', {
     get: () =>
         ["<pre><code><div style=\"margin: auto; width: fit-content;\">" +
             " _           _         _       _   ",
