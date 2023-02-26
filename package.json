@@ -15,7 +15,7 @@
     "url": "https://github.com/xjzh123/hackchat-client-plus/issues"
   },
   "homepage": "https://github.com/xjzh123/hackchat-client-plus#readme",
-  "dependencies": {
+  "devDependencies": {
     "@babel/core": "^7.21.0",
     "@babel/preset-env": "^7.20.2",
     "grunt": "^1.6.1",
@@ -27,9 +27,7 @@
     "grunt-contrib-htmlmin": "^3.1.0",
     "grunt-contrib-uglify": "^5.2.2",
     "grunt-processhtml": "^0.4.3",
-    "parcel": "^2.8.3"
-  },
-  "devDependencies": {
+    "parcel": "^2.8.3",
     "@parcel/packager-raw-url": "^2.8.3",
     "@parcel/transformer-webmanifest": "^2.8.3"
   }
