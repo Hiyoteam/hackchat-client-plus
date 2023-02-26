@@ -293,11 +293,10 @@ var COMMANDS = {
 
 
 function pushMessage(args, options = {}) {
-	// for f**king shabby firefox 68
-	let i18n = options.i18n !== null && options.i18n !== void 0 ? options.i18n : true
-	let isHtml = options.isHtml !== null && options.isHtml !== void 0 ? options.isHtml : false // This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.
-	let raw = options.raw !== null && options.raw !== void 0 ? options.raw : false
-	let noFold = options.noFold !== null && options.noFold !== void 0 ? options.noFold : false
+	let i18n = options.i18n ?? true
+	let isHtml = options.isHtml ?? false // This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.
+	let raw = options.raw ?? false
+	let noFold = options.noFold ?? false
 
 	if (i18n && args.text) {
 		args.text = i18ntranslate(args.text, ['system', 'info'])

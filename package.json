@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "**New update: shabby i18n (Simplified Chinese) now available!!!**",
   "scripts": {
-    "build": "parcel build src/*.js --out-file dist/dist.js --no-cache --no-optimize \"*.woff, *.woff2, *.ttf, *.png, *.jpg, *.jpeg, *.gif, *.mp3\""
+    "build": "parcel build src/index.html --dist-dir dist --no-cache --no-optimize \"*.woff, *.woff2, *.ttf, *.png, *.jpg, *.jpeg, *.gif, *.mp3\""
   },
   "repository": {
     "type": "git",
@@ -16,11 +16,21 @@
   },
   "homepage": "https://github.com/xjzh123/hackchat-client-plus#readme",
   "dependencies": {
-    "esbuild": "^0.17.10"
+    "@babel/core": "^7.21.0",
+    "@babel/preset-env": "^7.20.2",
+    "grunt": "^1.6.1",
+    "grunt-babel": "^8.0.0",
+    "grunt-contrib-clean": "^2.0.1",
+    "grunt-contrib-concat": "^2.1.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-cssmin": "^4.0.0",
+    "grunt-contrib-htmlmin": "^3.1.0",
+    "grunt-contrib-uglify": "^5.2.2",
+    "grunt-processhtml": "^0.4.3",
+    "parcel": "^2.8.3"
   },
   "devDependencies": {
     "@parcel/packager-raw-url": "^2.8.3",
-    "@parcel/transformer-webmanifest": "^2.8.3",
-    "parcel": "^2.8.3"
+    "@parcel/transformer-webmanifest": "^2.8.3"
   }
 }
