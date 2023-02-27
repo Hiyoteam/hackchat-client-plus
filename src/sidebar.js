@@ -149,7 +149,7 @@ function registerSetting(name, default_ = false, callback = null, on_register = 
 	checkbox.onchange = function (e) {
 		localStorageSet(name, !!e.target.checked)
 		if (typeof callback == 'function') {
-			callback(!!e.target.enabled)
+			callback(!!e.target.checked)
 		}
 	}
 	if (typeof on_register == 'function') {
