@@ -105,7 +105,7 @@ ul li {
   padding-bottom: 1em;
 }
 
-.nick {
+.chat-nick {
   float: left;
   width: 16em;
   margin-left: -17em;
@@ -387,7 +387,7 @@ ol ol {
     padding-bottom: 0.5em;
   }
 
-  .nick {
+  .chat-nick {
     margin: 0;
     float: none;
     text-align: left;

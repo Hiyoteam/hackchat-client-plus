@@ -8,7 +8,7 @@ let run = {
 			return
 		}
 		let logList = readableLog.split('\n')
-		if (logList.length <= args[0] || !doLogMessages) {
+		if (logList.length <= args[0] || !do_log_messages) {
 			pushMessage({ nick: '!', text: `No enough logs.` })
 			return
 		}
@@ -55,15 +55,15 @@ let run = {
 		});
 	},
 	preview(...args) {
-		$('#messages').innerHTML = '';
+		$id('messages').innerHTML = '';
 		pushMessage({ nick: '*', text: 'Info test' })
 		pushMessage({ nick: '!', text: 'Warn test' })
 		pushMessage({ nick: '[test]', text: '# Title test\n\ntext test\n\n[Link test](https://hcwiki.github.io/)\n\n> Quote test' })
-		$('#footer').classList.remove('hidden')
+		$id('footer').classList.remove('hidden')
 	},
 }
 
-$('#special-cmd').onclick = function () {
+$id('special-cmd').onclick = function () {
 	let cmdText = prompt(i18ntranslate('Input command:(This is for the developer\'s friends to access some special experimental functions.)', 'prompt'));
 	if (!cmdText) {
 		return;
@@ -85,7 +85,7 @@ function coderMode() {
 		btn.onclick = function () {
 			insertAtCursor(btn.innerHTML)
 		}
-		$('#more-mobile-btns').appendChild(btn)
+		$id('more-mobile-btns').appendChild(btn)
 	}
 }
 

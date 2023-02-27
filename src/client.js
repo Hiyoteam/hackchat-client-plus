@@ -98,7 +98,7 @@ function join(channel, oldNick) {
 					usersClear()
 					p = document.createElement('p')
 					p.textContent = `You may be kicked or moved to this channel by force to channel ?${args.channel}. Unable to get full user list. `
-					$('#users').appendChild(p)
+					$id('users').appendChild(p)
 					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` })
 				} else {
 					purgatory = true
@@ -129,11 +129,11 @@ function join(channel, oldNick) {
 			}
 			limiter.times = limiter.times.slice(-count)
 			if (localStorageGet('joined-left') != 'false') {
-				if (count > 5 && $('#joined-left').checked) {
-					$('#joined-left').checked = false // temporarily disable join/left notice
+				if (count > 5 && $id('joined-left').checked) {
+					$id('joined-left').checked = false // temporarily disable join/left notice
 					pushMessage({ nick: '*', text: 'Frequent joining detected. Now temporarily disabling join/left notice.' })
-				} else if (count < 5 && !($('#joined-left').checked)) {
-					$('#joined-left').checked = true
+				} else if (count < 5 && !($id('joined-left').checked)) {
+					$id('joined-left').checked = true
 					pushMessage({ nick: '*', text: 'Auto enabled join/left notice.' })
 				}
 			}
@@ -141,7 +141,7 @@ function join(channel, oldNick) {
 		if (command) {
 			command.call(null, args, message.data);
 		}
-		if (doLogMessages) { jsonLog += ';' + message.data }
+		if (do_log_messages) { jsonLog += ';' + message.data }
 	}
 }
 
@@ -209,7 +209,7 @@ var COMMANDS = {
 
 		userAdd(nick, args);
 
-		if ($('#joined-left').checked) {
+		if ($id('joined-left').checked) {
 			let payLoad = { nick: '*', text: nick + " joined" }
 
 			//onlineAdd can contain trip but onlineRemove doesnt contain trip
@@ -225,7 +225,7 @@ var COMMANDS = {
 
 		userRemove(nick);
 
-		if ($('#joined-left').checked) {
+		if ($id('joined-left').checked) {
 			pushMessage({ nick: '*', text: nick + " left" }, { i18n: true, raw });
 		}
 	},
@@ -259,7 +259,7 @@ var COMMANDS = {
 		svgEl.style.width = '100%'
 
 		// In order to make 40em work right.
-		svgEl.style.fontSize = `${$('#messages').clientWidth / lines[0].length * 1.5}px`
+		svgEl.style.fontSize = `${$id('messages').clientWidth / lines[0].length * 1.5}px`
 		// Captcha text is about 41 lines.
 		svgEl.style.height = '41em'
 
@@ -273,7 +273,7 @@ var COMMANDS = {
 			textEl.setAttribute('y', `${i + 1}em`)
 
 			// Captcha text shouldn't overflow #messages element, so I divide the width of the messages container with the overvalued length of each line in order to get an undervalued max width of each character, and than multiply it by 2 (The overvalued aspect ratio of a character) because the font-size attribute means the height of a character. 
-			textEl.setAttribute('font-size', `${$('#messages').clientWidth / lines[0].length * 1.5}px`)
+			textEl.setAttribute('font-size', `${$id('messages').clientWidth / lines[0].length * 1.5}px`)
 			textEl.setAttribute('fill', 'white')
 
 			// Preserve spaces.
@@ -285,115 +285,101 @@ var COMMANDS = {
 		pEl.appendChild(svgEl)
 
 		messageEl.appendChild(pEl);
-		$('#messages').appendChild(messageEl);
+		$id('messages').appendChild(messageEl);
 
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 }
 
+function addClassToMessage(element, args) {
+	if (verifyNickname(myNick.split('#')[0]) && args.nick == myNick.split('#')[0]) {
+		element.classList.add('me');
+	} else if (args.nick == '!') {
+		element.classList.add('warn');
+	} else if (args.nick == '*') {
+		element.classList.add('info');
+	} else if (args.admin) {
+		element.classList.add('admin');
+	} else if (args.mod) {
+		element.classList.add('mod');
+	} else {
+		return false
+	}
+	return true
+}
 
-function pushMessage(args, options = {}) {
-	let i18n = options.i18n ?? true
+function addClassToNick(element, args) {
+	if (args.nick === 'jeb_') {
+		element.setAttribute("class", "jebbed");
+	} else if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
+		element.setAttribute('style', 'color:#' + args.color + ' !important');
+	}
+}
+
+function makeTripEl(args) {
+	var tripEl = document.createElement('span');
+
+	if (args.mod) {
+		tripEl.textContent = String.fromCodePoint(11088) + " " + args.trip + " ";
+	} else {
+		tripEl.textContent = args.trip + " ";
+	}
+
+	tripEl.classList.add('trip');
+	return tripEl
+}
+
+function makeNickEl(args) {
+	var nickLinkEl = document.createElement('a');
+	nickLinkEl.textContent = args.nick;
+
+	addClassToNick(nickLinkEl, args)
+
+	//tweaked code from crosst.chat
+	nickLinkEl.onclick = function () {
+		// Reply to a whisper or info is meaningless
+		if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
+			insertAtCursor(args.text);
+			$id('chat-input').focus();
+			return;
+		} else if (args.nick == myNick.split('#')[0]) {
+			reply(args)
+		} else {
+			var nick = args.nick
+			let at = '@'
+			if ($id('soft-mention').checked) { at += ' ' }
+			insertAtCursor(at + nick + ' ');
+			input.focus();
+			return;
+		}
+	}
+	// Mention someone when right-clicking
+	nickLinkEl.oncontextmenu = function (e) {
+		e.preventDefault();
+		reply(args)
+	}
+
+	var date = new Date(args.time || Date.now());
+	nickLinkEl.title = date.toLocaleString();
+
+	if (args.color) {
+		nickLinkEl.title = nickLinkEl.title + ' #' + args.color
+	}
+
+	return nickLinkEl
+}
+
+function makeTextEl(args, options) {
+
 	let isHtml = options.isHtml ?? false // This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.
 	let raw = options.raw ?? false
 	let noFold = options.noFold ?? false
 
-	if (i18n && args.text) {
-		args.text = i18ntranslate(args.text, ['system', 'info'])
-	}
-
-	// Message container
-	var messageEl = document.createElement('div');
-
-	if (
-		typeof (myNick) === 'string' && (
-			args.text.match(new RegExp('@' + myNick.split('#')[0] + '\\b', "gi")) ||
-			((args.type === "whisper" || args.type === "invite") && args.from)
-		)
-	) {
-		notify(args);
-	}
-
-	messageEl.classList.add('message');
-
-	if (verifyNickname(myNick.split('#')[0]) && args.nick == myNick.split('#')[0]) {
-		messageEl.classList.add('me');
-	} else if (args.nick == '!') {
-		messageEl.classList.add('warn');
-	} else if (args.nick == '*') {
-		messageEl.classList.add('info');
-	} else if (args.admin) {
-		messageEl.classList.add('admin');
-	} else if (args.mod) {
-		messageEl.classList.add('mod');
-	}
-
-	// Nickname
-	var nickSpanEl = document.createElement('span');
-	nickSpanEl.classList.add('nick');
-	messageEl.appendChild(nickSpanEl);
-
-	if (args.trip) {
-		var tripEl = document.createElement('span');
-
-		if (args.mod) {
-			tripEl.textContent = String.fromCodePoint(11088) + " " + args.trip + " ";
-		} else {
-			tripEl.textContent = args.trip + " ";
-		}
-
-		tripEl.classList.add('trip');
-		nickSpanEl.appendChild(tripEl);
-	}
-
-	if (args.nick) {
-		var nickLinkEl = document.createElement('a');
-		nickLinkEl.textContent = args.nick;
-
-		if (args.nick === 'jeb_') {
-			nickLinkEl.setAttribute("class", "jebbed");
-		} else if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
-			nickLinkEl.setAttribute('style', 'color:#' + args.color + ' !important');
-		}
-
-		//tweaked code from crosst.chat
-		nickLinkEl.onclick = function () {
-			// Reply to a whisper or info is meaningless
-			if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
-				insertAtCursor(args.text);
-				$('#chat-input').focus();
-				return;
-			} else if (args.nick == myNick.split('#')[0]) {
-				reply(args)
-			} else {
-				var nick = args.nick
-				let at = '@'
-				if ($('#soft-mention').checked) { at += ' ' }
-				insertAtCursor(at + nick + ' ');
-				input.focus();
-				return;
-			}
-		}
-		// Mention someone when right-clicking
-		nickLinkEl.oncontextmenu = function (e) {
-			e.preventDefault();
-			reply(args)
-		}
-
-		var date = new Date(args.time || Date.now());
-		nickLinkEl.title = date.toLocaleString();
-
-		if (args.color) {
-			nickLinkEl.title = nickLinkEl.title + ' #' + args.color
-		}
-
-		nickSpanEl.appendChild(nickLinkEl);
-	}
-
-	// Text
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
-	let folded = autoFold && checkLong(args.text) && !noFold
+
+	let folded = auto_fold && checkLong(args.text) && !noFold
+
 	if (isHtml) {
 		textEl.innerHTML = args.text;
 	} else if (verifyMessage(args)) {
@@ -405,6 +391,7 @@ function pushMessage(args, options = {}) {
 		textEl.appendChild(pEl)
 		console.log('norender to dangerous message:', args)
 	}
+
 	if (folded) {
 		textEl.classList.add('folded')
 		textEl.onclick = function (e) {
@@ -416,6 +403,7 @@ function pushMessage(args, options = {}) {
 			}
 		}
 	}
+
 	if (raw) {
 		textEl.dataset.raw = raw
 		textEl.dataset.displayingRaw = 'false'
@@ -444,6 +432,7 @@ function pushMessage(args, options = {}) {
 			}
 		}
 	}
+	
 	// Optimize CSS of code blocks which have no specified language name: add a hjls class for them
 	textEl.querySelectorAll('pre > code').forEach((element) => {
 		let doElementHasClass = false
@@ -456,11 +445,55 @@ function pushMessage(args, options = {}) {
 			element.classList.add('hljs')
 		}
 	})
-	messageEl.appendChild(textEl);
+
+	return textEl
+}
+
+
+function pushMessage(args, options = {}) {
+	let i18n = options.i18n ?? true
+
+	if (i18n && args.text) {
+		args.text = i18ntranslate(args.text, ['system', 'info'])
+	}
+
+	// Message container
+	var messageEl = document.createElement('div');
+
+	if (
+		typeof (myNick) === 'string' && (
+			args.text.match(new RegExp('@' + myNick.split('#')[0] + '\\b', "gi")) ||
+			((args.type === "whisper" || args.type === "invite") && args.from)
+		)
+	) {
+		notify(args);
+	}
+
+	messageEl.classList.add('message');
+
+	addClassToMessage(messageEl, args)
+
+	// Nickname
+	var nickSpanEl = document.createElement('span');
+	nickSpanEl.classList.add('nick');
+	nickSpanEl.classList.add('chat-nick');
+	messageEl.appendChild(nickSpanEl);
+
+	if (args.trip) {
+		nickSpanEl.appendChild(makeTripEl(args, options));
+	}
+
+	if (args.nick) {
+		nickSpanEl.appendChild(makeNickEl(args, options));
+	}
+
+	// Text
+	
+	messageEl.appendChild(makeTextEl(args, options));
 
 	// Scroll to bottom
 	var atBottom = isAtBottom();
-	$('#messages').appendChild(messageEl);
+	$id('messages').appendChild(messageEl);
 	if (atBottom && myChannel != ''/*Frontpage should not be scrooled*/) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
@@ -468,7 +501,7 @@ function pushMessage(args, options = {}) {
 	unread += 1;
 	updateTitle();
 
-	if (doLogMessages && args.nick && args.text) {
+	if (do_log_messages && args.nick && args.text) {
 		readableLog += `\n[${date.toLocaleString()}] `
 		if (args.mod) { readableLog += '(mod) ' }
 		if (args.color) { readableLog += '(color:' + args.color + ') ' }
@@ -488,17 +521,17 @@ function send(data) {
 /* ---Main--- */
 
 if (myChannel == '') {
-	$('#footer').classList.add('hidden');
-	/*$('#sidebar').classList.add('hidden');*/
+	$id('footer').classList.add('hidden');
+	/*$id('sidebar').classList.add('hidden');*/
 	/*I want to be able to change the settings without entering a channel*/
-	$('#clear-messages').classList.add('hidden');
-	$('#export-json').classList.add('hidden');
-	$('#export-readable').classList.add('hidden');
-	$('#users-div').classList.add('hidden');
+	$id('clear-messages').classList.add('hidden');
+	$id('export-json').classList.add('hidden');
+	$id('export-readable').classList.add('hidden');
+	$id('users-div').classList.add('hidden');
 	pushFrontPage()
-	if (shouldGetInfo) {
+	if (should_get_info) {
 		getInfo().then(function () {
-			$('#messages').innerHTML = '';
+			$id('messages').innerHTML = '';
 			pushFrontPage()
 		})
 	}

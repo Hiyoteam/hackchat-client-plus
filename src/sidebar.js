@@ -1,13 +1,13 @@
-$('#sidebar').onmouseenter = $('#sidebar').onclick = function (e) {
-	if (e.target == $('#sidebar-close')) {
+$id('sidebar').onmouseenter = $id('sidebar').onclick = function (e) {
+	if (e.target == $id('sidebar-close')) {
 		return
 	}
-	$('#sidebar-content').classList.remove('hidden');
-	$('#sidebar').classList.add('expand');
+	$id('sidebar-content').classList.remove('hidden');
+	$id('sidebar').classList.add('expand');
 	e.stopPropagation();
 }
 
-$('#sidebar').onmouseleave = document.ontouchstart = function (event) {
+$id('sidebar').onmouseleave = document.ontouchstart = function (event) {
 	var e = event.toElement || event.relatedTarget;
 	try {
 		if (e.parentNode == this || e == this) {
@@ -15,28 +15,28 @@ $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
 		}
 	} catch (e) { return; }
 
-	if (!$('#pin-sidebar').checked) {
-		$('#sidebar-content').classList.add('hidden');
-		$('#sidebar').classList.remove('expand');
+	if (!$id('pin-sidebar').checked) {
+		$id('sidebar-content').classList.add('hidden');
+		$id('sidebar').classList.remove('expand');
 	}
 }
 
-$('#sidebar-close').onclick = function () {
-	if (!$('#pin-sidebar').checked) {
-		$('#sidebar-content').classList.add('hidden');
-		$('#sidebar').classList.remove('expand');
+$id('sidebar-close').onclick = function () {
+	if (!$id('pin-sidebar').checked) {
+		$id('sidebar-content').classList.add('hidden');
+		$id('sidebar').classList.remove('expand');
 	}
 }
 
 /* ---Sidebar buttons--- */
 
-$('#clear-messages').onclick = function () {
+$id('clear-messages').onclick = function () {
 	// Delete children elements
-	var messages = $('#messages');
+	var messages = $id('messages');
 	messages.innerHTML = '';
 }
 
-$('#set-custom-color').onclick = function () {
+$id('set-custom-color').onclick = function () {
 	// Set auto changecolor
 	let color = prompt(i18ntranslate('Your nickname color:(leave blank to reset; input "random" to set it to random color)', 'prompt'))
 	if (color == null) {
@@ -57,7 +57,7 @@ $('#set-custom-color').onclick = function () {
 	localStorageSet('my-color', myColor || '')//if myColor is null, set an empty string so that when it is got it will be ('' || null) (confer {var myColor = localStorageGet('my-color') || null;} at about line 190) the value of which is null
 }
 
-$('#set-template').onclick = function () {
+$id('set-template').onclick = function () {
 	// Set template
 	let template = prompt(i18ntranslate('Your template string:(use %m to replace your message content. press enter without inputing to reset.)', 'prompt'))
 	if (template == null) {
@@ -80,7 +80,7 @@ $('#set-template').onclick = function () {
 	localStorageSet('my-template', templateStr || '')
 }
 
-$('#export-json').onclick = function () {
+$id('export-json').onclick = function () {
 	navigator.clipboard.writeText(jsonLog).then(function () {
 		pushMessage({ nick: '*', text: "JSON log successfully copied to clipboard. Please save it in case it may be lost." })
 	}, function () {
@@ -88,14 +88,14 @@ $('#export-json').onclick = function () {
 	});
 }
 
-$('#export-readable').onclick = function () {
+$id('export-readable').onclick = function () {
 	navigator.clipboard.writeText(readableLog).then(function () {
 		pushMessage({ nick: '*', text: "Normal log successfully copied to clipboard. Please save it in case it may be lost." })
 	}, function () {
 		pushMessage({ nick: '!', text: "Failed to copy log to clipboard." })
 	});
 }
-$('#add-tunnel').onclick = function () {
+$id('add-tunnel').onclick = function () {
 	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "prompt"));
 	if (!tunneladdr) {
 		return;
@@ -109,7 +109,7 @@ $('#add-tunnel').onclick = function () {
 	pushMessage({ nick: '*', text: "Sucessfully added tunnel." })
 }
 
-$('#remove-tunnel').onclick = function () {
+$id('remove-tunnel').onclick = function () {
 	let tunneladdr = prompt(i18ntranslate("Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "prompt"));
 	if (!tunneladdr) {
 		return;
@@ -128,7 +128,7 @@ $("#tunnel-selector").onchange = function (e) {
 	pushMessage({ nick: "*", text: "Sucessfully changed tunnel, refresh to apply the changes." })
 }
 
-$('#img-upload').onclick = function () {
+$id('img-upload').onclick = function () {
 	if (localStorageGet('image-upload') != 'true') {
 		confirmed = confirm(i18ntranslate('Image host provided by DataEverything team. All uploads on your own responsibility.', prompt))
 		if (confirmed) {
@@ -142,34 +142,35 @@ $('#img-upload').onclick = function () {
 
 /* ---Sidebar settings--- */
 
+function registerSetting(name, default_ = false, callback = null, on_register = null) {
+	let checkbox = document.getElementById(name)
+	let enabled = default_ ? localStorageGet(name) != 'false' : localStorageGet(name) == 'true'
+	checkbox.checked = enabled
+	checkbox.onchange = function (e) {
+		localStorageSet(name, !!e.target.checked)
+		if (typeof callback == 'function') {
+			callback(!!e.target.enabled)
+		}
+	}
+	if (typeof on_register == 'function') {
+		on_register(enabled)
+	} else if (on_register == true || on_register == null && typeof callback == 'function') {
+		callback(enabled)
+	}
+	return enabled
+}
+
 // Restore settings from localStorage
 
-if (localStorageGet('pin-sidebar') == 'true') {
-	$('#pin-sidebar').checked = true;
-	$('#sidebar-content').classList.remove('hidden');
-}
+registerSetting('pin-sidebar', false, null, (enabled) => {
+	if (enabled) {
+		$id('sidebar-content').classList.remove('hidden');
+	}
+})
 
-if (localStorageGet('joined-left') == 'false') {
-	$('#joined-left').checked = false;
-}
+registerSetting('joined-left', true)
 
-if (localStorageGet('parse-latex') == 'false') {
-	$('#parse-latex').checked = false;
-	md.inline.ruler.disable(['katex']);
-	md.block.ruler.disable(['katex']);
-}
-
-$('#pin-sidebar').onchange = function (e) {
-	localStorageSet('pin-sidebar', !!e.target.checked);
-}
-
-$('#joined-left').onchange = function (e) {
-	localStorageSet('joined-left', !!e.target.checked);
-}
-
-$('#parse-latex').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('parse-latex', enabled);
+registerSetting('parse-latex', true, (enabled) => {
 	if (enabled) {
 		md.inline.ruler.enable(['katex']);
 		md.block.ruler.enable(['katex']);
@@ -177,188 +178,118 @@ $('#parse-latex').onchange = function (e) {
 		md.inline.ruler.disable(['katex']);
 		md.block.ruler.disable(['katex']);
 	}
+}, true)
+
+registerSetting('syntax-highlight', true, (enabled) => {
+	markdownOptions.doHighlight = enabled
+}, true)
+
+registerSetting('allow-imgur', true, (enabled) => {
+	allowImages = enabled
+	$id('allow-all-images').disabled = !enabled
+}, true)
+
+registerSetting('allow-all-images', false, (enabled) => {
+	whitelistDisabled = enabled
+}, true)
+
+registerSetting('soft-mention', false)
+
+registerSetting('auto-precaution', false)
+
+var auto_fold, do_log_messages, should_get_info
+
+registerSetting('auto-fold', false, (enabled) => {
+	auto_fold = enabled
+}, true)
+
+registerSetting('message-log', false, (enabled) => {
+	do_log_messages = enabled
+}, true)
+
+toggleLog()
+
+function toggleLog() {
+	let _ = do_log_messages ? '[log enabled]' : '[log disabled]'
+	jsonLog += _;
+	readableLog += '\n' + _;
 }
 
-if (localStorageGet('syntax-highlight') == 'false') {
-	$('#syntax-highlight').checked = false;
-	markdownOptions.doHighlight = false;
-}
-
-$('#syntax-highlight').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('syntax-highlight', enabled);
-	markdownOptions.doHighlight = enabled;
-}
-
-if (localStorageGet('allow-imgur') == 'false') {
-	$('#allow-imgur').checked = false;
-	allowImages = false;
-	$('#allow-all-img').disabled = true;
-} else {
-	$('#allow-imgur').checked = true;
-	allowImages = true;
-}
-
-
-if (localStorageGet('whitelist-disabled') == 'true') {
-	$('#allow-all-img').checked = true;
-	whitelistDisabled = true;
-} else {
-	$('#allow-all-img').checked = false;
-	whitelistDisabled = false;
-}
-
-$('#allow-imgur').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('allow-imgur', enabled);
-	allowImages = enabled;
-	$('#allow-all-img').disabled = !enabled;
-}
-
-$('#allow-all-img').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('whitelist-disabled', enabled);
-	whitelistDisabled = enabled;
-}
-
-if (localStorageGet('soft-mention') == 'true') {
-	$('#soft-mention').checked = true;
-} else {
-	$('#soft-mention').checked = false;
-}
-
-$('#soft-mention').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('soft-mention', enabled);
-}
-
-if (localStorageGet('auto-precaution') == 'true') {
-	$('#auto-precaution').checked = true;
-} else {
-	$('#auto-precaution').checked = false;
-}
-
-var autoFold
-
-$('#auto-precaution').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('auto-precaution', enabled);
-}
-if (localStorageGet('auto-fold') == 'true') {
-	$('#auto-fold').checked = true;
-	autoFold = true;
-} else {
-	$('#auto-fold').checked = false;
-	autoFold = false;
-}
-
-$('#auto-fold').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('auto-fold', enabled);
-	autoFold = enabled;
-}
-
-var doLogMessages
-
-if (localStorageGet('message-log') == 'true') {
-	$('#message-log').checked = true;
-	doLogMessages = true;
-} else {
-	$('#message-log').checked = false;
-	doLogMessages = false;
-}
-logOnOff()
-
-$('#message-log').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('message-log', enabled);
-	doLogMessages = enabled;
-	logOnOff()
-}
-
-function logOnOff() {
-	let a;
-	if (doLogMessages) { a = '[log enabled]' } else { a = '[log disabled]' }
-	jsonLog += a;
-	readableLog += '\n' + a;
-}
-
-if (localStorageGet('mobile-btn') == 'true') {
-	$('#mobile-btn').checked = true;
-} else {
-	$('#mobile-btn').checked = false;
-	$('#mobile-btns').classList.add('hidden');
-	$('#more-mobile-btns').classList.add('hidden');
-}
-
-updateInputSize();
-
-$('#mobile-btn').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('mobile-btn', enabled);
+registerSetting('mobile-btn', false, (enabled) => {
 	if (enabled) {
-		$('#mobile-btns').classList.remove('hidden');
-		$('#more-mobile-btns').classList.remove('hidden');
+		$id('mobile-btns').classList.remove('hidden');
+		$id('more-mobile-btns').classList.remove('hidden');
 	} else {
-		$('#mobile-btns').classList.add('hidden');
-		$('#more-mobile-btns').classList.add('hidden');
+		$id('mobile-btns').classList.add('hidden');
+		$id('more-mobile-btns').classList.add('hidden');
 	}
-	updateInputSize();
-}
+	updateInputSize()
+}, true)
 
-var shouldGetInfo
-
-if (localStorageGet('should-get-info') == 'true') {
-	$('#should-get-info').checked = true;
-	shouldGetInfo = true;
-} else {
-	$('#should-get-info').checked = false;
-	shouldGetInfo = false;
-}
-
-$('#should-get-info').onchange = function (e) {
-	var enabled = !!e.target.checked;
-	localStorageSet('should-get-info', enabled);
-	shouldGetInfo = enabled;
-}
+registerSetting('should-get-info', false, (enabled) => {
+	should_get_info = enabled
+}, true)
 
 /* ---Buttons for some mobile users--- */
 
-$('#tab').onclick = function () {
-	keyActions.tab()
+function createMobileButton(text, callback, id) {
+	id = id ?? text.toLowerCase()
+	let container = $id('more-mobile-btns')
+	let button = document.createElement('button')
+	button.type = 'button'
+	button.classList.add('char')
+	button.textContent = text
+	button.onclick = typeof callback == 'function' ? callback : (
+		typeof callback == 'string' ? () => insertAtCursor(callback) : () => insertAtCursor(text)
+	)
+	container.appendChild(button)
 }
 
-document.querySelectorAll('button.char').forEach(function (el) {
-	el.onclick = function () {
-		insertAtCursor(el.innerHTML)
-	}
-})
+function initiateMobileButtons() {
+	createMobileButton('Tab', keyActions.tab, 'mob-btn-tab')
 
-$('#sent-pre').onclick = function () {
-	if (lastSentPos < lastSent.length - 1) {
-		keyActions.up()
-	}
+	createMobileButton('/', '/', 'mob-btn-slash')
+
+	createMobileButton('↑', () => {
+		if (lastSentPos < lastSent.length - 1) {
+			keyActions.up()
+		}
+	}, 'mob-btn-pre')
+
+	createMobileButton('↓', () => {
+		if (lastSentPos > 0) {
+			keyActions.down()
+		}
+	}, 'mob-btn-next')
+
+	createMobileButton('@', '@', 'mob-btn-at')
+
+	createMobileButton('\\n', '\n', 'mob-btn-newline')
+
+	createMobileButton('?', '?', 'mob-btn-question')
+
+	createMobileButton('*', '*', 'mob-btn-astrisk')
+
+	createMobileButton('#', '#', 'mob-btn-hash')
 }
 
-$('#sent-next').onclick = function () {
-	if (lastSentPos > 0) {
-		keyActions.down()
-	}
+function clearMobileButtons() {
+	$id('more-mobile-btns').innerHTML = ''
 }
+
+initiateMobileButtons()
 
 $('#send').onclick = function () {
 	keyActions.send()
 }
 
-$('#feed').onclick = function () {
-	insertAtCursor('\n')
-}
-
 /* ---Sidebar user list--- */
 
 // User list
-var onlineUsers = [];
-var ignoredUsers = [];
+var onlineUsers = []
+var ignoredUsers = []
+
+var usersInfo = {};
 
 function userAdd(nick, user_info) {
 	let trip = user_info.trip
@@ -386,6 +317,17 @@ function userAdd(nick, user_info) {
 		}
 	}
 
+	user.onmouseenter = function (e) {
+		user.classList.add('nick')
+		addClassToMessage(user, user_info)
+		addClassToNick(user, user_info)
+	}
+
+	user.onmouseleave = function (e) {
+		user.style.removeProperty('color')
+		user.className = ''
+	}
+
 	var userLi = document.createElement('li');
 	userLi.appendChild(user);
 
@@ -402,12 +344,14 @@ function userAdd(nick, user_info) {
 		userLi.appendChild(tripEl)
 	}
 
-	$('#users').appendChild(userLi);
+	$id('users').appendChild(userLi);
 	onlineUsers.push(nick);
+
+	usersInfo[nick] = user_info
 }
 
 function userRemove(nick, user_info) {
-	var users = $('#users');
+	var users = $id('users');
 	var children = users.children;
 
 	users.removeChild(document.getElementById(`user-li-${nick}`))
@@ -416,27 +360,18 @@ function userRemove(nick, user_info) {
 	if (index >= 0) {
 		onlineUsers.splice(index, 1);
 	}
+
+	delete usersInfo[nick]
 }
 
 function userUpdate(nick, user_info) {
-	var users = $('#users');
-	var children = users.children;
+	usersInfo[nick] = user_info
 
-	for (var i = 0; i < children.length; i++) {
-		var user = children[i];
-		if (user.firstChild/*hc++ shows tripcodes in userlist, so a user element has two children for the nickname and the tripcode.*/.textContent == nick) {
-			users.removeChild(user);
-		}
-	}
-
-	var index = onlineUsers.indexOf(nick);
-	if (index >= 0) {
-		onlineUsers.splice(index, 1);
-	}
+	// document.getElementById(`user-li-${nick}`).hover
 }
 
 function usersClear() {
-	var users = $('#users');
+	var users = $id('users');
 
 	while (users.firstChild) {
 		users.removeChild(users.firstChild);
@@ -536,13 +471,13 @@ var currentHighlight = 'darcula';
 
 function setScheme(scheme) {
 	currentScheme = scheme;
-	$('#scheme-link').href = "schemes/" + scheme + ".css";
+	$id('scheme-link').href = "schemes/" + scheme + ".css";
 	localStorageSet('scheme', scheme);
 }
 
 function setHighlight(scheme) {
 	currentHighlight = scheme;
-	$('#highlight-link').href = "vendor/hljs/styles/" + scheme + ".min.css";
+	$id('highlight-link').href = "vendor/hljs/styles/" + scheme + ".min.css";
 	localStorageSet('highlight', scheme);
 }
 
@@ -575,40 +510,40 @@ tunnels.forEach(function (tunnelurl) {
 	link.setAttribute("href", tunnelurl);
 	tunnel.textContent = link.hostname
 	tunnel.value = tunnelurl
-	$('#tunnel-selector').appendChild(tunnel)
+	$id('tunnel-selector').appendChild(tunnel)
 })
 // Add scheme options to dropdown selector
 schemes.forEach(function (scheme) {
 	var option = document.createElement('option');
 	option.textContent = scheme;
 	option.value = scheme;
-	$('#scheme-selector').appendChild(option);
+	$id('scheme-selector').appendChild(option);
 });
 
 highlights.forEach(function (scheme) {
 	var option = document.createElement('option');
 	option.textContent = scheme;
 	option.value = scheme;
-	$('#highlight-selector').appendChild(option);
+	$id('highlight-selector').appendChild(option);
 });
 
 languages.forEach(function (item) {
 	var option = document.createElement('option');
 	option.textContent = item[0];
 	option.value = item[1];
-	$('#i18n-selector').appendChild(option);
+	$id('i18n-selector').appendChild(option);
 });
 
 
-$('#scheme-selector').onchange = function (e) {
+$id('scheme-selector').onchange = function (e) {
 	setScheme(e.target.value);
 }
 
-$('#highlight-selector').onchange = function (e) {
+$id('highlight-selector').onchange = function (e) {
 	setHighlight(e.target.value);
 }
 
-$('#i18n-selector').onchange = function (e) {
+$id('i18n-selector').onchange = function (e) {
 	setLanguage(e.target.value)
 }
 
@@ -629,7 +564,7 @@ if (localStorageGet('current-tunnel')) {
 	ctunnel = "wss://hack.chat/chat-ws"
 }
 
-$('#scheme-selector').value = currentScheme;
-$('#highlight-selector').value = currentHighlight;
-$('#i18n-selector').value = lang;
+$id('scheme-selector').value = currentScheme;
+$id('highlight-selector').value = currentHighlight;
+$id('i18n-selector').value = lang;
 $("#tunnel-selector").value = ctunnel;

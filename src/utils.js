@@ -19,6 +19,10 @@ function localStorageSet(key, val) {
 	} catch (e) { }
 }
 
+function $id(id) {
+	return document.getElementById(id)
+}
+
 /* ---Markdown--- */
 
 // initialize markdown engine
@@ -162,7 +166,7 @@ function checkLong(text) {
 	return text.split('\n').length > 30 || text.length > 1000
 }
 
-var input = $('#chatinput');
+var input = $id('chatinput');
 
 function insertAtCursor(text) {
 	var start = input.selectionStart || 0;

@@ -1,65 +1,70 @@
 //https://github.com/hack-chat/main/pull/184
 //select "chatinput" on "/"
 document.addEventListener("keydown", e => {
-    if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
-        e.preventDefault();
-        document.getElementById("chatinput").focus();
-    }
+	if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
+		e.preventDefault();
+		document.getElementById("chatinput").focus();
+	}
 });
 
 //make frontpage have a getter
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get#%E4%BD%BF%E7%94%A8defineproperty%E5%9C%A8%E7%8E%B0%E6%9C%89%E5%AF%B9%E8%B1%A1%E4%B8%8A%E5%AE%9A%E4%B9%89_getter
-Object.defineProperty(window, 'frontpage', {
-    get: () =>
-        ["<pre><code><div style=\"margin: auto; width: fit-content;\">" +
-            " _           _         _       _   ",
-            "| |_ ___ ___| |_   ___| |_ ___| |_ ",
-            "|   |_ ||  _| '_| |  _|   |_ ||  _|",
-            "|_|_|__/|___|_,_|.|___|_|_|__/|_|  ",
-            "</div></code></pre>"].join('\n') +
-        md.render(i18ntranslate([
-            "---",
-            "Welcome to hack.chat, a minimal, distraction-free chat application.",
-            "You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
-            "Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: " + (location.host != '' ? ('https://' + location.host + '/') : window.location.href) + "?your-channel",
-            "There are no channel lists *for normal users*, so a secret channel name can be used for private discussions.",
-            "---",
-            "Here are some pre-made channels you can join: " + (shouldGetInfo ? (info.public ? ("(" + info.users + " users online, " + info.chans + " channels existing when you enter this page)") : "(Getting online counts...)") : "(Online counts disabled)"),
-            ...channels,
-            "And here's a random one generated just for you: " + ((!shouldGetInfo) || info.public ? ("?" + Math.random().toString(36).substr(2, 8)) : ""),
-            "---",
-            "Formatting:",
-            "Notice: Dont send raw source code without using a code block!",
-            "Surround LaTeX with a dollar sign for inline style $\\zeta(2) = \\pi^2/6$, and two dollars for display. ",
-            "For syntax highlight, wrap the code like: \\`\\`\\`<language> <the code>\\`\\`\\` where <language> is any known programming language.",
-            "---",
-            "Current Github: https://github.com/hack-chat",
-            "Legacy GitHub: https://github.com/AndrewBelt/hack.chat",
-            "---",
-            "Bots, Android clients, desktop clients, browser extensions, docker images, programming libraries, server modules and more:",
-            "https://github.com/hack-chat/3rd-party-software-list",
-            "---",
-            "Server and web client released under the WTFPL and MIT open source license.",
-            "No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages.",
-            "---",
-            "Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
-            "Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for the domain).",
-            "Links: [Hack.Chat](https://hack.chat) | [Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io) | [History in chatrooms written in Chinese/聊天室历史书](https://hiyoteam.github.io/ChatroomHistoryBook/) | [TanChat](https://tanchat.fun) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!) | [ZhangClient\(Chinese Client/中文HC客户端\)](https://client.zhangsoft.cf/)"
-        ].join("\n"), 'home'))
-})
+function frontpage() {
+	return i18ntranslate([
+		"<pre><code><div style=\"margin: auto; width: fit-content;\">" +
+		" _           _         _       _   ",
+		"| |_ ___ ___| |_   ___| |_ ___| |_ ",
+		"|   |_ ||  _| '_| |  _|   |_ ||  _|",
+		"|_|_|__/|___|_,_|.|___|_|_|__/|_|  ",
+		"</div></code></pre>",
+		md.render([
+			"---",
+			"Welcome to hack.chat, a minimal, distraction-free chat application.",
+			"You are now experiencing hack.chat with a tweaked client: hackchat\\+\\+. Official hack.chat client is at: https://hack.chat.",
+			"Channels are created, joined and shared with the url, create your own channel by changing the text after the question mark. Example: " + (location.host != '' ? ('https://' + location.host + '/') : window.location.href) + "?your-channel",
+			"There are no channel lists *for normal users*, so a secret channel name can be used for private discussions.",
+			"---",
+			"Here are some pre-made channels you can join: " + (should_get_info ? (info.public ? ("(" + info.users + " users online, " + info.chans + " channels existing when you enter this page)") : "(Getting online counts...)") : "(Online counts disabled)"),
+		].join('\n')),
+		md.render(channels.map(line => line.join(' ')).join('\n')),
+		md.render([
+			"And here's a random one generated just for you: " + ((!should_get_info) || info.public ? ("?" + Math.random().toString(36).substr(2, 8)) : ""),
+			"",
+			"---",
+			"Formatting:",
+			"Notice: Dont send raw source code without using a code block!",
+			"Surround LaTeX with a dollar sign for inline style $\\zeta(2) = \\pi^2/6$, and two dollars for display. ",
+			"For syntax highlight, wrap the code like: \\`\\`\\`<language> <the code>\\`\\`\\` where <language> is any known programming language.",
+			"---",
+			"Current Github: https://github.com/hack-chat",
+			"Legacy GitHub: https://github.com/AndrewBelt/hack.chat",
+			"---",
+			"Bots, Android clients, desktop clients, browser extensions, docker images, programming libraries, server modules and more:",
+			"https://github.com/hack-chat/3rd-party-software-list",
+			"---",
+			"Server and web client released under the WTFPL and MIT open source license.",
+			"No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages.",
+			"---",
+			"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
+			"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for the domain).",
+			"Links: [Hack.Chat](https://hack.chat) | ==[Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io)== | [History in chatrooms written in Chinese/聊天室历史书](https://hiyoteam.github.io/ChatroomHistoryBook/) | [TanChat](https://tanchat.fun) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!)",
+			"其它HC客户端: [ZhangClient](https://client.zhangsoft.cf/) | [awa客户端 by DPG](https://hc.doppelganger.ga/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)"
+		].join('\n')),
+	].join("\n"), 'home')
+}
 
 
 var info = {}
 
 var channels = [
-    `?your-channel ?programming ?lounge`,
-    `?meta ?math ?physics ?chemistry`,
-    `?technology ?games ?banana`,
-    `?test ?your-channell ?china ?chinese ?kt1j8rpc`,
+	[`?your-channel`, `?programming`, `?lounge`],
+	[`?meta`, `?math`, `?physics`, `?chemistry`],
+	[`?technology`, `?games`, `?banana`],
+	[`?test`, `?your-channell`, `?china`, `?chinese`, `?kt1j8rpc`],
 ]
 
 function pushFrontPage() {
-    pushMessage({ text: frontpage }, { isHtml: true, i18n: false, noFold: true })
+	pushMessage({ text: frontpage() }, { isHtml: true, i18n: false, noFold: true })
 }
 
 /* ---Some variables to be used--- */
@@ -87,107 +92,110 @@ var replace = ''
 
 
 var seconds = {
-    'join': {
-        'times': [],
-        'last': (new Date).getTime(),
-    },
+	'join': {
+		'times': [],
+		'last': (new Date).getTime(),
+	},
 }
 
 var lastMentioned = ''
 
 
 function reply(args) {//from crosst.chat
-    let replyText = '';
-    let originalText = args.text;
-    let overlongText = false;
+	let replyText = '';
+	let originalText = args.text;
+	let overlongText = false;
 
-    // Cut overlong text
-    if (originalText.length > 350) {
-        replyText = originalText.slice(0, 350);
-        overlongText = true;
-    }
+	// Cut overlong text
+	if (originalText.length > 350) {
+		replyText = originalText.slice(0, 350);
+		overlongText = true;
+	}
 
-    // Add nickname
-    if (args.trip) {
-        replyText = '>' + args.trip + ' ' + args.nick + '：\n';
-    } else {
-        replyText = '>' + args.nick + '：\n';
-    }
+	// Add nickname
+	if (args.trip) {
+		replyText = '>' + args.trip + ' ' + args.nick + '：\n';
+	} else {
+		replyText = '>' + args.nick + '：\n';
+	}
 
-    // Split text by line
-    originalText = originalText.split('\n');
+	// Split text by line
+	originalText = originalText.split('\n');
 
-    // Cut overlong lines
-    if (originalText.length >= 8) {
-        originalText = originalText.slice(0, 8);
-        overlongText = true;
-    }
+	// Cut overlong lines
+	if (originalText.length >= 8) {
+		originalText = originalText.slice(0, 8);
+		overlongText = true;
+	}
 
-    for (let replyLine of originalText) {
-        // Cut third replied text
-        if (!replyLine.startsWith('>>')) {
-            replyText += '>' + replyLine + '\n';
-        }
-    }
+	for (let replyLine of originalText) {
+		// Cut third replied text
+		if (!replyLine.startsWith('>>')) {
+			replyText += '>' + replyLine + '\n';
+		}
+	}
 
-    // Add elipsis if text is cutted
-    if (overlongText) {
-        replyText += '>……\n';
-    }
-    replyText += '\n';
+	// Add elipsis if text is cutted
+	if (overlongText) {
+		replyText += '>……\n';
+	}
+	replyText += '\n';
 
 
-    // Add mention when reply to others
-    if (args.nick != myNick.split('#')[0]) {
-        var nick = args.nick
-        let at = '@'
-        if ($('#soft-mention').checked) { at += ' ' }
-        replyText += at + nick + ' ';
-    }
+	// Add mention when reply to others
+	if (args.nick != myNick.split('#')[0]) {
+		var nick = args.nick
+		let at = '@'
+		if ($id('soft-mention').checked) { at += ' ' }
+		replyText += at + nick + ' ';
+	}
 
-    // Insert reply text
-    replyText += input.value;
+	// Insert reply text
+	replyText += input.value;
 
-    input.value = '';
-    insertAtCursor(replyText);
-    input.focus();
+	input.value = '';
+	insertAtCursor(replyText);
+	input.focus();
 }
 
 /* ---Session Command--- */
 
 function getInfo() {
-    return new Promise(function (resolve, reject) {
-        ws = new WebSocket(ws_url);
+	return new Promise(function (resolve, reject) {
+		ws = new WebSocket(ws_url);
 
-        ws.onopen = function () {
-            this.send(JSON.stringify({ cmd: "session", isBot: false }))
-        }
+		ws.onopen = function () {
+			this.send(JSON.stringify({ cmd: "session", isBot: false }))
+		}
 
-        ws.onmessage = function (message) {
-            let data = JSON.parse(message.data)
-            if (data.cmd != 'session') {
-                return
-            }
-            info.public = data.public
-            info.chans = data.chans
-            info.users = data.users
-            if (shouldGetInfo) {
-                for (let i = 0; i < channels.length; i++) {
-                    let line = channels[i]
-                    let newLineChannels = []
-                    for (let channel of line.split(/ ?\?/g).slice(1)) {
-                        if (typeof info.public[channel] === typeof 0) {
-                            channel = channel + ' ' + '(' + info.public[channel] + ')'
-                        }
-                        newLineChannels.push('?' + channel)
-                    }
-                    channels[i] = newLineChannels.join(' ')
-                }
-            }
-            this.close()
-            resolve()
-        }
-    })
+		ws.onmessage = function (message) {
+			let data = JSON.parse(message.data)
+			if (data.cmd != 'session') {
+				return
+			}
+			info.public = data.public
+			info.chans = data.chans
+			info.users = data.users
+			if (should_get_info) {
+				for (let i = 0; i < channels.length; i++) {
+					let line = channels[i]
+					for (let j = 0; j < line.length; j++) {
+						let channel = line[j]
+						let user_count = info.public[channel.slice(1)]
+						if (typeof user_count == 'number') {
+							channel = channel + ' ' + '(' + user_count + ')'
+						} else {
+							channel = channel + ' ' + '(\\\\)'
+						}
+						line[j] = channel
+					}
+					channels[i] = line
+				}
+			}
+			this.close()
+			resolve()
+		}
+	})
 }
 
 /* ---Window and input field and sidebar stuffs--- */
@@ -239,7 +247,7 @@ function updateTitle() {
 	document.title = title;
 }
 
-$('#footer').onclick = function () {
+$id('footer').onclick = function () {
 	input.focus();
 }
 
@@ -253,7 +261,7 @@ var keyActions = {
 		// Submit message
 		if (input.value != '') {
 			let text = input.value
-			if ($('#auto-precaution').checked && checkLong(text) && (!text.startsWith('/') || text.startsWith('/me') || text.startsWith('//'))) {
+			if ($id('auto-precaution').checked && checkLong(text) && (!text.startsWith('/') || text.startsWith('/me') || text.startsWith('//'))) {
 				send({ cmd: 'emote', text: 'Warning: Long message after 3 second | 警告：3秒后将发送长消息' })
 				sendInputContent(3000)
 			} else {
@@ -417,7 +425,7 @@ function updateInputSize() {
 
 	input.style.height = 0;
 	input.style.height = input.scrollHeight + 'px';
-	document.body.style.marginBottom = $('#footer').offsetHeight + 'px';
+	document.body.style.marginBottom = $id('footer').offsetHeight + 'px';
 
 	if (atBottom) {
 		window.scrollTo(0, document.body.scrollHeight);
