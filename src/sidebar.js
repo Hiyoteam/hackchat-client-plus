@@ -364,10 +364,21 @@ function userRemove(nick, user_info) {
 	delete usersInfo[nick]
 }
 
-function userUpdate(nick, user_info) {
-	usersInfo[nick] = user_info
+function userUpdate(args) {
+	usersInfo[args.nick] = {
+		...usersInfo[args.nick],
+		...args
+	}
 
-	// document.getElementById(`user-li-${nick}`).hover
+	let user_info = usersInfo[args.nick]
+
+	let user = document.getElementById(`user-li-${args.nick}`).firstChild
+
+	user.onmouseenter = function (e) {
+		user.classList.add('nick')
+		addClassToMessage(user, user_info)
+		addClassToNick(user, user_info)
+	}
 }
 
 function usersClear() {

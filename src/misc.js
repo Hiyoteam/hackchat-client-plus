@@ -69,7 +69,6 @@ function pushFrontPage() {
 
 /* ---Some variables to be used--- */
 
-var ws;
 var myNick = localStorageGet('my-nick') || '';
 var myColor = localStorageGet('my-color') || null;//hex color value for autocolor
 var myChannel = window.location.search.replace(/^\?/, '')
@@ -162,7 +161,7 @@ function reply(args) {//from crosst.chat
 
 function getInfo() {
 	return new Promise(function (resolve, reject) {
-		ws = new WebSocket(ws_url);
+		let ws = new WebSocket(ws_url);
 
 		ws.onopen = function () {
 			this.send(JSON.stringify({ cmd: "session", isBot: false }))

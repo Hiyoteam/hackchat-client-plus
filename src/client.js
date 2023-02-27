@@ -9,6 +9,8 @@
 
 /* ---Websocket stuffs--- */
 
+var ws;
+
 var wasConnected = false;
 
 var isInChannel = false;
@@ -230,6 +232,10 @@ var COMMANDS = {
 		}
 	},
 
+	updateUser: function (args) {
+		userUpdate(args)
+	},
+
 	captcha: function (args) {
 		isAnsweringCaptcha = true
 
@@ -316,7 +322,7 @@ function addClassToNick(element, args) {
 	}
 }
 
-function makeTripEl(args) {
+function makeTripEl(args, options, date) {
 	var tripEl = document.createElement('span');
 
 	if (args.mod) {
@@ -329,7 +335,7 @@ function makeTripEl(args) {
 	return tripEl
 }
 
-function makeNickEl(args) {
+function makeNickEl(args, options, date) {
 	var nickLinkEl = document.createElement('a');
 	nickLinkEl.textContent = args.nick;
 
@@ -359,7 +365,6 @@ function makeNickEl(args) {
 		reply(args)
 	}
 
-	var date = new Date(args.time || Date.now());
 	nickLinkEl.title = date.toLocaleString();
 
 	if (args.color) {
@@ -369,7 +374,7 @@ function makeNickEl(args) {
 	return nickLinkEl
 }
 
-function makeTextEl(args, options) {
+function makeTextEl(args, options, date) {
 
 	let isHtml = options.isHtml ?? false // This is only for better controll to rendering. There are no backdoors to push HTML to users in my repo.
 	let raw = options.raw ?? false
@@ -471,6 +476,8 @@ function pushMessage(args, options = {}) {
 
 	messageEl.classList.add('message');
 
+	var date = new Date(args.time || Date.now());
+
 	addClassToMessage(messageEl, args)
 
 	// Nickname
@@ -480,16 +487,16 @@ function pushMessage(args, options = {}) {
 	messageEl.appendChild(nickSpanEl);
 
 	if (args.trip) {
-		nickSpanEl.appendChild(makeTripEl(args, options));
+		nickSpanEl.appendChild(makeTripEl(args, options, date));
 	}
 
 	if (args.nick) {
-		nickSpanEl.appendChild(makeNickEl(args, options));
+		nickSpanEl.appendChild(makeNickEl(args, options, date));
 	}
 
 	// Text
 	
-	messageEl.appendChild(makeTextEl(args, options));
+	messageEl.appendChild(makeTextEl(args, options, date));
 
 	// Scroll to bottom
 	var atBottom = isAtBottom();
