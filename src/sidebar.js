@@ -319,7 +319,7 @@ function userAdd(nick, user_info) {
 
 	user.onmouseenter = function (e) {
 		user.classList.add('nick')
-		addClassToMessage(user, user_info)
+		addClassToMessage(user.parentElement, user_info)
 		addClassToNick(user, user_info)
 	}
 
@@ -376,7 +376,7 @@ function userUpdate(args) {
 
 	user.onmouseenter = function (e) {
 		user.classList.add('nick')
-		addClassToMessage(user, user_info)
+		addClassToMessage(user.parentElement, user_info)
 		addClassToNick(user, user_info)
 	}
 }
