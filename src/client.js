@@ -150,19 +150,25 @@ function join(channel, oldNick) {
 var COMMANDS = {
 	chat: function (args, raw) {
 		if (ignoredUsers.indexOf(args.nick) >= 0) {
-			return;
+			return
 		}
-		pushMessage(args, { i18n: false, raw });
+		pushMessage(args, { i18n: false, raw })
 	},
 
 	info: function (args, raw) {
-		args.nick = '*';
-		pushMessage(args, { i18n: true, raw });
+		if ((args.type == 'whisper' || args.type == 'invite') && ignoredUsers.indexOf(args.from) >= 0) {
+			return
+		}
+		args.nick = '*'
+		pushMessage(args, { i18n: true, raw })
 	},
 
 	emote: function (args, raw) {
-		args.nick = '*';
-		pushMessage(args, { i18n: false, raw });
+		if (ignoredUsers.indexOf(args.text.match(/@(.+?)(?: .+)/)[1]) >= 0) {
+			return
+		}
+		args.nick = '*'
+		pushMessage(args, { i18n: false, raw })
 	},
 
 	warn: function (args, raw) {
