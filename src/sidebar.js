@@ -271,6 +271,8 @@ function initiateMobileButtons() {
 	createMobileButton('*', '*', 'mob-btn-astrisk')
 
 	createMobileButton('#', '#', 'mob-btn-hash')
+
+	createMobileButton('`', '`', 'mob-btn-backquote')
 }
 
 function clearMobileButtons() {
