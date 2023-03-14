@@ -3,7 +3,7 @@
 **New update: shabby i18n (Simplified Chinese) now available!!!**
 
 A tweaked hackchat client. aka hackchat++.
-Most code are from <https://github.com/hack-chat/main>.
+Most code, and icon, are from <https://github.com/hack-chat/main>.
 Hosted at <https://hcer.netlify.app> or <https://hc.thz.cool> (thanks to Maggie, aka THZ, for hosting)
 
 Some of the current features:(* means optional features, which can be set to the original behavior instead of tweaked behavior)
