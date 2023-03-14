@@ -47,7 +47,7 @@ function frontpage() {
 			"---",
 			"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
 			"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for the domain).",
-			"Links: [Hack.Chat](https://hack.chat) | ==[Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io)== | [History in chatrooms written in Chinese/聊天室历史书](https://hiyoteam.github.io/ChatroomHistoryBook/) | [TanChat](https://tanchat.fun) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!)",
+			"Links: [Hack.Chat](https://hack.chat) | ==[Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io)== | [History in chatrooms written in Chinese/聊天室历史书](https://hiyoteam.github.io/ChatroomHistoryBook/) | [TanChat](https://tanchat.fun) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!) | [中文文档](help)",
 			"其它HC客户端: [ZhangClient](https://client.zhangsoft.cf/) | [awa客户端 by DPG](https://hc.doppelganger.ga/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)"
 		].join('\n')),
 	].join("\n"), 'home')
