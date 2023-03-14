@@ -1,13 +1,174 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-100%">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="https://unpkg.com/@csstools/normalize.css" rel="stylesheet">
+    <style>
+        :root {
+            --spacing: 0;
+        }
+
+        [un-cloak] {
+            display: none;
+        }
+
+        header {
+            background: linear-gradient(135deg, #8e9eab, #eef2f3)
+        }
+
+        .link {
+            text-decoration: none;
+            color: unset;
+        }
+    </style>
+    <script>
+        window.__unocss = {
+            shortcuts: {
+                // shortcuts to multiple utilities
+                'banner-item': 'm-xauto m-y1 sm:m-1 min-h-10 max-w-100 flex justify-center items-center  bg-#aaaaaa',
+            }
+        }
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/@unocss/runtime"></script>
 </head>
-<body>
-    <div class="">awa</div>
+
+<body class="m-0 bg-#f0f0f0 h-100%" un-cloak>
+    <header class="p-1">
+        <div class="w-auto flex justify-center items-center p-4 sm:min-h-25 lg:min-h-30">
+            <img class="h-15 lg:h-18 m-r-4 sm:m-r-8" src="../imgs/android-icon-192x192.png">
+            <div>
+                <h1 class="m-0 text-10 lg:text-12 font-mono">HC++</h1>
+                <div class="text-4">老牌、完善的hack.chat客户端</div>
+            </div>
+        </div>
+
+        <div class="md:w-80% m-auto sm:grid grid-cols-3">
+            <a href="https://hcer.netlify.app" class="link">
+                <div class="banner-item">
+                    → hcer.netlify.app
+                </div>
+            </a>
+            <a href="https://hc.thz.cool" class="link">
+                <div class="banner-item">
+                    → hc.thz.cool
+                </div>
+            </a>
+            <a href="https://github.com/xjzh123/hackchat-client-plus" class="link">
+                <div class="banner-item">
+                    <object data="https://shields.io/github/stars/xjzh123/hackchat-client-plus?style=social"></object>
+                </div>
+            </a>
+        </div>
+    </header>
+    <main class="md:w-80% m-auto p-10 break-words">
+        <h1>功能</h1>
+        <ul>
+            <li>
+                <h3>回复消息</h3>
+                <p>左键用户名以<code>@</code>对方，右键用户名以回复消息。</p>
+            </li>
+            <li>
+                <h3>记录消息</h3>
+                <p>在侧边栏可以开启记录消息，可以复制记录的消息。客户端只会把记录的消息存放在JavaScript变量里面，不会持久化保存，也不会发送给开发者。</p>
+            </li>
+            <li>
+                <h3>移动端按钮</h3>
+                <p>在侧边栏可以开启移动端按钮，移动端用户可以快速输入特殊符号、使用<code>Tab</code>键补全<code>@</code>、调出历史发送的消息等。</p>
+            </li>
+            <li>
+                <h3>多语言支持</h3>
+                <p>在侧边栏可以切换语言，目前支持中文。刷新后页面语言将会改变。</p>
+            </li>
+            <li>
+                <h3>自定义邀请</h3>
+                <p>在侧边栏可以邀请用户到自定义的频道。</p>
+            </li>
+            <li>
+                <h3>屏蔽用户</h3>
+                <p>在侧边栏可以屏蔽特定用户的发言。</p>
+            </li>
+            <li>
+                <h3>自动改色</h3>
+                <p>在侧边栏可以设置颜色，以后每次加入都会自动使用这个昵称颜色。</p>
+            </li>
+            <li>
+                <h3>自定义WS地址</h3>
+                <p class="font-bold">请注意，该功能不适合用于加入ZHC等聊天室。</p>
+                <p>在侧边栏可以设置自定义的Websocket连接地址。</p>
+            </li>
+            <li>
+                ……
+            </li>
+        </ul>
+        <h1>优化</h1>
+        <ul>
+            <li>
+                <h3>LaTeX武器防御</h3>
+                <p>客户端会将任何已知的LaTeX武器和部分极度刷屏的Markdown消息渲染为纯文本。</p>
+            </li>
+            <li>
+                <h3>重连优化</h3>
+                <p>掉线以后，如果重连失败，按下回车可以主动重连。此外，重连时会自动在用户名后增加下划线以防止重名。</p>
+            </li>
+            <li>
+                <h3>消息溢出优化</h3>
+                <p>精心设计的CSS，可以最大限度防止消息文本溢出，让消息文本待在该待的地方。</p>
+            </li>
+            <li>
+                <h3>图片加载</h3>
+                <p>支持SM.MS图床、positmages、路过图床、catbox等图床。此外，还支持百度图片的图片URL。</p>
+                <p>您可以通过设置，使客户端加载<span class="font-italic">任何</span>图片。</p>
+            </li>
+            <li>
+                <h3>验证码优化</h3>
+                <p>精心设计的，全HC最容易辨识的HC验证码。</p>
+            </li>
+            <li>
+                <h3>崩溃防御</h3>
+                <p>去除了原版客户端内导致浏览器崩溃的后门。此外，可能导致浏览器崩溃的LaTeX武器也被防御。</p>
+            </li>
+            <li>
+                <p>……</p>
+            </li>
+        </ul>
+        <h1>更多</h1>
+        <ul>
+            <li>
+                <h3>更多CSS样式</h3>
+                <p>几个新的配色方案，包括Wikidot后室站风格的配色。</p>
+            </li>
+            <li>
+                <p>……</p>
+            </li>
+        </ul>
+        <h1>FAQ</h1>
+        <ul>
+            <li>
+                <h3>我发现了Bug！</h3>
+                <p>欢迎在<a href="https://github.com/xjzh123/hackchat-client-plus">Github</a>提出issue，或者在HC联系我！</p>
+            </li>
+            <li>
+                <h3>你会做……吗？</h3>
+                <p>欢迎在<a href="https://github.com/xjzh123/hackchat-client-plus">Github</a>或者HC提出，但是很抱歉，目前HC++的开发进度停滞，是否加入新功能取决于我。</p>
+            </li>
+            <li>
+                <h3>我能Fork或者取用代码吗？</h3>
+                <p>根据LGPL许可证（和我的要求），请<span class="font-italic">尽可能</span>开源并且标注HC++。</p>
+            </li>
+            <li>
+                <h3>为什么你的态度这么差？</h3>
+                <p>抱歉¯\_(ツ)_/¯</p>
+            </li>
+            <li>
+                <h3><a href="javascript:;" onclick="blacked.classList.remove('hidden')">你这做的是什么垃圾，完全比不上黑茶的客户端。</a></h3>
+            </li>
+        </ul>
+    </main>
+    <div id="blacked" class="hidden"><div class="fixed top-0 z-999 bg-black text-white w-100% h-100% flex justify-center items-center">你让一名开发者心灰意冷。</div></div>
 </body>
+
 </html>
