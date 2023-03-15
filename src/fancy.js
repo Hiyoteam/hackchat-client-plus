@@ -26,6 +26,13 @@ let run = {
 		}
 		location.reload()
 	},
+	goto(...args) {
+		if (args.length != 1) {
+			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
+			return
+		}
+		window.open(args[0])
+	},
 	coderMode(...args) {
 		if (!localStorageGet('coder-mode') || localStorageGet('coder-mode') != 'true') {
 			coderMode()
