@@ -71,7 +71,7 @@ let run = {
 }
 
 $id('special-cmd').onclick = function () {
-	let cmdText = prompt(i18ntranslate('Input command:(This is for the developer\'s friends to access some special experimental functions.)', 'prompt'));
+	let cmdText = input.value || prompt(i18ntranslate('Input command:(This is for the developer\'s friends to access some special experimental functions.)', 'prompt'));
 	if (!cmdText) {
 		return;
 	}
