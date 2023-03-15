@@ -31,7 +31,7 @@ let run = {
 			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
 			return
 		}
-		window.open(args[0])
+		location.href = new URL(args[0], location.href)
 	},
 	coderMode(...args) {
 		if (!localStorageGet('coder-mode') || localStorageGet('coder-mode') != 'true') {
