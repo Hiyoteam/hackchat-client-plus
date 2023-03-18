@@ -21,7 +21,7 @@ let i18n = new Map([
                 ['Color scheme', '配色方案'],
                 ['Highlight scheme', '代码高亮方案'],
                 ['Connect tunnel', '连接地址'],
-                ['Upload file', '上传文件'],
+                ['Upload files', '上传文件'],
                 ['Add tunnel', "添加加速隧道"],
                 ['Remove tunnel', "移除加速隧道"],
                 ['Upload Image', '上传图片'],
