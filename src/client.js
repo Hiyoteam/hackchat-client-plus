@@ -552,5 +552,5 @@ if (myChannel == '') {
 	join(myChannel);
 }
 
-const HCER_INFO = 'HC++ Made by 4n0n4me at hcer.netlify.app, source at: https://github.com/xjzh123/hackchat-client-plus'
+const HCER_INFO = 'HC++ Made by 4n0n4me & other HiyoTeam members at hcer.netlify.app (or hc.thz.cool for cloudflare proxied), source at: https://github.com/Hiyoteam/hackchat-client-plus'
 console.log(HCER_INFO)
