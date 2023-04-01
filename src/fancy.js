@@ -78,6 +78,8 @@ let run = {
 		let plugins=localStorageGet("plugins")
 		if(plugins != undefined){
 			plugins=JSON.parse(plugins)
+		}else{
+			plugins=[]
 		}
 		//add the plugin
 		plugins.push(plugin_address)
