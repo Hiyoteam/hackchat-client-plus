@@ -1,5 +1,5 @@
 // Load all allowed plugins in the localStorage
-plugins=JSON.parse(localstorageGet("plugins"))
+plugins=JSON.parse(localStorageGet("plugins"))
 console.log("Loading plugins:",plugins)
 // add into the head
 plugins.forEach(element => {
