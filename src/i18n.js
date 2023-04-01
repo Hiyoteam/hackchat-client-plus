@@ -66,8 +66,8 @@ let i18n = new Map([
                 /* System messages */
                 ['Users online: ', '在线用户：'],
                 ['Thanks for using hackchat++ client! Source at: ', '感谢使用hackchat++！开源在：'],
-                [/^([a-zA-Z0-9_]{1,24}) joined/, '$1 加入了聊天室'],
-                [/^([a-zA-Z0-9_]{1,24}) left/, '$1 离开了聊天室'],
+                [/^([a-zA-Z0-9_]{1,24}) joined$/, '$1 加入了聊天室'],
+                [/^([a-zA-Z0-9_]{1,24}) left$/, '$1 离开了聊天室'],
                 ['You cancelled joining. Press enter at the input field to reconnect.', '你取消了加入。在输入框上按回车可以重新加入。'],
                 ['Server disconnected. ', '断连了！'],
                 ['Attempting to reconnect. . .', '正在尝试重连……'],
@@ -79,18 +79,18 @@ let i18n = new Map([
                 ['Please refresh to apply language. Multi language is in test and not perfect yet. ', '请刷新来应用语言设置。多语言支持目前还在测试当中，并不完美。'],
                 [/Ignored nick ([a-zA-Z0-9_]{1,24})\./, '已忽略$1的消息。'],
                 [/Cancelled ignoring nick ([a-zA-Z0-9_]{1,24})\./, '已取消忽略$1的消息。'],
-                [/^Kicked ([a-zA-Z0-9_]{1,24})/, '已踢出 $1'],
-                [/^Banned ([a-zA-Z0-9_]{1,24})/, '已封禁 $1'],
+                [/^Kicked ([a-zA-Z0-9_]{1,24})$/, '已踢出 $1'],
+                [/^Banned ([a-zA-Z0-9_]{1,24})$/, '已封禁 $1'],
                 ["Sucessfully added tunnel.", "成功增加隧道。"],
                 ["Sucessfully removed tunnel.", "成功移除隧道。"],
                 ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"]
             ]),
             info: new Map([
                 /* Chatroom info */
-                [/You whispered to @([a-zA-Z0-9_]{1,24}): /, '你对 @$1 私聊：'],
-                [/([a-zA-Z0-9_]{1,24}) whispered: /, '$1 对你私聊：'],
-                [/You invited ([a-zA-Z0-9_]{1,24}) to /, '你邀请 $1 到 '],
-                [/([a-zA-Z0-9_]{1,24}) invited you to /, '$1 邀请你到 '],
+                [/^You whispered to @([a-zA-Z0-9_]{1,24}): /, '你对 @$1 私聊：'],
+                [/^([a-zA-Z0-9_]{1,24}) whispered: /, '$1 对你私聊：'],
+                [/^You invited ([a-zA-Z0-9_]{1,24}) to /, '你邀请 $1 到 '],
+                [/^([a-zA-Z0-9_]{1,24}) invited you to /, '$1 邀请你到 '],
                 ['Nickname must consist of up to 24 letters, numbers, and underscores', '用户名只能包含24个及以下字符，只能包含字母、数字和下划线'],
                 ['Nickname taken', '该用户名已被占用'],
                 ['You have been denied access to that channel and have been moved somewhere else. Retry later or wait for a mod to move you.', '系统阻止了你加入该频道，把你移到了别的地方。请稍后再试或等待管理员移动你。'],
@@ -100,7 +100,7 @@ let i18n = new Map([
                 ['You are changing colors too fast. Wait a moment before trying again.', '你更改颜色太快了，请稍后再试。'],
                 ['You are being rate-limited or blocked.', '你被暂时限制了，或者被封禁了。'],
                 ['Wait a moment and try again.', '请稍后再试。'],
-                [/([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})/, '$1 改名为 $2'],
+                [/^([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})$/, '$1 改名为 $2'],
 
                 /* Help */
                 ['All commands:', '全部命令：'],
