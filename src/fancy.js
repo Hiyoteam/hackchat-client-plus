@@ -68,6 +68,19 @@ let run = {
 		pushMessage({ nick: '[test]', text: '# Title test\n\ntext test\n\n[Link test](https://hcwiki.github.io/)\n\n> Quote test' })
 		$id('footer').classList.remove('hidden')
 	},
+	addplugin(...args) {
+		if (args.length != 1) {
+			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
+			return
+		}
+		plugin_address=args[0]
+		//get the cmds first
+		plugins=JSON.parse(localstorageGet("plugins"))
+		//add the plugin
+		plugins.push(plugin_address)
+		//save
+		localStorageSet("plugins",JSON.stringify(plugins))
+	}
 }
 
 $id('special-cmd').onclick = function () {
