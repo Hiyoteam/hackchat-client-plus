@@ -75,7 +75,10 @@ let run = {
 		}
 		let plugin_address=args[0]
 		//get the cmds first
-		let plugins=JSON.parse(localStorageGet("plugins"))
+		let plugins=localStorageGet("plugins")
+		if(plugins != undefined){
+			plugins=JSON.parse(plugins)
+		}
 		//add the plugin
 		plugins.push(plugin_address)
 		//save
