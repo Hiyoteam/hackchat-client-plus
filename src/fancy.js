@@ -85,6 +85,20 @@ let run = {
 		plugins.push(plugin_address)
 		//save
 		localStorageSet("plugins",JSON.stringify(plugins))
+		pushMessage({nick:"*",text:"Added plugin."})
+	},
+	listplugins(...args){
+		let plugins=localStorageGet("plugins")
+		if(plugins != undefined){
+			plugins=JSON.parse(plugins)
+		}else{
+			plugins=[]
+		}
+		pushMessage({nick:"*",text:"Restigered plugins:"+JSON.stringify(plugins)})
+	},
+	clearplugins(...args){
+		localStorageSet("plugins","[]")
+		pushMessage({nick:"*",text:"Plugins cleared."})
 	}
 }
 
