@@ -73,9 +73,9 @@ let run = {
 			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
 			return
 		}
-		plugin_address=args[0]
+		let plugin_address=args[0]
 		//get the cmds first
-		plugins=JSON.parse(localstorageGet("plugins"))
+		let plugins=JSON.parse(localstorageGet("plugins"))
 		//add the plugin
 		plugins.push(plugin_address)
 		//save
