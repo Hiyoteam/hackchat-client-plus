@@ -112,7 +112,7 @@ $id('special-cmd').onclick = function () {
 		try{
 			run[cmdArray[0]](...cmdArray.slice(1))
 		}catch(e){
-			pushMessage({nick:"!","Error when executeing \""+cmdArray[0]+"\",Send the following error messages to the developer.\n```"+e+"\n```"})
+			pushMessage({nick:"!",text:"Error when executeing \""+cmdArray[0]+"\",Send the following error messages to the developer.\n```"+e+"\n```"})
 		}
 	} else {
 		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
