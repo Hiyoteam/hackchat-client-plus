@@ -463,7 +463,6 @@ function makeTextEl(args, options, date) {
 
 function pushMessage(args, options = {}) {
 	let i18n = options.i18n ?? true
-	args.text = checkReplace(args.text,replacements)
 	if (i18n && args.text) {
 		args.text = i18ntranslate(args.text, ['system', 'info'])
 	}
