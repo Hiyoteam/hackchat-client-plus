@@ -459,6 +459,7 @@ var schemes = [
 	// 'crosst-chat-night',
 	// 'crosst-chat-city',
 	'backrooms-liminal',
+	'amoled',
 ];
 
 var highlights = [
