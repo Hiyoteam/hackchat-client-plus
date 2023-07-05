@@ -73,7 +73,14 @@ var imgHostWhitelist = [
 	'gimg2.baidu.com',	//百度
 	'files.catbox.moe',	//catbox
 	'img.liyuv.top',    //李鱼图床
-];
+	location.hostname,    // 允许我自己
+	'img.zhangsoft.cf',    // 小张图床
+	'bed.paperee.repl.co', 'filebed.paperee.guru',    // 纸片君ee的纸床
+	'imagebed.s3.bitiful.net',    //Dr0让加的
+	'img1.imgtp.com', 'imgtp.com',    // imgtp
+	'api.helloos.eu.org',    // HelloOsMe's API
+	'cdn.luogu.com.cn',    // luogu
+]; // Some are copied from https://github.com/ZhangChat-Dev-Group/ZhangChat/
 
 function getDomain(link) {
 	var a = document.createElement('a');
