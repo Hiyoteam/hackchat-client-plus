@@ -554,7 +554,6 @@ if (myChannel == '') {
 		})
 	}
 } else {
-	replacements = loadReplacements()
 	join(myChannel);
 }
 
