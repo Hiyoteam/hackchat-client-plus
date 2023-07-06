@@ -103,18 +103,31 @@ let run = {
 }
 
 $id('special-cmd').onclick = function () {
-	let cmdText = input.value || prompt(i18ntranslate('Input command:(This is for the developer\'s friends to access some special experimental functions.)', 'prompt'));
+	let cmdText = input.value || prompt(i18ntranslate('Input command:(This is for the developers to access/test some special experimental functions.)', 'prompt'));
 	if (!cmdText) {
 		return;
 	}
 	let cmdArray = cmdText.split(' ')
 	if (run[cmdArray[0]]) {
-		run[cmdArray[0]](...cmdArray.slice(1))
+		try{
+			run[cmdArray[0]](...cmdArray.slice(1))
+		}catch(e){
+			pushMessage({nick:"!",text:"Error when executeing \""+cmdArray[0]+"\",Send the following error messages to the developer.\n```"+e+"\n```"})
+		}
 	} else {
 		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
 	}
 }
 
+// Feature: let special commands could be executed just like running on server.
+function isSPCmd(text){ //P.S SPCmd == SpeCial Command
+	return (text.startsWith('/') && (run[text.split("/")[1].split(" ")[0]] != undefined))
+}
+function callSPcmd(text){
+	let name=text.split("/")[1].split(" ")[0]
+	let args=text.split("/")[1].split(" ").slice(1)
+	run[name](...args)
+}
 function coderMode() {
 	for (let char of ['(', ')', '"']) {
 		let btn = document.createElement('button')

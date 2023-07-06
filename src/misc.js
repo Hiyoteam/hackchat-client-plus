@@ -414,7 +414,12 @@ function silentSendText(text) {
 	if (purgatory) {
 		send({ cmd: 'emote', text: text });
 	} else {
-		send({ cmd: 'chat', text: text });
+		// Hook localCmds
+		if(isSPCmd(text)){
+			callSPcmd(text)
+		}else{
+			send({ cmd: 'chat', text: text });
+		}
 	}
 	return text;
 }

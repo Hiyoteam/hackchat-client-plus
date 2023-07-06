@@ -437,6 +437,7 @@ function makeNickEl(args, options, date) {
 
 	//tweaked code from crosst.chat
 	nickLinkEl.onclick = function () {
+		// @TODO Finish right-click menu
 		// Reply to a whisper or info is meaningless
 		if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
 			insertAtCursor(args.text);
@@ -551,13 +552,16 @@ function makeTextEl(args, options, date) {
 
 function pushMessage(args, options = {}) {
 	let i18n = options.i18n ?? true
-
 	if (i18n && args.text) {
 		args.text = i18ntranslate(args.text, ['system', 'info'])
 	}
 
 	// Message container
 	var messageEl = document.createElement('div');
+	// Raw-JSON for right-click menu
+	var jsonEl = document.createElement("raw-json-data")
+	jsonEl.innerText=JSON.stringify(args)
+	
 
 	if (
 		typeof (myNick) === 'string' && (
@@ -569,7 +573,7 @@ function pushMessage(args, options = {}) {
 	}
 
 	messageEl.classList.add('message');
-
+	
 	var date = new Date(args.time || Date.now());
 
 	addClassToMessage(messageEl, args)
@@ -579,6 +583,7 @@ function pushMessage(args, options = {}) {
 	nickSpanEl.classList.add('nick');
 	nickSpanEl.classList.add('chat-nick');
 	messageEl.appendChild(nickSpanEl);
+	messageEl.appendChild(jsonEl)
 
 	if (args.trip) {
 		nickSpanEl.appendChild(makeTripEl(args, options, date));
