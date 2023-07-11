@@ -551,6 +551,10 @@ function makeTextEl(args, options, date) {
 
 
 function pushMessage(args, options = {}) {
+	args = hook.run("before","pushmessage",args)
+	if (!args){
+		return //prevented
+	}
 	let i18n = options.i18n ?? true
 	if (i18n && args.text) {
 		args.text = i18ntranslate(args.text, ['system', 'info'])
@@ -615,7 +619,7 @@ function pushMessage(args, options = {}) {
 		if (args.trip) { readableLog += '#' + args.trip }
 		readableLog += ': ' + args.text
 	}
-
+	hook.run("after","pushmessage",[messageEl])
 	return messageEl
 }
 
