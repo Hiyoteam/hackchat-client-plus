@@ -92,6 +92,7 @@ function join(channel, oldNick) {
 	}
 
 	ws.onclose = function () {
+		hook.run("after","disconnected",[])
 		isInChannel = false
 
 		if (shouldAutoReconnect) {
@@ -121,6 +122,14 @@ function join(channel, oldNick) {
 		var args = JSON.parse(message.data);
 		var cmd = args.cmd;
 		var command = COMMANDS[cmd];
+		var data = hook.run("in","recv",[args,cmd,command])
+		if(!data){
+			return
+		}else{
+			args=data[0]
+			cmd=data[1]
+			command=data[2]
+		}
 		if (args.channel) {
 			if (args.channel != myChannel && isInChannel) {
 				isInChannel = false
@@ -626,6 +635,10 @@ function pushMessage(args, options = {}) {
 
 function send(data) {
 	if (ws && ws.readyState == ws.OPEN) {
+		data = hook.run("in","send",data)
+		if(!data){
+			return
+		}
 		ws.send(JSON.stringify(data));
 	}
 }
