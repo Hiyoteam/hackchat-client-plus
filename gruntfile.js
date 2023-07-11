@@ -20,7 +20,8 @@ module.exports = function (grunt) {
                     "src/sidebar.js",
                     "src/client.js",
                     "src/fancy.js",
-                    "src/plugin-loader.js"
+                    "src/plugin-loader.js",
+                    "src/hooks.js"
                 ],
                 dest: 'dist/index.js',
             },
