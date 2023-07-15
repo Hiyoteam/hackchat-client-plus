@@ -297,7 +297,7 @@ var COMMANDS = {
 		// respectively render markdown for every nickname in order to prevent the underlines in different nicknames from being rendered as italics or bold for matching markdown syntax. 
 		pushMessage({ nick: '*', text: i18ntranslate("Users online: ", 'system') + nicksHTML.join(", ") }, { i18n: false, isHtml: true, raw })
 
-		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source code at: https://github.com/xjzh123/hackchat-client-plus" }, { i18n: true })
+		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source code at: https://github.com/Hiyoteam/hackchat-client-plus" }, { i18n: true })
 
 		if (myColor) {
 			if (myColor == 'random') {
