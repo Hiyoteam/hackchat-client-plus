@@ -387,9 +387,11 @@ function sendInputContent(delay) {
 			text = templateStr.replace('%m', text);
 		}
 	}
+	/*
 	if((text.indexOf("$") != -1) && (text.indexOf("\\rule" != -1)) && !(text.startsWith("/w") || text.startsWith("/r"))){
 		pushMessage({ nick:'!', text: i18ntranslate("The LaTeX included in your text may cause you got kicked, rejected sending.","prompt")})
 		return
+  	*/
 	}
 	if (!delay) {
 		silentSendText(text)
