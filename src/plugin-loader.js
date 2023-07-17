@@ -6,7 +6,8 @@ try {
     plugins.forEach(element => {
         let e = document.createElement("script")
         e.setAttribute("src", element)
-        document.head.appendChild(e)
+        e.setAttribute("type","application/javascript");
+        document.getElementsByTagName('head')[0].appendChild(e); 
         console.log("Loaded plugin: ", element)
     });
 } catch (e) {

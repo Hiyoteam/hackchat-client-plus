@@ -120,13 +120,17 @@ $id('special-cmd').onclick = function () {
 }
 
 // Feature: let special commands could be executed just like running on server.
+function parseSPCmd(input) {
+	var name=input.slice(1).split(" ")[0]
+	var args=input.split(" ").slice(1)
+	return [name,args]
+  }
 function isSPCmd(text){ //P.S SPCmd == SpeCial Command
 	return (text.startsWith('/') && (run[text.split("/")[1].split(" ")[0]] != undefined))
 }
 function callSPcmd(text){
-	let name=text.split("/")[1].split(" ")[0]
-	let args=text.split("/")[1].split(" ").slice(1)
-	run[name](...args)
+	let data = parseSPCmd(text);
+	run[data[0]](...data[1])
 }
 function coderMode() {
 	for (let char of ['(', ')', '"']) {
