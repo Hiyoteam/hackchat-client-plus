@@ -60,7 +60,8 @@ let i18n = new Map([
                 ['Warning, please verify this is where you want to go: ', '警告，请确认以下链接是你要去的：'],
                 ['Automatically converted into upper case by client.', '客户端已自动转换为大写。'],
                 ["Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "请输入隧道URL.(如果你不知道这是做什么的，请点击取消。)"],
-                ["Invaild tunnel URL.", "非法的隧道URL."]
+                ["Invaild tunnel URL.", "非法的隧道URL."],
+                ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"]
             ]),
             system: new Map([
                 /* System messages */
