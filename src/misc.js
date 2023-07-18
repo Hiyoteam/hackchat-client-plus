@@ -387,7 +387,6 @@ function sendInputContent(delay) {
 			text = templateStr.replace('%m', text);
 		}
 	}
-	}
 	if (!delay) {
 		silentSendText(text)
 	} else {
