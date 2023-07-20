@@ -162,7 +162,7 @@ var verifyNickname = function (nick) {
 //LaTeX weapon and too-many-quotes weapon defence
 function verifyMessage(args) {
 	// Shabby iOS Safari doesn't support zero-width assertion
-	if (/([^\s^_]+[\^_]{){8,}|(^|\n)(>[^>\n]*){5,}/.test(args.text) || /\$.*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}].*\$/.test(args.text) || /\$\$[\s\S]*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}][\s\S]*\$\$/.test(args.text)) {
+	if (/([^\s^_]+[\^_]{){8,}|(^|\n)(>[^>\n]*){5,}/.test(args.text) || /\$.*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}].*\$/.test(args.text) || /\$\$[\s\S]*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}][\s\S]*\$\$/.test(args.text) || /^(?:[+\-*] ){3,}/m.test(args.text)) {
 		return false;
 	} else {
 		return true;
