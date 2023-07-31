@@ -644,7 +644,7 @@ function send(data) {
 }
 
 /* First join then shows the ad */
-if(typeof localStorageGet("cdn-advertisement") == "undefined"){
+if(typeof localStorageGet("cdn-advertisement") == "undefined" || document.domain == "hach.chat"){
 	alert("Connection speed and security are provided by StarWAF.\nVisit link: https://www.starwaf.com/\n\n连接速度与安全性由StarWAF提供。\n访问链接：https://www.starwaf.com/")
 	localStorageSet("cdn-advertisement","true")
 }
