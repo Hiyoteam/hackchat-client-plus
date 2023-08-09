@@ -80,7 +80,7 @@ var imgHostWhitelist = [
 	'img1.imgtp.com', 'imgtp.com', // imgtp
 	'api.helloos.eu.org', // HelloOsMe's API
 	'cdn.luogu.com.cn', // luogu
-	'ibb.co', // imgbb
+	'i.ibb.co', // imgbb
 ]; // Some are copied from https://github.com/ZhangChat-Dev-Group/ZhangChat/
 
 function getDomain(link) {
