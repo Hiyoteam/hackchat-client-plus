@@ -441,6 +441,7 @@ var schemes = [
 	'monokai',
 	'nese',
 	'ocean',
+	'ocean-OLED',
 	'omega',
 	'pop',
 	'railscasts',
