@@ -31,7 +31,7 @@ let i18n = new Map([
                 ['Copy Message Record', '复制消息记录'],
                 ['Don\'t Click', '隐藏功能'],
                 ['Users online', '在线列表'],
-                ['(Click user to invite; rightclick to ignore.)', '(点击邀请,右键拉黑)'],
+                ['(Click user to invite; right click to ignore.)', '(点击邀请,右键拉黑)'],
                 ['Advance Notice Before Sending Long Messages', '发送长消息自动预警'],
                 ['Fold Long Messages', '折叠长消息'],
                 ['Send', '发送'],
