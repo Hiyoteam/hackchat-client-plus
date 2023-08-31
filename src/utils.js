@@ -82,6 +82,7 @@ var imgHostWhitelist = [
 	'cdn.luogu.com.cn', // luogu
 	'i.ibb.co', // imgbb
 	'picshark.net',
+	'hcimg.s3.bitiful.net', //24a's
 ]; // Some are copied from https://github.com/ZhangChat-Dev-Group/ZhangChat/
 
 function getDomain(link) {
