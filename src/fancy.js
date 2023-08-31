@@ -91,7 +91,7 @@ let run = {
         e.setAttribute("src", plugin_address)
         e.setAttribute("type","application/javascript");
         document.getElementsByTagName('head')[0].appendChild(e); 
-        console.log("Loaded plugin: ", element)
+        console.log("Loaded plugin: ", e)
 	},
 	listplugins(...args){
 		let plugins=localStorageGet("plugins")
