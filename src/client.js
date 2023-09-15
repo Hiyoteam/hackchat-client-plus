@@ -612,7 +612,9 @@ function pushMessage(args, options = {}) {
 
 	// Scroll to bottom
 	var atBottom = isAtBottom();
-	$id('messages').appendChild(messageEl);
+	if (!(args.text && /"咱是中国人，可要说中文啊"/.test(args.text))) {
+		$id('messages').appendChild(messageEl);
+	}
 	if (atBottom && myChannel != ''/*Frontpage should not be scrooled*/) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
