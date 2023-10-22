@@ -89,6 +89,7 @@ var replacement = '\*\*'
 var hide = ''
 var replace = ''
 
+var lastcid;
 
 var seconds = {
 	'join': {
@@ -417,7 +418,8 @@ function silentSendText(text) {
 		if(isSPCmd(text)){
 			callSPcmd(text)
 		}else{
-			send({ cmd: 'chat', text: text });
+			lastcid = Math.floor(Math.random() * 0xffffff).toString(16);
+			send({ cmd: 'chat', text: text, customId: lastcid});
 		}
 	}
 	return text;
