@@ -2,6 +2,9 @@
  * @param {String} query
  * @returns {Element}
  */
+
+var antiLatex = false;
+
 function $(query) {
 	return document.querySelector(query);
 }
@@ -163,7 +166,8 @@ var verifyNickname = function (nick) {
 
 //LaTeX weapon and too-many-quotes weapon defence
 function verifyMessage(args) {
-	// Shabby iOS Safari doesn't support zero-width assertion
+	// iOS Safari doesn't support zero-width assertion
+	if(!antiLatex) return true;
 	if (/([^\s^_]+[\^_]{){8,}|(^|\n)(>[^>\n]*){5,}/.test(args.text) || /\$.*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}].*\$/.test(args.text) || /\$\$[\s\S]*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}][\s\S]*\$\$/.test(args.text) || /^(?:[+\-*] ){3,}/m.test(args.text)) {
 		return false;
 	} else {
@@ -172,7 +176,7 @@ function verifyMessage(args) {
 }
 
 function checkLong(text) {
-	return text.split('\n').length > 30 || text.length > 1000
+	return text.split('\n').length > 10 || text.length > 1000
 }
 
 var input = $id('chatinput');

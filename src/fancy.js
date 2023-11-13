@@ -105,6 +105,9 @@ let run = {
 	clearplugins(...args){
 		localStorageSet("plugins","[]")
 		pushMessage({nick:"*",text:"Plugins cleared."})
+	},
+	updatelast(...args){
+		send({cmd: 'updateMessage', mode: 'overwrite', text: args[0], customId: lastcid});
 	}
 }
 
