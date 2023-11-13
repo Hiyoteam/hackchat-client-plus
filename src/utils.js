@@ -1,10 +1,9 @@
-/**
- * @param {String} query
- * @returns {Element}
- */
-
 var antiLatex = false;
 
+/**
+ * @param {String} query
+ * @returns {Element|HTMLElement}
+ */
 function $(query) {
 	return document.querySelector(query);
 }
@@ -21,6 +20,10 @@ function localStorageSet(key, val) {
 	} catch (e) { }
 }
 
+/**
+ * @param {String} id
+ * @returns {Element|HTMLElement}
+ */
 function $id(id) {
 	return document.getElementById(id)
 }
@@ -88,9 +91,7 @@ var imgHostWhitelist = [
 ]; // Some are copied from https://github.com/ZhangChat-Dev-Group/ZhangChat/
 
 function getDomain(link) {
-	var a = document.createElement('a');
-	a.href = link;
-	return a.hostname;
+	return new URL(link).hostname
 }
 
 function isWhiteListed(link) {
