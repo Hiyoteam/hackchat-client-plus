@@ -371,10 +371,6 @@ ol ol {
   white-space: pre-line;
 }
 
-raw-json-data {
-  display: none;
-}
-
 /* Mobile style */
 
 @media only screen and (max-width: 600px) {

@@ -571,9 +571,6 @@ function pushMessage(args, options = {}) {
 
 	// Message container
 	var messageEl = document.createElement('div');
-	// Raw-JSON for right-click menu
-	var jsonEl = document.createElement("raw-json-data")
-	jsonEl.innerText=JSON.stringify(args)
 	
 
 	if (
@@ -596,7 +593,6 @@ function pushMessage(args, options = {}) {
 	nickSpanEl.classList.add('nick');
 	nickSpanEl.classList.add('chat-nick');
 	messageEl.appendChild(nickSpanEl);
-	messageEl.appendChild(jsonEl)
 
 	if (args.trip) {
 		nickSpanEl.appendChild(makeTripEl(args, options, date));
