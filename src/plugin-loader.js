@@ -7,7 +7,7 @@ try {
         let e = document.createElement("script")
         e.setAttribute("src", element)
         e.setAttribute("type","application/javascript");
-        document.getElementsByTagName('head')[0].appendChild(e); 
+        document.getElementsByTagName('head')[0].appendChild(e);
         console.log("Loaded plugin: ", element)
     });
 } catch (e) {

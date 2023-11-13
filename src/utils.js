@@ -1,6 +1,5 @@
 /**
- * 
- * @param {String} query 
+ * @param {String} query
  * @returns {Element}
  */
 function $(query) {

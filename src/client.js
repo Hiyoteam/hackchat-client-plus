@@ -287,14 +287,14 @@ var COMMANDS = {
 
 		let nicksHTML = nicks.map(function (nick) {
 			if (nick.match(/^_+$/)) {
-				return nick // such nicknames made up of only underlines will be rendered into a horizontal rule. 
+				return nick // such nicknames made up of only underlines will be rendered into a horizontal rule.
 			}
 			let div = document.createElement('div')
 			div.innerHTML = md.render(nick)
 			return div.firstChild.innerHTML
 		})
 
-		// respectively render markdown for every nickname in order to prevent the underlines in different nicknames from being rendered as italics or bold for matching markdown syntax. 
+		// respectively render markdown for every nickname in order to prevent the underlines in different nicknames from being rendered as italics or bold for matching markdown syntax.
 		pushMessage({ nick: '*', text: i18ntranslate("Users online: ", 'system') + nicksHTML.join(", ") }, { i18n: false, isHtml: true, raw })
 
 		pushMessage({ nick: '*', text: "Thanks for using hackchat++ client! Source code at: https://github.com/Hiyoteam/hackchat-client-plus" }, { i18n: true })
@@ -378,10 +378,10 @@ var COMMANDS = {
 			let textEl = document.createElementNS(NS, 'text')
 			textEl.innerHTML = line
 
-			// In order to make it in the right position. 
+			// In order to make it in the right position.
 			textEl.setAttribute('y', `${i + 1}em`)
 
-			// Captcha text shouldn't overflow #messages element, so I divide the width of the messages container with the overvalued length of each line in order to get an undervalued max width of each character, and than multiply it by 2 (The overvalued aspect ratio of a character) because the font-size attribute means the height of a character. 
+			// Captcha text shouldn't overflow #messages element, so I divide the width of the messages container with the overvalued length of each line in order to get an undervalued max width of each character, and than multiply it by 2 (The overvalued aspect ratio of a character) because the font-size attribute means the height of a character.
 			textEl.setAttribute('font-size', `${$id('messages').clientWidth / lines[0].length * 1.5}px`)
 			textEl.setAttribute('fill', 'white')
 

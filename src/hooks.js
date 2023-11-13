@@ -1,5 +1,5 @@
 var hooks = {}
-// Format like: 
+// Format like:
 // {"commandname":{"before":[func1,func2...],"in":[func1,func2,...],"after":[func1,func2,...]}}
 var hook = {} // for storage the hook system
 hook.register = function (when, name, func) {

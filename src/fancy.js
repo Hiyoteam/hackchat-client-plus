@@ -90,7 +90,7 @@ let run = {
 		let e = document.createElement("script")
         e.setAttribute("src", plugin_address)
         e.setAttribute("type","application/javascript");
-        document.getElementsByTagName('head')[0].appendChild(e); 
+        document.getElementsByTagName('head')[0].appendChild(e);
         console.log("Loaded plugin: ", e)
 	},
 	listplugins(...args){
