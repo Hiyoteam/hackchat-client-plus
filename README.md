@@ -4,7 +4,7 @@
 
 A tweaked hackchat client. aka hackchat++.
 Most code, and icon, are from <https://github.com/hack-chat/main>.
-Hosted at <https://hcer.netlify.app> or <https://hc.thz.cool> (thanks to Maggie, aka THZ, for hosting)
+Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ and https://hach.chat/ and https://hcer.fourohfour.link/ (thanks to 0x24a for domains).
 
 Some of the current features:(* means optional features, which can be set to the original behavior instead of tweaked behavior)
 
@@ -45,7 +45,7 @@ Some of the current features:(* means optional features, which can be set to the
 
 Using this tool implies agreement to the following disclaimer. THE DISCLAIMER IS IN CHINESE. All the functions of this tool are sourced from the hack-chat server interface, and these functions can also be implemented by other hack-chat clients. THIS TOOL HAS NO SPECIAL OPERATING PRINCIPLE. Therefore, any comments or readings published or read using this tool or any other hack-chat client are essentially conducted through the hack-chat server and are unrelated to the author of this tool. PLEASE NOTE THAT ANY COMMENTS OR READINGS PUBLISHED OR READ USING THIS TOOL OR ANY OF ITS DERIVATIVE PRODUCTS DO NOT REPRESENT THE VIEWS OF THE AUTHOR OF THIS TOOL AND ARE UNRELATED TO THE AUTHOR OF THIS TOOL.
 
-TODO:
+## TODOs
 
 - [x] better userlist
 - [ ] better button switcher
@@ -61,3 +61,14 @@ TODO:
 - [x] r-string mode
 - [ ] auto picture upload
 - [ ] elegant mode (auto *Italic*)
+
+(Sorry, now I don't remember what do some of the todos mean, and todos that are not implemented now probably won't be implemented in the future, in favor of WIP NeoHC++.)
+
+## Credits
+
+- HackChat.
+- 0x24a, for providing host and domains, and contrinuting to HC++ (even though I dismiss some of his ideas of updating HC++).
+- [CroSst Chat](https://github.com/CrosSt-Chat/CSC-main), for providing code to implement quote reply.
+- MrZhang365, for making ZhangClient which inspires me to make i18n.
+- all early users (paperee, await, ...), for providing advices and giving me feedbacks.
+- all users that promote HC++.

@@ -45,7 +45,7 @@ function frontpage() {
 			"Server and web client released under the WTFPL and MIT open source license.",
 			"No message history is retained on the hack.chat server, but in certain channels there may be bots made by users which record messages.",
 			"---",
-			"Github of hackchat++ (aka hackchat-client-plus): https://github.com/xjzh123/hackchat-client-plus",
+			"Github of hackchat++ (aka hackchat-client-plus): https://github.com/Hiyoteam/hackchat-client-plus",
 			"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ and https://hach.chat/ and https://hcer.fourohfour.link/ (thanks to 0x24a for domains).",
 			"Links: [Hack.Chat](https://hack.chat) | ==[Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io)== | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.gitbook.io/history) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!)",
 			"其它HC客户端: [ZhangClient](https://client.zhangsoft.cf/) | [awa客户端 by DPG](https://hc.doppelganger.ga/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)"
