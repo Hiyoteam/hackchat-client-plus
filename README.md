@@ -70,5 +70,6 @@ Using this tool implies agreement to the following disclaimer. THE DISCLAIMER IS
 - 0x24a, for providing host and domains, and contrinuting to HC++ (even though I dismiss some of his ideas of updating HC++).
 - [CroSst Chat](https://github.com/CrosSt-Chat/CSC-main), for providing code to implement quote reply.
 - MrZhang365, for making ZhangClient which inspires me to make i18n.
+- woo/DarkT, for making PipeChat and WhiteChat which inspires me to make colored user list.
 - all early users (paperee, await, ...), for providing advices and giving me feedbacks.
 - all users that promote HC++.
