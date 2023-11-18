@@ -1,5 +1,11 @@
 # hackchat-client-plus
 
+**Note:** 
+This project is now maintained in low priority in favor of WIP NeoHC++ (warning: NeoHC++ won't be available soon, and it may lack many features from HC++.). Thanks for 0x24a, who still maintains this project.
+Users can still use HC++ for its feature set is already very powerful, but they can also try the following alternatives:
+
+[awa客户端 by DPG](https://hc.doppelganger.eu.org/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)
+
 **New update: shabby i18n (Simplified Chinese) now available!!!**
 
 A tweaked hackchat client. aka hackchat++.
@@ -28,12 +34,6 @@ Some of the current features:(* means optional features, which can be set to the
 - Custom websocket url. To use it, ~~add the ws url in the url like <hcer.netlify.app/?your-channel@wss://example-ws-url.com>. If you need character `@` in your channel name, use `@@` instead.~~ set a tunnel from the sidebar instead.
   - Notice that this client is not designed to connect to multi versions of servers, so it is very likely to work wierdly connecting other chatrooms, like [Crosst-Chat](https://github.com/CrosSt-Chat/CSC-main) or [ZhangChat](https://github.com/ZhangChat-Dev-Group/ZhangChat).
   - This feature is originally made to support reverse proxy connections, in order to help those who have difficulties connecting to hack.chat.
-
----
-
-## My Links
-
-[ZhangClient](https://client.zhangsoft.cf/) (Chinese Hack.Chat client, very easy for Chinese users to use. Even some server messages translated.) （中文客户端，适合中国用户，甚至服务器消息也翻译了）
 
 ---
 
