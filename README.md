@@ -10,7 +10,7 @@ Users can still use HC++ for its feature set is already very powerful, but they 
 
 A tweaked hackchat client. aka hackchat++.
 Most code, and icon, are from <https://github.com/hack-chat/main>.
-Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ and https://hach.chat/ and https://hcer.fourohfour.link/ (thanks to 0x24a for domains).
+Hosted at [hcer.netlify.app](https://hcer.netlify.app/), [hc.thz.cool](https://hc.thz.cool/), [hach.chat](https://hach.chat/) and https://hcer.fourohfour.link/ (thanks to 0x24a for some domains).
 
 Some of the current features:(* means optional features, which can be set to the original behavior instead of tweaked behavior)
 
