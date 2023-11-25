@@ -1,8 +1,8 @@
 # hackchat-client-plus
 
 **Note:** 
-This project is now maintained in low priority in favor of WIP NeoHC++ (warning: NeoHC++ won't be available soon, and it may lack many features from HC++.). Thanks for 0x24a, who still maintains this project.
-Users can still use HC++ for its feature set is already very powerful, but they can also try the following alternatives:
+This project is currently maintained with low priority in favor of the work-in-progress NeoHC++. Please note that NeoHC++ may not be available soon and it may lack many features from HC++. We thank 0x24a for continuing to maintain this project.
+Users can still use HC++ as its feature set is already very comprehensive. However, they can also explore the following alternatives:
 
 [awa客户端 by DPG](https://hc.doppelganger.eu.org/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)
 
@@ -13,7 +13,6 @@ Most code, and icon, are from <https://github.com/hack-chat/main>.
 Hosted at [hcer.netlify.app](https://hcer.netlify.app/), [hc.thz.cool](https://hc.thz.cool/), [hach.chat](https://hach.chat/) and [hcer.fourohfour.link](https://hcer.fourohfour.link/) (thanks to 0x24a for some domains).
 
 Some of the current features:(* means optional features, which can be set to the original behavior instead of tweaked behavior)
-
 - Up to date (Includes all known features of 2022/10 hack-chat official client)
 - Open source and safe (No message or password recording)
 - Defend known latex weapons (Malicious latex messages wont be rendered but will be shown in plain text)
