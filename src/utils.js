@@ -1,4 +1,4 @@
-var antiLatex = false;
+var antiLatex = true;
 
 /**
  * @param {String} query
