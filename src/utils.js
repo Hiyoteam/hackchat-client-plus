@@ -90,7 +90,11 @@ var imgHostWhitelist = [
 ]; // Some are copied from https://github.com/ZhangChat-Dev-Group/ZhangChat/
 
 function getDomain(link) {
-	return new URL(link).hostname
+	try{
+		return new URL(link).hostname
+	}catch(err){
+		return new URL("http://example.com").hostname
+	}
 }
 
 function isWhiteListed(link) {
