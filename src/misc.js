@@ -418,8 +418,7 @@ function silentSendText(text) {
 		if(isSPCmd(text)){
 			callSPcmd(text)
 		}else{
-			lastcid = Math.floor(Math.random() * 0xffffff).toString(16);
-			send({ cmd: 'chat', text: text, customId: lastcid});
+			send({ cmd: 'chat', text: text });
 		}
 	}
 	return text;
