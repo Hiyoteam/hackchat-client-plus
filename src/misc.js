@@ -48,7 +48,8 @@ function frontpage() {
 			"Github of hackchat++ (aka hackchat-client-plus): https://github.com/Hiyoteam/hackchat-client-plus",
 			"Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ and https://hach.chat/ and https://hcer.fourohfour.link/ (thanks to 0x24a for domains).",
 			"Links: [Hack.Chat](https://hack.chat) | ==[Hack.Chat wiki written in Chinese/中文hack.chat帮助文档](https://hcwiki.github.io)== | [History in chatrooms written in Chinese/聊天室历史书](https://hcwiki.gitbook.io/history) | [Crosst.Chat](https://crosst.chat) (Thanks for providing replying script!)",
-			"其它HC客户端: [awa客户端 by DPG](https://hc.doppelganger.eu.org/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)"
+			"其它HC客户端: [awa客户端 by DPG](https://hc.doppelganger.eu.org/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)",
+			"This client is modified from hackchat++"
 		].join('\n')),
 	].join("\n"), 'home')
 }

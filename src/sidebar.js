@@ -310,12 +310,12 @@ function userAdd(nick, user_info) {
 
 	user.oncontextmenu = function (e) {
 		e.preventDefault()
-		if (ignoredUsers.indexOf(nick) > -1) {
-			userDeignore(nick)
-			pushMessage({ nick: '*', text: `Cancelled ignoring nick ${nick}.` })
+		if (ignoredUsers.indexOf(user_info.hash) > -1) {
+			userDeignore(user_info.hash)
+			pushMessage({ nick: '*', text: `Cancelled ignoring hash ${user_info.hash}.` })
 		} else {
-			userIgnore(nick)
-			pushMessage({ nick: '*', text: `Ignored nick ${nick}.` })
+			userIgnore(user_info.hash)
+			pushMessage({ nick: '*', text: `Ignored nick ${user_info.hash}.` })
 		}
 	}
 
