@@ -182,36 +182,37 @@ function verifyMessage(args) {
 function checkLong(text) {
 	return msgLineLength(text) > 8
 }
-function msgLineLength(msg) {
-	let pas = [];
+
+function msgLineLength(text) {
+	let lines = 0;
 	let byteCount = 0;
 	let currentSubstring = '';
-	for (let i = 0; i < msg.length; i++) {
-		let byteLength = msg.charCodeAt(i) <= 127 ? 1 : 2;
-		if (msg[i] === '\n') {
+	for (let i = 0; i < text.length; i++) {
+		let byteLength = text.charCodeAt(i) <= 127 ? 1 : 2;
+		if (text[i] === '\n') {
 			if (byteCount + byteLength >= 72) {
-				pas.push(currentSubstring);
+				lines += 1;
 				byteCount = 0;
 				currentSubstring = '';
 			}
-			currentSubstring += msg[i];
-			pas.push(currentSubstring);
+			currentSubstring += text[i];
+			lines += 1;
 			byteCount = 0;
 			currentSubstring = '';
 		} else if (byteCount + byteLength > 72) {
-			pas.push(currentSubstring);
+			lines += 1;
 			byteCount = byteLength;
-			currentSubstring = msg[i];
+			currentSubstring = text[i];
 		} else {
 			byteCount += byteLength;
-			currentSubstring += msg[i];
+			currentSubstring += text[i];
 		}
 	}
-	if (currentSubstring !== '') pas.push(currentSubstring)
-	msg.split("\n").forEach(e => {
-		if (e.startsWith("#")) pas.push(1)
+	if (currentSubstring !== '') lines += 1
+	text.split("\n").forEach(e => {
+		if (e.startsWith("#")) lines += 1
 	})
-	return pas.length;
+	return lines;
 }
 
 var input = $id('chatinput');
