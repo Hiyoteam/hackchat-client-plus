@@ -290,7 +290,7 @@ $('#send').onclick = function () {
 // User list
 var onlineUsers = []
 var ignoredUsers = []
-
+var ignoredHashs = []
 var usersInfo = {};
 
 function userAdd(nick, user_info) {
@@ -410,6 +410,14 @@ function userIgnore(nick) {
 
 function userDeignore(nick) {
 	ignoredUsers.splice(ignoredUsers.indexOf(nick))
+}
+
+function hashIgnore(hash) {
+	ignoredHashs.push(hash)
+}
+
+function hashDeignore(hash) {
+	ignoredHashs.splice(ignoredHashs.indexOf(hash))
 }
 
 

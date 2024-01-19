@@ -108,7 +108,17 @@ let run = {
 	},
 	updatelast(...args){
 		send({cmd: 'updateMessage', mode: 'overwrite', text: args[0], customId: lastcid});
-	}
+	},
+	ignorehash(...args){
+		let hash = args[0]
+		if (ignoredHashs.indexOf(hash) > -1) {
+			hashDeignore(hash)
+			pushMessage({ nick: '*', text: `Cancelled ignoring hash ${hash}.` })
+		} else {
+			hashIgnore(hash)
+			pushMessage({ nick: '*', text: `Ignored hash ${hash}.` })
+		}
+	},
 }
 
 $id('special-cmd').onclick = function () {

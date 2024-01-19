@@ -1,4 +1,4 @@
-//https://github.com/hack-chat/main/pull/184
+﻿//https://github.com/hack-chat/main/pull/184
 //select "chatinput" on "/"
 document.addEventListener("keydown", e => {
 	if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {

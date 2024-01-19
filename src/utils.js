@@ -90,9 +90,9 @@ var imgHostWhitelist = [
 ]; // Some are copied from https://github.com/ZhangChat-Dev-Group/ZhangChat/
 
 function getDomain(link) {
-	try{
+	try {
 		return new URL(link).hostname
-	}catch(err){
+	} catch (err) {
 		return new URL("http://example.com").hostname
 	}
 }
@@ -171,7 +171,7 @@ var verifyNickname = function (nick) {
 //LaTeX weapon and too-many-quotes weapon defence
 function verifyMessage(args) {
 	// iOS Safari doesn't support zero-width assertion
-	if(!antiLatex) return true;
+	if (!antiLatex) return true;
 	if (/([^\s^_]+[\^_]{){8,}|(^|\n)(>[^>\n]*){5,}/.test(args.text) || /\$.*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}].*\$/.test(args.text) || /\$\$[\s\S]*[[{]\d+(?:mm|pt|bp|dd|pc|sp|cm|cc|in|ex|em|px)[\]}][\s\S]*\$\$/.test(args.text) || /^[ \t]*(?:[+\-*][ \t]){3,}/m.test(args.text)) {
 		return false;
 	} else {
@@ -180,7 +180,38 @@ function verifyMessage(args) {
 }
 
 function checkLong(text) {
-	return text.split('\n').length > 10 || text.length > 1000
+	return msgLineLength(text) > 8
+}
+function msgLineLength(msg) {
+	let pas = [];
+	let byteCount = 0;
+	let currentSubstring = '';
+	for (let i = 0; i < msg.length; i++) {
+		let byteLength = msg.charCodeAt(i) <= 127 ? 1 : 2;
+		if (msg[i] === '\n') {
+			if (byteCount + byteLength >= 72) {
+				pas.push(currentSubstring);
+				byteCount = 0;
+				currentSubstring = '';
+			}
+			currentSubstring += msg[i];
+			pas.push(currentSubstring);
+			byteCount = 0;
+			currentSubstring = '';
+		} else if (byteCount + byteLength > 72) {
+			pas.push(currentSubstring);
+			byteCount = byteLength;
+			currentSubstring = msg[i];
+		} else {
+			byteCount += byteLength;
+			currentSubstring += msg[i];
+		}
+	}
+	if (currentSubstring !== '') pas.push(currentSubstring)
+	msg.split("\n").forEach(e => {
+		if (e.startsWith("#")) pas.push(1)
+	})
+	return pas.length;
 }
 
 var input = $id('chatinput');
