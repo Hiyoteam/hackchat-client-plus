@@ -290,7 +290,7 @@ $('#send').onclick = function () {
 // User list
 var onlineUsers = []
 var ignoredUsers = []
-
+var ignoredHashs = []
 var usersInfo = {};
 
 function userAdd(nick, user_info) {
@@ -310,12 +310,12 @@ function userAdd(nick, user_info) {
 
 	user.oncontextmenu = function (e) {
 		e.preventDefault()
-		if (ignoredUsers.indexOf(user_info.hash) > -1) {
-			userDeignore(user_info.hash)
-			pushMessage({ nick: '*', text: `Cancelled ignoring hash ${user_info.hash}.` })
+		if (ignoredUsers.indexOf(nick) > -1) {
+			userDeignore(nick)
+			pushMessage({ nick: '*', text: `Cancelled ignoring nick ${nick}.` })
 		} else {
-			userIgnore(user_info.hash)
-			pushMessage({ nick: '*', text: `Ignored nick ${user_info.hash}.` })
+			userIgnore(nick)
+			pushMessage({ nick: '*', text: `Ignored nick ${nick}.` })
 		}
 	}
 
@@ -410,6 +410,14 @@ function userIgnore(nick) {
 
 function userDeignore(nick) {
 	ignoredUsers.splice(ignoredUsers.indexOf(nick))
+}
+
+function hashIgnore(hash) {
+	ignoredHashs.push(hash)
+}
+
+function hashDeignore(hash) {
+	ignoredHashs.splice(ignoredHashs.indexOf(hash))
 }
 
 

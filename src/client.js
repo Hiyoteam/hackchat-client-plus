@@ -194,7 +194,7 @@ function join(channel, oldNick) {
 
 var COMMANDS = {
 	chat: function (args, raw) {
-		if (ignoredUsers.indexOf(nickGetHash(args.nick)) >= 0) {
+		if (ignoredUsers.indexOf(args.nick) >= 0 || ignoredHashs.indexOf(nickGetHash(args.nick)) >= 0) {
 			return
 		}
 		var elem = pushMessage(args, { i18n: false, raw })
@@ -260,7 +260,7 @@ var COMMANDS = {
 	},
 
 	info: function (args, raw) {
-		if ((args.type == 'whisper' || args.type == 'invite') && ignoredUsers.indexOf(nickGetHash(args.from)) >= 0) {
+		if ((args.type == 'whisper' || args.type == 'invite') && (ignoredUsers.indexOf(args.from) >= 0 || ignoredHashs.indexOf(nickGetHash(args.from)) >= 0)) {
 			return
 		}
 		args.nick = '*'
@@ -268,7 +268,7 @@ var COMMANDS = {
 	},
 
 	emote: function (args, raw) {
-		if (ignoredUsers.indexOf(nickGetHash(args.text.match(/@(.+?)(?: .+)/)[1])) >= 0) {
+		if (ignoredUsers.indexOf(args.text.match(/@(.+?)(?: .+)/)[1]) >= 0 || ignoredHashs.indexOf(nickGetHash(args.text.match(/@(.+?)(?: .+)/)[1])) >= 0) {
 			return
 		}
 		args.nick = '*'
