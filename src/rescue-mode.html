@@ -17,7 +17,7 @@
             document.querySelector("body").style.display="block"
         }else{
             //run action
-            var actions=document.location.hash.split(",")
+            var actions=document.location.hash.slice(1).split(",")
             actions.forEach(function(e){
                 var map={
                     "clear-localstorage":0,
