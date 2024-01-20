@@ -74,10 +74,11 @@ let run = {
 			return
 		}
 		// Warning
+		let plugin_address=args[0]
 		pushMessage({ nick: '!', text: `Warning: Please only add plugins that you trust.
 		**IF YOUR HC++ IS BROKEN, THEN GO TO [/rescue-mode.html](/rescue-mode.html) AND PRESS =="REMOVE ALL PLUGINS"==**.
 		or [REMOVE THIS PLUGIN](/rescue-mode.html#remove-plugin?${encodeURIComponent(plugin_address)}) now.` })
-		let plugin_address=args[0]
+		
 		//get the cmds first
 		let plugins=localStorageGet("plugins")
 		if(plugins != undefined){
