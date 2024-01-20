@@ -16,6 +16,7 @@ var checkActiveCacheInterval = 30 * 1000;
 var activeMessages = [];
 var users_ = []
 
+
 function nickGetHash(nick) {
 	for (let k in users_) {
 		if (users_[k].nick === nick) return users_[k].hash
@@ -66,6 +67,7 @@ function join(channel, oldNick) {
 	wasConnected = false;
 
 	ws.onopen = function () {
+		hook.run("before","connect",[])
 		var shouldConnect = true;
 		if (!wasConnected) {
 			if (location.hash) {
