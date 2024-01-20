@@ -647,7 +647,7 @@ function pushMessage(args, options = {}) {
 
 function send(data) {
 	if (ws && ws.readyState == ws.OPEN) {
-		data = hook.run("in","send",data)
+		data = hook.run("in","send",[data])
 		if(!data){
 			return
 		}
