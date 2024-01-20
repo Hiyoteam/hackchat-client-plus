@@ -5,12 +5,30 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HC++ Rescue Mode</title>
 </head>
-<body style="padding: 4px;">
+<body style="padding: 4px; display: none;">
     <h1>HC++ Rescue Mode</h1>
     <hr>
     <h2>Quick Actions</h2>
     <button onclick="localStorage.clear();alert('Done.')">Clear localStorage</button></br>
     <button onclick="alert('Your plugins:\n'+JSON.parse(localStorage['plugins']).join('\n'))">List all plugins</button></br>
     <button onclick="localStorage['plugins']='[]'">Remove all plugins</button></br>
+    <script>
+        if(!document.location.hash){
+            document.querySelector("body").style.display="block"
+        }else{
+            //run action
+            var actions=document.location.hash.split(",")
+            actions.forEach(function(e){
+                var map={
+                    "clear-localstorage":0,
+                    "list-plugins":1,
+                    "remove-plugins":2
+                }
+                document.querySelectorAll("button")[map[actions]].click();
+            })
+            alert("Actions done.")
+            window.close()
+        }
+    </script>
 </body>
 </html>

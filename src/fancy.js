@@ -74,7 +74,7 @@ let run = {
 			return
 		}
 		// Warning
-		pushMessage({ nick: '!', text: `Warning: Please only add plugins that you trust.\n**IF YOUR HC++ IS BROKEN, THEN GO TO [/rescue-mode.html](/rescue-mode.html) AND PRESS =="REMOVE ALL PLUGINS"==**.` })
+		pushMessage({ nick: '!', text: `Warning: Please only add plugins that you trust.\n**IF YOUR HC++ IS BROKEN, THEN GO TO [/rescue-mode.html](/rescue-mode.html) AND PRESS =="REMOVE ALL PLUGINS"==**.\n or [REMOVE ALL PLUGINS](/rescue-mode.html#remove-plugins) now.` })
 		let plugin_address=args[0]
 		//get the cmds first
 		let plugins=localStorageGet("plugins")
