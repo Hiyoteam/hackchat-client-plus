@@ -19,12 +19,27 @@
             //run action
             var actions=document.location.hash.slice(1).split(",")
             actions.forEach(function(e){
-                var map={
+                let action=e.split("?")[0]
+                let args=e.split("?").slice(1).join("?")
+                if(["remove-plugin"].indexOf(action) != -1){
+                    if(action=="remove-plugin"){
+                        var news=[]
+                        JSON.parse(localStorage['plugins']).forEach(function(el){
+                            if(el!=decodeURIComponent(args)){
+                                news.push(el)
+                            }
+                        })
+                        localStorage['plugins']=JSON.stringify(news)
+                    }
+                    alert("Actions done.")
+                    window.close()
+                }
+                var other_map={
                     "clear-localstorage":0,
                     "list-plugins":1,
                     "remove-plugins":2
                 }
-                document.querySelectorAll("button")[map[actions]].click();
+                document.querySelectorAll("button")[other_map[action]].click();
             })
             alert("Actions done.")
             window.close()
