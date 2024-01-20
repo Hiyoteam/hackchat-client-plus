@@ -87,13 +87,15 @@ let run = {
 		plugins.push(plugin_address)
 		//save
 		localStorageSet("plugins",JSON.stringify(plugins))
-		pushMessage({nick:"*",text:"Added plugin."})
+		pushMessage({nick:"*",text:"Added plugin, refresh to apply."})
+		```
 		//load it NOW
 		let e = document.createElement("script")
         e.setAttribute("src", plugin_address)
         e.setAttribute("type","application/javascript");
         document.getElementsByTagName('head')[0].appendChild(e);
         console.log("Loaded plugin: ", e)
+		``` //disabled for security.
 	},
 	listplugins(...args){
 		let plugins=localStorageGet("plugins")
