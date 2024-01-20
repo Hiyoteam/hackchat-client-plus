@@ -15,6 +15,12 @@
 var checkActiveCacheInterval = 30 * 1000;
 var activeMessages = [];
 var users_ = []
+var hookws = {
+	send: [],
+	onmessage: [],
+	onclose: [],
+	onopen: []
+}
 
 function nickGetHash(nick) {
 	for (let k in users_) {
@@ -66,6 +72,11 @@ function join(channel, oldNick) {
 	wasConnected = false;
 
 	ws.onopen = function () {
+		let noOnopen = false
+        hookws.onopen.forEach(e=>{
+			if (e() === true) noOnopen = true
+		})
+		if (noOnopen) return;
 		var shouldConnect = true;
 		if (!wasConnected) {
 			if (location.hash) {
@@ -99,6 +110,11 @@ function join(channel, oldNick) {
 	}
 
 	ws.onclose = function () {
+		let noOnclose = false
+        hookws.onclose.forEach(e=>{
+			if (e() === true) noOclose = true
+		})
+		if (noOnclose) return;
 		hook.run("after","disconnected",[])
 		isInChannel = false
 
@@ -126,6 +142,11 @@ function join(channel, oldNick) {
 	}
 
 	ws.onmessage = function (message) {
+		let noOnmessage = false
+        hookws.onmessage.forEach(e=>{
+			if (e(message) === true) noOnmessage = true
+		})
+		if (noOnmessage) return;
 		var args = JSON.parse(message.data);
 		var cmd = args.cmd;
 		var command = COMMANDS[cmd];
@@ -644,6 +665,11 @@ function pushMessage(args, options = {}) {
 
 
 function send(data) {
+	let noSend = false
+	hookws.send.forEach(e=>{
+		if (e(data) === true) noSend = true
+	})
+	if (noSend) return;
 	if (ws && ws.readyState == ws.OPEN) {
 		data = hook.run("in","send",data)
 		if(!data){
