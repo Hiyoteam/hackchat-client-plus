@@ -10,7 +10,7 @@
     <hr>
     <h2>Quick Actions</h2>
     <button onclick="localStorage.clear();alert('Done.')">Clear localStorage</button></br>
-    <button onclick="alert('Your plugins:\n'+JSON.parse(list).join('\n'))">List all plugins</button></br>
+    <button onclick="alert('Your plugins:\n'+JSON.parse(localStorage['plugins']).join('\n'))">List all plugins</button></br>
     <button onclick="localStorage['plugins']='[]'">Remove all plugins</button></br>
 </body>
 </html>
