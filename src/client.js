@@ -651,7 +651,7 @@ function send(data) {
 		if(!data){
 			return
 		}
-		ws.send(JSON.stringify(data));
+		ws.send(JSON.stringify(data[0]));
 	}
 }
 
