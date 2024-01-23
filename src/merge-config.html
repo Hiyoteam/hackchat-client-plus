@@ -14,7 +14,7 @@
     <code>
         <span id="config">Loading config..</span>
     </code><br>
-    <button onclick="localStorage=target;document.body.innerText='Done.'">MERGE</button><button onclick="document.body.innerHTML='Operation cancelled.'">CANCEL</button>
+    <button onclick="for(var key in target){var value=target[key];localStorage[key]=value};document.body.innerText='Done.'">MERGE</button><button onclick="document.body.innerHTML='Operation cancelled.'">CANCEL</button>
     <script>
         args=document.location.hash.slice(1)
         try{
