@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HC++ Config Merge</title>
+</head>
+<body style="padding: 4px;">
+    <h1>HC++ Config Merge</h1>
+    <hr>
+    <h3>Are you sure to merge the following config?</h3>
+    <h3 style="color: red;">All of your current config will lost!</h3>
+    <p>New config:</p>
+    <code>
+        <span id="config">Loading config..</span>
+    </code><br>
+    <button onclick="localStorage=target;document.body.innerText='Done.'">MERGE</button><button onclick="document.body.innerHTML='Operation cancelled.'">CANCEL</button>
+    <script>
+        args=document.location.hash.slice(1)
+        try{
+            target=JSON.parse(decodeURIComponent(args))
+        }catch(e){
+            target=null
+            document.body.innerHTML="<p style='color:red;'>error: cannot load config</p>"
+        }
+        if(target){
+            document.getElementById("config").innerText=JSON.stringify(target)
+        }
+
+    </script>
+</body>
+</html>
