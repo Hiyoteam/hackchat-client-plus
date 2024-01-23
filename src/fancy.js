@@ -131,7 +131,7 @@ let run = {
 			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
 			return
 		}
-		pushMessage({ nick: '*', text: `Click [this](${args[0]}/merge-config.html#${encodeURIComponent(JSON.stringify(localStorage))}) to merge config.`})
+		pushMessage({ nick: '*', text: `Click [this](https://${args[0]}/merge-config.html#${encodeURIComponent(JSON.stringify(localStorage))}) to merge config.`})
 	}
 }
 
