@@ -125,7 +125,7 @@ md.renderer.rules.image = function (tokens, idx, options) {
 		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
 		var suffix = options.xhtmlOut ? ' /' : '';
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
-		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ` referrerpolicy="no-referrer" onerror="this.styles.display="none";let addr=document.createElement("p");addr.innerText="${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src))}";this.appendChild(addr)"></a>`;
+		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ` referrerpolicy="no-referrer" onerror="this.styles.display='none';let addr=document.createElement('p');addr.innerText='${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src))}';this.appendChild(addr)"></a>`;
 	}
 
 	return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
