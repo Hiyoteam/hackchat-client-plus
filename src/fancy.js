@@ -132,6 +132,20 @@ let run = {
 			return
 		}
 		pushMessage({ nick: '*', text: `Click [this](https://${args[0]}/merge-config.html#${encodeURIComponent(JSON.stringify(localStorage))}) to merge config.`})
+	},
+	enable_camo(...args){
+		if (args.length > 1) {
+			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 or 0 is needed.` })
+			return
+		}
+		if(args.length == 0){
+			pushMessage({ nick: '!', text: `## Warning:\n Camo is a experimental feature and currently in test.\n**ONCE YOU ENABLED IT, YOU CAN ONLY DISABLE IT VIA CONSOLE.**\nIf you are sure about enabling it, then input \`/enable_camo iamsure\``})
+		}else if(args[0] == "iamsure"){
+			localStorageSet("test-camo",1)
+			pushMessage({ nick: '*', text: `Camo enabled. refresh to apply.` })
+		}else{
+			pushMessage({ nick: '!', text: 'Unknown arguments.' })
+		}
 	}
 }
 
