@@ -120,12 +120,13 @@ md.renderer.rules.image = function (tokens, idx, options) {
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
 		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' referrerpolicy="no-referrer"></a>';
 	}else if(allowImages && camo){
-		var imgSrc = ' src="' + Remarkable.utils.escapeHtml(camoAddrs[Math.floor(Math.random()*camoAddrs.length)]+"?proxyUrl="+tokens[idx].src) + '"';
+		var proxiedAddr = camoAddrs[Math.floor(Math.random()*camoAddrs.length)]+"?proxyUrl="+tokens[idx].src
+		var imgSrc = ' src="' + Remarkable.utils.escapeHtml(proxiedAddr) + '"';
 		var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
 		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
 		var suffix = options.xhtmlOut ? ' /' : '';
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
-		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ` referrerpolicy="no-referrer" onerror="this.style.display='none';let addr=document.createElement('p');addr.innerText='${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src))}';this.parentElement.appendChild(addr)"></a>`;
+		return '<a href="' + proxiedAddr + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ` referrerpolicy="no-referrer" onerror="this.style.display='none';let addr=document.createElement('p');addr.innerText='${Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src))}';this.parentElement.appendChild(addr)"></a>`;
 	}
 
 	return '<a href="' + src + '" target="_blank" rel="noreferrer">' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(src)) + '</a>';
