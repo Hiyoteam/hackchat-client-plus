@@ -66,7 +66,7 @@ var allowImages = false;
 var whitelistDisabled = false;
 var camo=false || localStorageGet("test-camo")!=undefined
 var camoAddrs=[
-	"badaddr"
+	"https://camo.hach.chat/"
 ];
 var imgHostWhitelist = [
 	'i.imgur.com',
