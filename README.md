@@ -6,11 +6,11 @@ Users can still use HC++ for its feature set is already very powerful, but they 
 
 [awa客户端 by DPG](https://hc.doppelganger.eu.org/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)
 
-**New update: shabby i18n (Simplified Chinese) now available!!!**
+**New update: simple i18n (Simplified Chinese) now available!!!**
 
 A tweaked hackchat client. aka hackchat++.
 Most code, and icon, are from <https://github.com/hack-chat/main>.
-Hosted at [hcer.netlify.app](https://hcer.netlify.app/), [hc.thz.cool](https://hc.thz.cool/), [hach.chat](https://hach.chat/) and [hcer.fourohfour.link](https://hcer.fourohfour.link/) (thanks to 0x24a for some domains).
+Hosted at [hcer.netlify.app](https://hcer.netlify.app/), [hc.thz.cool](https://hc.thz.cool/), [hach.chat](https://hach.chat/), [hcpp.onrender.com](https://hcpp.onrender.com/) and [hcer.fourohfour.link](https://hcer.fourohfour.link/) (thanks to 0x24a for some domains).
 
 Some of the current features:(* means optional features, which can be set to the original behavior instead of tweaked behavior)
 

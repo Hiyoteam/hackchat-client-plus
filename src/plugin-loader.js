@@ -12,4 +12,5 @@ try {
     });
 } catch (e) {
     console.warn("Error when loading plugins")
+    console.log(e)
 }

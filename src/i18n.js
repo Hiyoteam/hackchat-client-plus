@@ -70,7 +70,7 @@ let i18n = new Map([
                 [/^([a-zA-Z0-9_]{1,24}) joined$/, '$1 加入了聊天室'],
                 [/^([a-zA-Z0-9_]{1,24}) left$/, '$1 离开了聊天室'],
                 ['You cancelled joining. Press enter at the input field to reconnect.', '你取消了加入。在输入框上按回车可以重新加入。'],
-                ['Server disconnected. ', '断连了！'],
+                ['Server disconnected. ', '掉线了！'],
                 ['Attempting to reconnect. . .', '正在尝试重连……'],
                 ['Failed to connect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect.', '连接到服务器失败。如果你想重连，在输入框上按回车即可。'],
                 [/You may be kicked or moved to this channel by force to channel \?(.+) \. Unable to get full user list\. /, '你可能被踢到或者强制移到了频道 ?$1 。无法获取完整用户列表。'],
