@@ -397,6 +397,10 @@ ol ol {
     display: inline;
   }
 
+  .text * {
+    overflow: hidden;
+  }
+
   #sidebar {
     /* 
       https://github.com/ZhangChat-Dev-Group/ZhangChat/blob/main/client/style.css
