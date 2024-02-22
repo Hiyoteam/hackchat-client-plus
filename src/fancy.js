@@ -87,6 +87,10 @@ let run = {
 		}else{
 			plugins=[]
 		}
+		if(plugins.indexOf(plugin_address) > -1){
+			pushMessage({nick:"!",text:"This plugin is already loaded."})
+			return
+		}
 		//add the plugin
 		plugins.push(plugin_address)
 		//save
@@ -99,6 +103,7 @@ let run = {
         document.getElementsByTagName('head')[0].appendChild(e);
         console.log("Loaded plugin: ", e)
 		 //re-enabled bcs plugins in our plugin index are very safe
+		pushMessage({nick:"*",text:"Added plugin."})
 	},
 	listplugins(...args){
 		let plugins=localStorageGet("plugins")
