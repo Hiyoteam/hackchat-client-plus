@@ -340,6 +340,9 @@ var COMMANDS = {
 	},
 
 	onlineRemove: function (args, raw) {
+		if (ignoredUsers.indexOf(args.nick) >= 0 || ignoredHashs.indexOf(nickGetHash(args.nick)) >= 0) {
+			return
+		}
 		var nick = args.nick;
 		users_ = users_.filter(function (item) {
 			return item.nick !== args.nick;
