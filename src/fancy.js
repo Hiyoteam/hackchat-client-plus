@@ -73,11 +73,12 @@ let run = {
 			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
 			return
 		}
-		// Warning
 		let plugin_address=args[0]
-		pushMessage({ nick: '!', text: `Warning: Please only add plugins that you trust.
-		**IF YOUR HC++ IS BROKEN, THEN GO TO [/rescue-mode.html](/rescue-mode.html) AND PRESS =="REMOVE ALL PLUGINS"==**.
-		or [REMOVE THIS PLUGIN](/rescue-mode.html#remove-plugin?${encodeURIComponent(plugin_address)}) now.` })
+		//validate
+		if(getDomain(plugin_address) != "plugins.hach.chat"){
+			pushMessage({nick:"!",text:"From 2024/2/22, you can only load plugins from plugins.hach.chat due to security reasons. This plugin cannot be loaded."})
+			return
+		}
 		
 		//get the cmds first
 		let plugins=localStorageGet("plugins")
@@ -86,19 +87,23 @@ let run = {
 		}else{
 			plugins=[]
 		}
+		if(plugins.indexOf(plugin_address) > -1){
+			pushMessage({nick:"!",text:"This plugin is already loaded."})
+			return
+		}
 		//add the plugin
 		plugins.push(plugin_address)
 		//save
 		localStorageSet("plugins",JSON.stringify(plugins))
-		pushMessage({nick:"*",text:"Added plugin, refresh to apply."})
 		
 		//load it NOW
-		// let e = document.createElement("script")
-        // e.setAttribute("src", plugin_address)
-        // e.setAttribute("type","application/javascript");
-        // document.getElementsByTagName('head')[0].appendChild(e);
-        // console.log("Loaded plugin: ", e)
-		 //disabled for security.
+		let e = document.createElement("script")
+        e.setAttribute("src", plugin_address)
+        e.setAttribute("type","application/javascript");
+        document.getElementsByTagName('head')[0].appendChild(e);
+        console.log("Loaded plugin: ", e)
+		 //re-enabled bcs plugins in our plugin index are very safe
+		pushMessage({nick:"*",text:"Added plugin."})
 	},
 	listplugins(...args){
 		let plugins=localStorageGet("plugins")
