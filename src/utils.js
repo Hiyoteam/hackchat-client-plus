@@ -176,6 +176,13 @@ function verifyLink(link) {
 	return true;
 }
 
+function addPluginButton(name, callback){
+	var button = document.createElement("button");
+	button.innerText = name;
+	button.onclick = callback;
+	$id("plugin-buttons").appendChild(button);
+}
+
 var verifyNickname = function (nick) {
 	return /^[a-zA-Z0-9_]{1,24}$/.test(nick);
 }
