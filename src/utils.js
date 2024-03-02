@@ -177,11 +177,14 @@ function verifyLink(link) {
 }
 
 function addPluginButton(name, callback){
+	var p=document.createElement("p");
 	var button = document.createElement("button");
 	button.innerText = name;
 	button.onclick = callback;
-	$id("plugin-buttons").appendChild(button);
-	$id("plugin-buttons").appendChild(document.createElement("br"));
+	p.appendChild(button);
+	button.setAttribute("class", "plugin-button");
+	button.setAttribute("tr","");
+	$id("plugin-buttons").appendChild(p);
 }
 
 var verifyNickname = function (nick) {
