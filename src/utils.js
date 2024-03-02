@@ -181,6 +181,7 @@ function addPluginButton(name, callback){
 	button.innerText = name;
 	button.onclick = callback;
 	$id("plugin-buttons").appendChild(button);
+	$id("plugin-buttons").appendChild(document.createElement("br"));
 }
 
 var verifyNickname = function (nick) {
