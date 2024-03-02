@@ -64,7 +64,7 @@ var md = new Remarkable('full', markdownOptions);
 // image handler
 var allowImages = false;
 var whitelistDisabled = false;
-var camo=false || localStorageGet("test-camo")!=undefined
+var camo=true || localStorageGet("test-camo")!=undefined
 var camoAddrs=[
 	"https://camo.hach.chat/"
 ];
@@ -90,7 +90,7 @@ var imgHostWhitelist = [
 	'cdn.luogu.com.cn', // luogu
 	'i.ibb.co', // imgbb
 	'picshack.net',
-	'hcimg.s3.bitiful.net', //24a's
+	'camo.hach.chat', //hc camo
 ]; // Some are copied from https://github.com/ZhangChat-Dev-Group/ZhangChat/
 
 function getDomain(link) {
