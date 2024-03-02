@@ -1,4 +1,4 @@
-$id('sidebar').onmouseenter = $id('sidebar').onclick = function (e) {
+﻿$id('sidebar').onmouseenter = $id('sidebar').onclick = function (e) {
 	if (e.target == $id('sidebar-close')) {
 		return
 	}
@@ -469,6 +469,7 @@ var schemes = [
 	// 'crosst-chat-city',
 	'backrooms-liminal',
 	'amoled',
+        'hell'
 ];
 
 var highlights = [
