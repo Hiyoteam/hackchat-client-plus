@@ -469,7 +469,8 @@ var schemes = [
 	// 'crosst-chat-city',
 	'backrooms-liminal',
 	'amoled',
-        'hell'
+	'retro',
+    'hell'
 ];
 
 var highlights = [
