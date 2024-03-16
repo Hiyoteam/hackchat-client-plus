@@ -1,4 +1,4 @@
-var antiLatex = true;
+﻿var antiLatex = true;
 
 /**
  * @param {String} query
@@ -66,7 +66,9 @@ var allowImages = false;
 var whitelistDisabled = false;
 var camo=true || localStorageGet("test-camo")!=undefined
 var camoAddrs=[
-	"https://camo.hach.chat/"
+	"https://camo.hach.chat/",
+	"https://camo.upsilon.workers.dev/",
+	"https://camo.cmd1152.workers.dev/"
 ];
 var imgHostWhitelist = [
 	'i.imgur.com',
