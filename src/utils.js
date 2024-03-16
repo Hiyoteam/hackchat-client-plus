@@ -187,7 +187,6 @@ function addPluginButton(name, callback){
 	button.setAttribute("class", "plugin-button");
 	button.setAttribute("tr","");
 	$id("plugin-buttons").appendChild(p);
-	$id("plugin-buttons").appendChild(button);
 }
 
 var verifyNickname = function (nick) {
