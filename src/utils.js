@@ -1,4 +1,4 @@
-var antiLatex = true;
+﻿var antiLatex = true;
 
 /**
  * @param {String} query
@@ -66,7 +66,9 @@ var allowImages = false;
 var whitelistDisabled = false;
 var camo=true || localStorageGet("test-camo")!=undefined
 var camoAddrs=[
-	"https://camo.hach.chat/"
+	"https://camo.hach.chat/",
+	"https://camo.upsilon.workers.dev/",
+	"https://camo.cmd1152.workers.dev/"
 ];
 var imgHostWhitelist = [
 	'i.imgur.com',
@@ -177,14 +179,10 @@ function verifyLink(link) {
 }
 
 function addPluginButton(name, callback){
-	var p=document.createElement("p");
 	var button = document.createElement("button");
 	button.innerText = name;
 	button.onclick = callback;
-	p.appendChild(button);
-	button.setAttribute("class", "plugin-button");
-	button.setAttribute("tr","");
-	$id("plugin-buttons").appendChild(p);
+	$id("plugin-buttons").appendChild(button);
 }
 
 var verifyNickname = function (nick) {
