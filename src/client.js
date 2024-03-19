@@ -194,9 +194,14 @@ function join(channel, oldNick) {
 	}
 }
 
+function nickIgnored(nick) {
+	if (!nick) return false
+	return ignoredUsers.indexOf(nick) >= 0 || ignoredHashs.indexOf(nickGetHash(nick)) >= 0
+}
+
 var COMMANDS = {
 	chat: function (args, raw) {
-		if (ignoredUsers.indexOf(args.nick) >= 0 || ignoredHashs.indexOf(nickGetHash(args.nick)) >= 0) {
+		if (nickIgnored(args.nick)) {
 			return
 		}
 		var elem = pushMessage(args, { i18n: false, raw })
@@ -262,15 +267,21 @@ var COMMANDS = {
 	},
 
 	info: function (args, raw) {
-		if ((args.type == 'whisper' || args.type == 'invite') && (ignoredUsers.indexOf(args.from) >= 0 || ignoredHashs.indexOf(nickGetHash(args.from)) >= 0)) {
+		if ((args.type == 'whisper' || args.type == 'invite') && (nickIgnored(args.from)) {
 			return
+		}
+		if (args.type == 'info') {
+			let match = args.text.match(/^.+ is now .+$/)
+			if (match && nickIgnored(match[1])) {
+				return
+			}
 		}
 		args.nick = '*'
 		pushMessage(args, { i18n: true, raw })
 	},
 
 	emote: function (args, raw) {
-		if (ignoredUsers.indexOf(args.text.match(/@(.+?)(?: .+)/)[1]) >= 0 || ignoredHashs.indexOf(nickGetHash(args.text.match(/@(.+?)(?: .+)/)[1])) >= 0) {
+		if (nickIgnored(args.text.match(/@(.+?)(?: .+)/)[1])) {
 			return
 		}
 		args.nick = '*'
@@ -320,13 +331,14 @@ var COMMANDS = {
 	},
 
 	onlineAdd: function (args, raw) {
-		if (ignoredUsers.indexOf(args.nick) >= 0 || ignoredHashs.indexOf(nickGetHash(args.nick)) >= 0) {
-			return
-		}
 		var nick = args.nick;
 		users_.push(args)
 
 		userAdd(nick, args);
+		
+		if (nickIgnored(args.nick)) {
+			return
+		}
 
 		if ($id('joined-left').checked) {
 			let payLoad = { nick: '*', text: nick + " joined" }
@@ -340,15 +352,16 @@ var COMMANDS = {
 	},
 
 	onlineRemove: function (args, raw) {
-		if (ignoredUsers.indexOf(args.nick) >= 0 || ignoredHashs.indexOf(nickGetHash(args.nick)) >= 0) {
-			return
-		}
 		var nick = args.nick;
 		users_ = users_.filter(function (item) {
 			return item.nick !== args.nick;
 		});
 
 		userRemove(nick);
+
+		if (nickIgnored(args.nick)) {
+			return
+		}
 
 		if ($id('joined-left').checked) {
 			pushMessage({ nick: '*', text: nick + " left" }, { i18n: true, raw });
