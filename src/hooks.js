@@ -13,9 +13,12 @@ hook.register = function (when, name, func) {
 hook.run = function (when, name, args) {
     let funcs = hooks[name] ?? { "before": [], "in": [], "after": [] }
     funcs[when].forEach(element => {
-        args = element(args)
-        if (args == false) {
+        let result = element(args)
+        if (result == false) {
             return false //prevent this event run
+        }
+        if (Array.isArray(result)) {
+            args = result
         }
     })
     return args
