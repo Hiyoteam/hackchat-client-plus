@@ -267,7 +267,7 @@ var COMMANDS = {
 	},
 
 	info: function (args, raw) {
-		if ((args.type == 'whisper' || args.type == 'invite') && (nickIgnored(args.from)) {
+		if ((args.type == 'whisper' || args.type == 'invite') && (nickIgnored(args.from))) {
 			return
 		}
 		if (args.type == 'info') {
