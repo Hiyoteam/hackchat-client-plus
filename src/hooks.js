@@ -14,7 +14,7 @@ hook.run = function (when, name, args) {
     let funcs = hooks[name] ?? { "before": [], "in": [], "after": [] }
     funcs[when].forEach(element => {
         let result = element(args)
-        if (result == false) {
+        if (result === false) {
             return false //prevent this event run
         }
         if (Array.isArray(result)) {
