@@ -593,7 +593,7 @@ function makeTextEl(args, options, date) {
 
 
 function pushMessage(args, options = {}) {
-	args = hook.run("before","pushmessage",[args])
+	[args] = hook.run("before","pushmessage",[args])
 	if (!args){
 		return //prevented
 	}
