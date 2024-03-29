@@ -12,7 +12,7 @@ hook.register = function (when, name, func) {
 }
 hook.run = function (when, name, args) {
     let funcs = hooks[name] ?? { "before": [], "in": [], "after": [] }
-    for (let element of hooks[when]) {
+    for (let element of funcs[when]) {
         let result = element(args)
         if (result === false) {
             return false //prevent this event run
