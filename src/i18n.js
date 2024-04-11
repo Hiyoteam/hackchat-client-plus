@@ -82,7 +82,7 @@
                 [/Cancelled ignoring nick ([a-zA-Z0-9_]{1,24})\./, '已取消忽略$1的消息。'],
                 [/^Kicked ([a-zA-Z0-9_]{1,24})$/, '已踢出 $1'],
                 [/^Banned ([a-zA-Z0-9_]{1,24})$/, '已封禁 $1'],
-                [/^([a-zA-Z0-9_]{1,24}) was moved into \?(.+)$/, '$1 被移动到 $2'],
+                [/^([a-zA-Z0-9_]{1,24}) was moved into \?(.+)$/, '$1 被移动到 ?$2'],
                 ["Sucessfully added tunnel.", "成功增加隧道。"],
                 ["Sucessfully removed tunnel.", "成功移除隧道。"],
                 ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"]
