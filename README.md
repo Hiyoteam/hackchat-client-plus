@@ -6,7 +6,7 @@ Users can still use HC++ for its feature set is already very powerful, but they 
 
 [awa客户端 by DPG](https://hc.doppelganger.eu.org/) | [whitechat客户端 by 黑茶](https://whitechat.darknights.repl.co/) | [pipechat客户端 by 黑茶](https://pipechat.darknights.repl.co/)
 
-**New update: simple i18n (Simplified Chinese) now available!!!**
+**Simple i18n (Simplified Chinese) now available!!!**
 
 A tweaked hackchat client. aka hackchat++.
 Most code, and icon, are from <https://github.com/hack-chat/main>.
@@ -14,7 +14,7 @@ Hosted at [hcer.netlify.app](https://hcer.netlify.app/), [hc.thz.cool](https://h
 
 Some of the current features:(* means optional features, which can be set to the original behavior instead of tweaked behavior)
 
-- Up to date (Includes all known features of 2022/10 hack-chat official client)
+- Up to date (Includes all known features of 2024/4 hack-chat official client)
 - Open source and safe (No message or password recording)
 - Defend known latex weapons (Malicious latex messages wont be rendered but will be shown in plain text)
 - Repair the display of yourself's messages (Now no matter whether you use a tripcode, you can see the nickname of yourself in a different color from others', if you haven't set a custom nickname color with `/color` or `changecolor` command.)
@@ -34,6 +34,8 @@ Some of the current features:(* means optional features, which can be set to the
 - Custom websocket url. To use it, ~~add the ws url in the url like <hcer.netlify.app/?your-channel@wss://example-ws-url.com>. If you need character `@` in your channel name, use `@@` instead.~~ set a tunnel from the sidebar instead.
   - Notice that this client is not designed to connect to multi versions of servers, so it is very likely to work wierdly connecting other chatrooms, like [Crosst-Chat](https://github.com/CrosSt-Chat/CSC-main).
   - This feature is originally made to support reverse proxy connections, in order to help those who have difficulties connecting to hack.chat.
+- Simple i18n.
+- A shabby plugin system.
 
 ---
 

@@ -8,7 +8,7 @@ body {
 body,
 input,
 textarea {
-  font-family: 'DejaVu Sans Mono', monospace;
+  font-family: "DejaVu Sans Mono", monospace;
   font-size: 12px;
   -o-tab-size: 4;
   -moz-tab-size: 4;
@@ -135,7 +135,7 @@ p.folded {
 
 p.folded::before {
   content: "Folded, Click or scroll to See more...";
-  color: grey
+  color: grey;
 }
 
 .message .text {
@@ -159,7 +159,16 @@ pre.captcha {
 }
 
 .colorful {
-  background: linear-gradient(to right, #6600cc, #9900ff, #9900cc, #660066, #9900cc, #9900ff, #6600cc);
+  background: linear-gradient(
+    to right,
+    #6600cc,
+    #9900ff,
+    #9900cc,
+    #660066,
+    #9900cc,
+    #9900ff,
+    #6600cc
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -168,7 +177,14 @@ pre.captcha {
 }
 
 .jebbed {
-  background: linear-gradient(to right, #6666ff, #0099ff, #00ff00, #ff3399, #6666ff);
+  background: linear-gradient(
+    to right,
+    #6666ff,
+    #0099ff,
+    #00ff00,
+    #ff3399,
+    #6666ff
+  );
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -177,7 +193,6 @@ pre.captcha {
 }
 
 @keyframes rainbow_animation {
-
   0%,
   100% {
     background-position: 0 0;
@@ -294,26 +309,26 @@ table {
   border-collapse: collapse;
 }
 
-table>caption+thead>tr:first-child>th,
-table>colgroup+thead>tr:first-child>th,
-table>thead:first-child>tr:first-child>th,
-table>caption+thead>tr:first-child>td,
-table>colgroup+thead>tr:first-child>td,
-table>thead:first-child>tr:first-child>td {
+table > caption + thead > tr:first-child > th,
+table > colgroup + thead > tr:first-child > th,
+table > thead:first-child > tr:first-child > th,
+table > caption + thead > tr:first-child > td,
+table > colgroup + thead > tr:first-child > td,
+table > thead:first-child > tr:first-child > td {
   border-top: 0;
 }
 
-table>thead>tr>th {
+table > thead > tr > th {
   vertical-align: bottom;
   border-bottom: 2px solid #4e4e4e;
 }
 
-table>thead>tr>th,
-table>tbody>tr>th,
-table>tfoot>tr>th,
-table>thead>tr>td,
-table>tbody>tr>td,
-table>tfoot>tr>td {
+table > thead > tr > th,
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
+table > tfoot > tr > td {
   padding: 8px;
   line-height: 1.42857143;
   vertical-align: top;
@@ -329,17 +344,17 @@ th {
   padding: 0;
 }
 
-table>tbody>tr:nth-child(odd)>td,
-table>tbody>tr:nth-child(odd)>th {
+table > tbody > tr:nth-child(odd) > td,
+table > tbody > tr:nth-child(odd) > th {
   background-color: #4e4e4e;
 }
 
-table>thead>tr>th,
-table>tbody>tr>th,
-table>tfoot>tr>th,
-table>thead>tr>td,
-table>tbody>tr>td,
-table>tfoot>tr>td {
+table > thead > tr > th,
+table > tbody > tr > th,
+table > tfoot > tr > th,
+table > thead > tr > td,
+table > tbody > tr > td,
+table > tfoot > tr > td {
   padding: 8px;
   line-height: 1.42857143;
   vertical-align: top;
@@ -374,11 +389,8 @@ ol ol {
 /* Mobile style */
 
 @media only screen and (max-width: 600px) {
-  .messages {
-    border: none;
-  }
-
   #messages {
+    border: none;
     padding: 0.5em;
   }
 

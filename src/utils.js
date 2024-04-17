@@ -64,8 +64,8 @@ var md = new Remarkable('full', markdownOptions);
 // image handler
 var allowImages = false;
 var whitelistDisabled = false;
-var camo=true || localStorageGet("test-camo")!=undefined
-var camoAddrs=[
+var camo = true || localStorageGet("test-camo") != undefined
+var camoAddrs = [
 	"https://camo.hach.chat/",
 	"https://camo.upsilon.workers.dev/",
 	"https://camo.cmd1152.workers.dev/"
@@ -121,8 +121,8 @@ md.renderer.rules.image = function (tokens, idx, options) {
 		var suffix = options.xhtmlOut ? ' /' : '';
 		var scrollOnload = isAtBottom() ? ' onload="window.scrollTo(0, document.body.scrollHeight)"' : '';
 		return '<a href="' + src + '" target="_blank" rel="noreferrer"><img' + scrollOnload + imgSrc + alt + title + suffix + ' referrerpolicy="no-referrer"></a>';
-	}else if(allowImages && camo){
-		var proxiedAddr = camoAddrs[Math.floor(Math.random()*camoAddrs.length)]+"?proxyUrl="+tokens[idx].src
+	} else if (allowImages && camo) {
+		var proxiedAddr = camoAddrs[Math.floor(Math.random() * camoAddrs.length)] + "?proxyUrl=" + tokens[idx].src
 		var imgSrc = ' src="' + Remarkable.utils.escapeHtml(proxiedAddr) + '"';
 		var title = tokens[idx].title ? (' title="' + Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(tokens[idx].title)) + '"') : '';
 		var alt = ' alt="' + (tokens[idx].alt ? Remarkable.utils.escapeHtml(Remarkable.utils.replaceEntities(Remarkable.utils.unescapeMd(tokens[idx].alt))) : '') + '"';
@@ -178,14 +178,14 @@ function verifyLink(link) {
 	return true;
 }
 
-function addPluginButton(name, callback){
-	var p=document.createElement("p");
+function addPluginButton(name, callback) {
+	var p = document.createElement("p");
 	var button = document.createElement("button");
 	button.innerText = name;
 	button.onclick = callback;
 	p.appendChild(button);
 	button.setAttribute("class", "plugin-button");
-	button.setAttribute("tr","");
+	button.setAttribute("tr", "");
 	$id("plugin-buttons").appendChild(p);
 }
 

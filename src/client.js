@@ -67,7 +67,7 @@ function join(channel, oldNick) {
 	wasConnected = false;
 
 	ws.onopen = function () {
-		hook.run("before","connect",[])
+		hook.run("before", "connect", [])
 		var shouldConnect = true;
 		if (!wasConnected) {
 			if (location.hash) {
@@ -101,7 +101,7 @@ function join(channel, oldNick) {
 	}
 
 	ws.onclose = function () {
-		hook.run("after","disconnected",[])
+		hook.run("after", "disconnected", [])
 		isInChannel = false
 
 		if (shouldAutoReconnect) {
@@ -131,13 +131,13 @@ function join(channel, oldNick) {
 		var args = JSON.parse(message.data);
 		var cmd = args.cmd;
 		var command = COMMANDS[cmd];
-		var data = hook.run("in","recv",[args,cmd,command])
-		if(!data){
+		var data = hook.run("in", "recv", [args, cmd, command])
+		if (!data) {
 			return
-		}else{
-			args=data[0]
-			cmd=data[1]
-			command=data[2]
+		} else {
+			args = data[0]
+			cmd = data[1]
+			command = data[2]
 		}
 		if (args.channel) {
 			if (args.channel != myChannel && isInChannel) {
@@ -223,6 +223,10 @@ var COMMANDS = {
 		for (var i = 0; i < activeMessages.length; i++) {
 			var msg = activeMessages[i];
 			if (msg.userid === args.userid && msg.customId === customId) {
+				if (mode === 'complete') {
+					activeMessages.splice(i, 1);
+					return;
+				}
 				message = msg;
 				break;
 			}
@@ -335,7 +339,7 @@ var COMMANDS = {
 		users_.push(args)
 
 		userAdd(nick, args);
-		
+
 		if (nickIgnored(args.nick)) {
 			return
 		}
@@ -461,7 +465,9 @@ function addClassToNick(element, args) {
 function makeTripEl(args, options, date) {
 	var tripEl = document.createElement('span');
 
-	if (args.mod) {
+	if (args.flair) { // https://github.com/hack-chat/main/commit/dc841cb25e2efd456811f8e01cdc60d825c0f2b4
+		tripEl.textContent = args.flair + " " + args.trip + " ";
+	} else if (args.mod) { // back compatibility
 		tripEl.textContent = String.fromCodePoint(11088) + " " + args.trip + " ";
 	} else {
 		tripEl.textContent = args.trip + " ";
@@ -593,8 +599,8 @@ function makeTextEl(args, options, date) {
 
 
 function pushMessage(args, options = {}) {
-	args = hook.run("before","pushmessage",[args])?.[0] ?? false
-	if (!args){
+	args = hook.run("before", "pushmessage", [args])?.[0] ?? false
+	if (!args) {
 		return //prevented
 	}
 	let i18n = options.i18n ?? true
@@ -604,7 +610,7 @@ function pushMessage(args, options = {}) {
 
 	// Message container
 	var messageEl = document.createElement('div');
-	
+
 
 	if (
 		typeof (myNick) === 'string' && (
@@ -616,7 +622,7 @@ function pushMessage(args, options = {}) {
 	}
 
 	messageEl.classList.add('message');
-	
+
 	var date = new Date(args.time || Date.now());
 
 	addClassToMessage(messageEl, args)
@@ -659,15 +665,15 @@ function pushMessage(args, options = {}) {
 		if (args.trip) { readableLog += '#' + args.trip }
 		readableLog += ': ' + args.text
 	}
-	hook.run("after","pushmessage",[messageEl])
+	hook.run("after", "pushmessage", [messageEl])
 	return messageEl
 }
 
 
 function send(data) {
 	if (ws && ws.readyState == ws.OPEN) {
-		data = hook.run("in","send",[data])
-		if(!data){
+		data = hook.run("in", "send", [data])
+		if (!data) {
 			return
 		}
 		ws.send(JSON.stringify(data[0]));
@@ -675,9 +681,9 @@ function send(data) {
 }
 
 /* First join then shows the ad */
-if(typeof localStorageGet("cdn-advertisement") == "undefined" && document.domain == "hach.chat"){
+if (typeof localStorageGet("cdn-advertisement") == "undefined" && document.domain == "hach.chat") {
 	alert("Connection speed and security are provided by StarWAF.\nVisit link: https://www.starwaf.com/\n\n连接速度与安全性由StarWAF提供。\n访问链接：https://www.starwaf.com/")
-	localStorageSet("cdn-advertisement","true")
+	localStorageSet("cdn-advertisement", "true")
 }
 /* ---Main--- */
 

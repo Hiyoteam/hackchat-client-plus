@@ -457,6 +457,7 @@ var schemes = [
 	'tk-night',
 	'tomorrow',
 	'carrot',
+	'catppuccin',
 	'lax',
 	'Ubuntu',
 	'gruvbox-light',
@@ -470,7 +471,9 @@ var schemes = [
 	'backrooms-liminal',
 	'amoled',
 	'retro',
-    'hell'
+	'hell',
+	'Waifu',
+	'flamingo',
 ];
 
 var highlights = [
@@ -483,7 +486,7 @@ var highlights = [
 	'tk-night',
 	'tomorrow',
 	'xcode',
-	'zenburn'
+	'zenburn',
 ]
 
 var languages = [
