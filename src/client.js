@@ -144,10 +144,10 @@ function join(channel, oldNick) {
 				isInChannel = false
 				if (args.channel != 'purgatory') {
 					purgatory = false
-					usersClear()
-					let p = document.createElement('p')
-					p.textContent = `You may be kicked or moved to this channel by force to channel ?${args.channel}. Unable to get full user list. `
-					$id('users').appendChild(p)
+					// usersClear()
+					// let p = document.createElement('p')
+					// p.textContent = `You may be kicked or moved to this channel by force to channel ?${args.channel}. Unable to get full user list. `
+					// $id('users').appendChild(p)
 					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` })
 				} else {
 					purgatory = true
