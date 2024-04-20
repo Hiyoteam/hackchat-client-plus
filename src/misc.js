@@ -430,15 +430,13 @@ function checkIsMobileOrTablet() {
 	return check;
 };
 
-const isMobile = checkIsMobileOrTablet()
+// const isMobile = checkIsMobileOrTablet()
 
 function updateInputSize() {
 	var atBottom = isAtBottom();
 
-	if (!isMobile) {
-		input.style.height = 0;
-		input.style.height = input.scrollHeight + 'px';
-	}
+	input.style.height = 0;
+	input.style.height = input.scrollHeight + 'px';
 
 	document.body.style.marginBottom = $id('footer').offsetHeight + 'px';
 
