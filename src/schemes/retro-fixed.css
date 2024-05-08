@@ -161,10 +161,8 @@ label[for=pin-sidebar] {
   border-radius: 0;
   margin-bottom: 0.3em;
 }
-#special-cmd {
-  /*         border: 1px solid red; */
-  margin-top: 100vh; /* 想不到怎么修这个问题，看起来是想往下滚才可以看见设置按钮，但是怎么设置都不保险，直接改成 100vh*/
-  margin-bottom: 2.5em;
+#users-div { /*尽量不按顺序来定位，定位user-div的上一个元素的top加margin（因为是倒序排序，top和bottom反了）相当于在user-div的bottom加margin*/
+  margin-bottom: 100vh; /* 想不到怎么修这个问题，看起来是想往下滚才可以看见设置按钮，但是怎么设置都不保险，直接改成 100vh*/
 }
 #users-div>h4, #users-div>p, #sidebar-content > div:nth-child(1) {
   display: none !important;
