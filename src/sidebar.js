@@ -474,6 +474,7 @@ var schemes = [
 	'hell',
 	'Waifu',
 	'flamingo',
+	'retro-fixed'
 ];
 
 var highlights = [
