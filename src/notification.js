@@ -116,18 +116,20 @@ function spawnNotification(title, body) {
 }
 
 function notify(args) {
-	// Spawn notification if enabled
-	if (notifySwitch.checked) {
-		spawnNotification("?" + myChannel + "  �  " + args.nick, args.text)
-	}
-
-	// Play sound if enabled
-	if (soundSwitch.checked) {
-		var soundPromise = document.getElementById("notify-sound").play();
-		if (soundPromise) {
-			soundPromise.catch(function (error) {
-				console.error("Problem playing sound:\n" + error);
-			});
+	try {
+		// Spawn notification if enabled
+		if (notifySwitch.checked) {
+			spawnNotification("?" + myChannel + "  �  " + args.nick, args.text)
 		}
-	}
+
+		// Play sound if enabled
+		if (soundSwitch.checked) {
+			var soundPromise = document.getElementById("notify-sound").play();
+			if (soundPromise) {
+				soundPromise.catch(function (error) {
+					console.error("Problem playing sound:\n" + error);
+				});
+			}
+		}
+	} catch (_) { console.error(e) }
 }
