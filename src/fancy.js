@@ -73,55 +73,55 @@ let run = {
 			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
 			return
 		}
-		let plugin_address=args[0]
+		let plugin_address = args[0]
 		//validate
-		if(getDomain(plugin_address) != "plugins.hach.chat"){
-			pushMessage({nick:"!",text:"From 2024/2/22, you can only load plugins from plugins.hach.chat due to security reasons. This plugin cannot be loaded."})
+		if (getDomain(plugin_address) != "plugins.hach.chat") {
+			pushMessage({ nick: "!", text: "From 2024/2/22, you can only load plugins from plugins.hach.chat due to security reasons. This plugin cannot be loaded." })
 			return
 		}
-		
+
 		//get the cmds first
-		let plugins=localStorageGet("plugins")
-		if(plugins != undefined){
-			plugins=JSON.parse(plugins)
-		}else{
-			plugins=[]
+		let plugins = localStorageGet("plugins")
+		if (plugins != undefined) {
+			plugins = JSON.parse(plugins)
+		} else {
+			plugins = []
 		}
-		if(plugins.indexOf(plugin_address) > -1){
-			pushMessage({nick:"!",text:"This plugin is already loaded."})
+		if (plugins.indexOf(plugin_address) > -1) {
+			pushMessage({ nick: "!", text: "This plugin is already loaded." })
 			return
 		}
 		//add the plugin
 		plugins.push(plugin_address)
 		//save
-		localStorageSet("plugins",JSON.stringify(plugins))
-		
+		localStorageSet("plugins", JSON.stringify(plugins))
+
 		//load it NOW
 		let e = document.createElement("script")
-        e.setAttribute("src", plugin_address)
-        e.setAttribute("type","application/javascript");
-        document.getElementsByTagName('head')[0].appendChild(e);
-        console.log("Loaded plugin: ", e)
-		 //re-enabled bcs plugins in our plugin index are very safe
-		pushMessage({nick:"*",text:"Added plugin."})
+		e.setAttribute("src", plugin_address)
+		e.setAttribute("type", "application/javascript");
+		document.getElementsByTagName('head')[0].appendChild(e);
+		console.log("Loaded plugin: ", e)
+		//re-enabled bcs plugins in our plugin index are very safe
+		pushMessage({ nick: "*", text: "Added plugin." })
 	},
-	listplugins(...args){
-		let plugins=localStorageGet("plugins")
-		if(plugins != undefined){
-			plugins=JSON.parse(plugins)
-		}else{
-			plugins=[]
+	listplugins(...args) {
+		let plugins = localStorageGet("plugins")
+		if (plugins != undefined) {
+			plugins = JSON.parse(plugins)
+		} else {
+			plugins = []
 		}
-		pushMessage({nick:"*",text:"Restigered plugins:"+JSON.stringify(plugins)})
+		pushMessage({ nick: "*", text: "Restigered plugins:" + JSON.stringify(plugins) })
 	},
-	clearplugins(...args){
-		localStorageSet("plugins","[]")
-		pushMessage({nick:"*",text:"Plugins cleared."})
+	clearplugins(...args) {
+		localStorageSet("plugins", "[]")
+		pushMessage({ nick: "*", text: "Plugins cleared." })
 	},
-	updatelast(...args){
-		send({cmd: 'updateMessage', mode: 'overwrite', text: args[0], customId: lastcid});
+	updatelast(...args) {
+		send({ cmd: 'updateMessage', mode: 'overwrite', text: args[0], customId: lastcid });
 	},
-	ignorehash(...args){
+	ignorehash(...args) {
 		let hash = args[0]
 		if (ignoredHashs.indexOf(hash) > -1) {
 			hashDeignore(hash)
@@ -131,29 +131,60 @@ let run = {
 			pushMessage({ nick: '*', text: `Ignored hash ${hash}.` })
 		}
 	},
-	merge_config(...args){
+	merge_config(...args) {
 		if (args.length != 1) {
 			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 is needed.` })
 			return
 		}
-		pushMessage({ nick: '*', text: `Click [this](https://${args[0]}/merge-config.html#${encodeURIComponent(JSON.stringify(localStorage))}) to merge config.`})
+		pushMessage({ nick: '*', text: `Click [this](https://${args[0]}/merge-config.html#${encodeURIComponent(JSON.stringify(localStorage))}) to merge config.` })
 	},
-	enable_camo(...args){
+	enable_camo(...args) {
 		if (args.length > 1) {
 			pushMessage({ nick: '!', text: `${args.length} arguments are given while 1 or 0 is needed.` })
 			return
 		}
-		if(args.length == 0){
-			pushMessage({ nick: '!', text: `## Warning:\n Camo is a experimental feature and currently in test.\n**ONCE YOU ENABLED IT, YOU CAN ONLY DISABLE IT VIA CONSOLE.**\nIf you are sure about enabling it, then input \`/enable_camo iamsure\``})
-		}else if(args[0] == "iamsure"){
-			localStorageSet("test-camo",1)
+		if (args.length == 0) {
+			pushMessage({ nick: '!', text: `## Warning:\n Camo is a experimental feature and currently in test.\n**ONCE YOU ENABLED IT, YOU CAN ONLY DISABLE IT VIA CONSOLE.**\nIf you are sure about enabling it, then input \`/enable_camo iamsure\`` })
+		} else if (args[0] == "iamsure") {
+			localStorageSet("test-camo", 1)
 			pushMessage({ nick: '*', text: `Camo enabled. refresh to apply.` })
-		}else{
+		} else {
 			pushMessage({ nick: '!', text: 'Unknown arguments.' })
+		}
+	},
+	debug(...args) {
+		if (args[0] === debugCode) {
+			if (debugMode) {
+				pushMessage({ nick: '!', text: 'Developer mode has been enabled. To disable it, please refresh the page.' })
+			} else {
+				debugMode = true
+				pushMessage({ nick: '*', text: 'Developer mode has been enabled.' })
+				pushMessage({ nick: '!', text: 'Do not keep developer mode enabled for too long. After using it, please refresh immediately to restore protection.'})
+				isWhiteListed = getDomain = () => { //¯\_(ツ)_/¯
+					return `plugins.hach.chat`
+				}
+				run.eval = (...args) => {
+					try {
+						let rollback = eval(args.join(" "))
+						try {
+							pushMessage({ nick: '*', text: JSON.stringify(rollback) })
+						} catch (err) {
+							pushMessage({ nick: '*', text: '[Unknown Object(Failed to show)]' })
+						}
+					} catch (err) {
+						pushMessage({ nick: '!', text: err.message || err })
+					}
+				}
+			}
+		} else {
+			debugCode = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString();
+			pushMessage({ nick: '!', text: `You are enabling developer mode. I want you to be aware of what you are doing. Enabling this mode will disable some protections and may lead to password theft. We recommend using a non-personal password in incognito mode to test untrusted things. Executing this command may result in your password being stolen. To proceed with the execution, please run \`/debug ${debugCode}\`.` })
 		}
 	}
 }
 
+var debugCode = false
+var debugMode = false
 $id('special-cmd').onclick = function () {
 	let cmdText = input.value || prompt(i18ntranslate('Input command:(This is for the developers to access/test some special experimental functions.)', 'prompt'));
 	if (!cmdText) {
@@ -161,10 +192,10 @@ $id('special-cmd').onclick = function () {
 	}
 	let cmdArray = cmdText.split(' ')
 	if (run[cmdArray[0]]) {
-		try{
+		try {
 			run[cmdArray[0]](...cmdArray.slice(1))
-		}catch(e){
-			pushMessage({nick:"!",text:"Error when executeing \""+cmdArray[0]+"\",Send the following error messages to the developer.\n```"+e+"\n```"})
+		} catch (e) {
+			pushMessage({ nick: "!", text: "Error when executeing \"" + cmdArray[0] + "\",Send the following error messages to the developer.\n```" + e + "\n```" })
 		}
 	} else {
 		pushMessage({ nick: '!', text: "No such function: " + cmdArray[0] })
@@ -173,14 +204,14 @@ $id('special-cmd').onclick = function () {
 
 // Feature: let special commands could be executed just like running on server.
 function parseSPCmd(input) {
-	var name=input.slice(1).split(" ")[0]
-	var args=input.split(" ").slice(1)
-	return [name,args]
-  }
-function isSPCmd(text){ //P.S SPCmd == SPecial Command
+	var name = input.slice(1).split(" ")[0]
+	var args = input.split(" ").slice(1)
+	return [name, args]
+}
+function isSPCmd(text) { //P.S SPCmd == SPecial Command
 	return (text.startsWith('/') && (run[text.split("/")[1].split(" ")[0]] != undefined))
 }
-function callSPcmd(text){
+function callSPcmd(text) {
 	let data = parseSPCmd(text);
 	run[data[0]](...data[1])
 }
