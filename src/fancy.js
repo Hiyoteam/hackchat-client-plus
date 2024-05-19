@@ -1,4 +1,4 @@
-let run = {
+﻿let run = {
 	copy(...args) {//copy the x-th last message
 		if (args == []) {
 			args = ['0']
@@ -172,9 +172,16 @@ let run = {
 						pushMessage({ nick: '!', text: err.message || err })
 					}
 				}
+				let erudaDOM = document.createElement("script");
+				erudaDOM.setAttribute("src", "./eruda.js")
+				erudaDOM.setAttribute("type", "application/javascript");
+				erudaDOM.onload = function() {
+					eruda.init();
+				}
+				document.getElementsByTagName('head')[0].appendChild(erudaDOM);
 			}
 		} else {
-			debugCode = (Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000).toString();
+			debugCode = (Math.floor(Math.random() * (9999999999 - 1000000000 + 1)) + 1000000000).toString();
 			pushMessage({ nick: '!', text: `You are enabling developer mode. I want you to be aware of what you are doing. Enabling this mode will disable some protections and may lead to password theft. We recommend using a non-personal password in incognito mode to test untrusted things. Executing this command may result in your password being stolen. To proceed with the execution, please run \`/debug ${debugCode}\`.` })
 		}
 	}
