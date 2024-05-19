@@ -6,7 +6,7 @@ try {
     // add into the head
     plugins.forEach(element => {
         let e = document.createElement("script")
-        if(getDomain(element) != "plugins.hach.chat") {
+        if(!debugMode && getDomain(element) != "plugins.hach.chat") {
             hasInvaild = true
             console.warn("Invalid plugin: ", element)
         }else{

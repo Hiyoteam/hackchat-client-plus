@@ -75,7 +75,7 @@ let run = {
 		}
 		let plugin_address = args[0]
 		//validate
-		if (getDomain(plugin_address) != "plugins.hach.chat") {
+		if (!debugMode && getDomain(plugin_address) != "plugins.hach.chat") {
 			pushMessage({ nick: "!", text: "From 2024/2/22, you can only load plugins from plugins.hach.chat due to security reasons. This plugin cannot be loaded." })
 			return
 		}
@@ -160,9 +160,6 @@ let run = {
 				debugMode = true
 				pushMessage({ nick: '*', text: 'Developer mode has been enabled.' })
 				pushMessage({ nick: '!', text: 'Do not keep developer mode enabled for too long. After using it, please refresh immediately to restore protection.'})
-				isWhiteListed = getDomain = () => { //¯\_(ツ)_/¯
-					return `plugins.hach.chat`
-				}
 				run.eval = (...args) => {
 					try {
 						let rollback = eval(args.join(" "))
