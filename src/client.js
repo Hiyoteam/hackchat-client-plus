@@ -533,7 +533,7 @@ function makeNickEl(args, options, date) {
 		//right-click menu
 		if (checkIsMobileOrTablet()) {
 			let options = getMenuOptions(args)
-			return openMenu(e, args, options);
+			return openMenu(e, nickLinkEl, args, options);
 		}
 		// Reply to a whisper or info is meaningless
 		createAt(args);
@@ -543,7 +543,7 @@ function makeNickEl(args, options, date) {
 		e.preventDefault();
 		//reply(args)
 		let options = getMenuOptions(args);
-		openMenu(e, args, options);
+		openMenu(e, nickLinkEl, args, options);
 	}
 
 	nickLinkEl.title = date.toLocaleString();
@@ -559,16 +559,16 @@ menuDom.style.display = "none";
 document.addEventListener('click', () => {
 	menuDom.style.display = "none";
 })
-function openMenu(event, args, options = {}) {
+function openMenu(event, nickLinkEl, args, options = {}) {
 	menuDom.innerText = "";
 	let defMenu = {
-		"At": (event, args) => {
+		"At": (event, nickLinkEl, args) => {
 			createAt(args);
 		},
-		"Reply": (event, args) => {
+		"Reply": (event, nickLinkEl, args) => {
 			reply(args);
 		},
-		"Copy Text": (event, args) => {
+		"Copy Text": (event, nickLinkEl, args) => {
 			navigator.clipboard.writeText(args.text)
 			.then(() => {})
 			.catch(err => {
@@ -578,6 +578,9 @@ function openMenu(event, args, options = {}) {
 			    })
 			});
 		},
+		"Delete": (event, nickLinkEl, args) => {
+			nickLinkEl.parentElement.parentElement.remove()
+		},
 	}
 	for (let k in options) {
 		defMenu[k] = options[k];
@@ -585,7 +588,7 @@ function openMenu(event, args, options = {}) {
 	for (let k in defMenu) {
 		let option = document.createElement("li");
 		option.onclick = () => {
-			defMenu[k](event, args);
+			defMenu[k](event, nickLinkEl, args);
 		}
 		option.innerText = k;
 		menuDom.appendChild(option);
