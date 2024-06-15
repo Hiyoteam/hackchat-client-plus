@@ -476,36 +476,74 @@ function makeTripEl(args, options, date) {
 	tripEl.classList.add('trip');
 	return tripEl
 }
-
+function createAt(args) {
+	if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
+		insertAtCursor(args.text);
+		$id('chatinput').focus();
+		return;
+	} else {
+		var nick = args.nick
+		let at = '@'
+		if ($id('soft-mention').checked) { at += ' ' }
+		insertAtCursor(at + nick + ' ');
+		input.focus();
+		return;
+	}
+}
+function getMenuOptions(args) {
+	let options = {};
+	let nick = args.nick || args.from;
+	if (args.color) {
+		options["Copy Color"] = (event, args) => {
+			navigator.clipboard.writeText(args.color)
+			.then(() => {})
+			.catch(err => {
+			    pushMessage({
+			  	    nick: '!',
+					text: `Failed to copy: ${err.message}`
+			    })
+			});
+		}
+	}
+	if (!(args.type == 'whisper' || nick == '*' || nick == '!')) {
+		options[ignoredUsers.includes(nick) ? "UnIgnore Nick" : "Ignore Nick"] = (event, args) => {
+			let name = args.from || args.nick;
+			if (ignoredUsers.includes(nick)) {
+				userDeignore(name);
+			} else userIgnore(name);
+		}
+		let hash = nickGetHash(nick);
+		options[ignoredHashs.includes(hash) ? "UnIgnore Hash" : "Ignore Hash"] = (event, args) => {
+			let hash = nickGetHash(args.from || args.nick);
+			if (ignoredUsers.includes(hash)) {
+				hashDeignore(hash);
+			} else hashIgnore(hash);
+		}
+	}
+	return options;
+}
 function makeNickEl(args, options, date) {
 	var nickLinkEl = document.createElement('a');
 	nickLinkEl.textContent = args.nick;
 
-	addClassToNick(nickLinkEl, args)
+	addClassToNick(nickLinkEl, args, options)
 
 	//tweaked code from crosst.chat
-	nickLinkEl.onclick = function () {
-		// @TODO Finish right-click menu
-		// Reply to a whisper or info is meaningless
-		if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
-			insertAtCursor(args.text);
-			$id('chat-input').focus();
-			return;
-		} else if (args.nick == myNick.split('#')[0]) {
-			reply(args)
-		} else {
-			var nick = args.nick
-			let at = '@'
-			if ($id('soft-mention').checked) { at += ' ' }
-			insertAtCursor(at + nick + ' ');
-			input.focus();
-			return;
+	nickLinkEl.onclick = function (e) {
+		//right-click menu
+		if (checkIsMobileOrTablet()) {
+			let options = getMenuOptions(args)
+			return openMenu(e, args, options);
 		}
+		// Reply to a whisper or info is meaningless
+		createAt(args);
 	}
 	// Mention someone when right-clicking
 	nickLinkEl.oncontextmenu = function (e) {
 		e.preventDefault();
-		reply(args)
+		//reply(args)
+		let options = getMenuOptions(args);
+		openMenu(e, args, options);
 	}
 
 	nickLinkEl.title = date.toLocaleString();
@@ -515,6 +553,49 @@ function makeNickEl(args, options, date) {
 	}
 
 	return nickLinkEl
+}
+let menuDom = $id("menu");
+menuDom.style.display = "none";
+document.addEventListener('click', () => {
+	menuDom.style.display = "none";
+})
+function openMenu(event, args, options = {}) {
+	menuDom.innerText = "";
+	let defMenu = {
+		"At": (event, args) => {
+			createAt(args);
+		},
+		"Reply": (event, args) => {
+			reply(args);
+		},
+		"Copy Text": (event, args) => {
+			navigator.clipboard.writeText(args.text)
+			.then(() => {})
+			.catch(err => {
+			    pushMessage({
+			  	    nick: '!',
+					text: `Failed to copy: ${err.message}`
+			    })
+			});
+		},
+	}
+	for (let k in options) {
+		defMenu[k] = options[k];
+	}
+	for (let k in defMenu) {
+		let option = document.createElement("li");
+		option.onclick = () => {
+			defMenu[k](event, args);
+		}
+		option.innerText = k;
+		menuDom.appendChild(option);
+	}
+	setTimeout(()=>{
+		menuDom.style.display = "block";
+		menuDom.style.top = ((event.clientY + menuDom.clientHeight) > window.innerHeight ? window.innerHeight - menuDom.clientHeight : event.clientY) + 'px';
+		menuDom.style.left = event.clientX + 'px';
+		menuDom.scrollTo(0, 0);
+	},100)
 }
 
 function makeTextEl(args, options, date) {
@@ -647,9 +728,7 @@ function pushMessage(args, options = {}) {
 
 	// Scroll to bottom
 	var atBottom = isAtBottom();
-	if (!(args.text && /咱是中国人，可要说中文啊/.test(args.text))) {
-		$id('messages').appendChild(messageEl);
-	}
+	$id('messages').appendChild(messageEl);
 	if (atBottom && myChannel != ''/*Frontpage should not be scrooled*/) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
