@@ -494,7 +494,7 @@ function getMenuOptions(args) {
 	let options = {};
 	let nick = args.nick || args.from;
 	if (args.color) {
-		options["Copy Color"] = (event, args) => {
+		options["Copy Color"] = (event, nickLinkEl, args) => {
 			navigator.clipboard.writeText(args.color)
 			.then(() => {})
 			.catch(err => {
@@ -506,14 +506,14 @@ function getMenuOptions(args) {
 		}
 	}
 	if (!(args.type == 'whisper' || nick == '*' || nick == '!')) {
-		options[ignoredUsers.includes(nick) ? "UnIgnore Nick" : "Ignore Nick"] = (event, args) => {
+		options[ignoredUsers.includes(nick) ? "UnIgnore Nick" : "Ignore Nick"] = (event, nickLinkEl, args) => {
 			let name = args.from || args.nick;
 			if (ignoredUsers.includes(nick)) {
 				userDeignore(name);
 			} else userIgnore(name);
 		}
 		let hash = nickGetHash(nick);
-		options[ignoredHashs.includes(hash) ? "UnIgnore Hash" : "Ignore Hash"] = (event, args) => {
+		options[ignoredHashs.includes(hash) ? "UnIgnore Hash" : "Ignore Hash"] = (event, nickLinkEl, args) => {
 			let hash = nickGetHash(args.from || args.nick);
 			if (ignoredUsers.includes(hash)) {
 				hashDeignore(hash);
