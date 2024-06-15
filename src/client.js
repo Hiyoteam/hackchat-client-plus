@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * NOTE: The client side of hack.chat is currently in development,
  * a new, more modern but still minimal version will be released
@@ -526,7 +526,7 @@ function makeNickEl(args, options, date) {
 	var nickLinkEl = document.createElement('a');
 	nickLinkEl.textContent = args.nick;
 
-	addClassToNick(nickLinkEl, args, options)
+	addClassToNick(nickLinkEl, args)
 
 	//tweaked code from crosst.chat
 	nickLinkEl.onclick = function (e) {
