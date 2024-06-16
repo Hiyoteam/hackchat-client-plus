@@ -36,6 +36,7 @@
                 ['Fold Long Messages', '折叠长消息'],
                 ['Send', '发送'],
                 ['Settings', '设置'],
+                ['Can Edit Message', '可编辑消息'],
             ]),
             prompt: new Map([
                 /* Alerts and prompts */
@@ -154,6 +155,19 @@
                 ['Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for hosting).', '托管在 https://hcer.netlify.app/ 和 https://hc.thz.cool/（感谢Maggie，即THZ，提供托管）。'],
                 ['Links: ', '友情链接：'],
                 [' (Thanks for providing replying script!) ', '（感谢提供回复功能的代码）']
+            ]),
+            menu: new Map([
+                ['Reply', '回复'],
+                ['Copy Text', '复制内容'],
+                ['Delete', '删除'],
+                ['Copy Color', '复制颜色'],
+                ['Update History', '消息更新历史'],
+                ['Reply', '回复'],
+                ['UnIgnore Nick', '取消屏蔽名称'],
+                ['Ignore Nick', '屏蔽名称'],
+                ['UnIgnore Hash', '取消屏蔽Hash'],
+                ['Ignore Hash', '屏蔽Hash'],
+		['Update (Edit)', '更新消息（编辑）']
             ]),
         }
     ]

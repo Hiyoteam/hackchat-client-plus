@@ -440,3 +440,14 @@ ol ol {
 #menu>li:hover {
   background: #ffffff20;
 }
+
+dialog {
+  border: 1px solid;
+  padding: 5px 10px 5px 10px;
+  border-radius: 2px;
+  background: #333333ee;
+  color: unset;
+  max-width: 90%;
+  max-height: 90vh;
+  position: fixed;
+}

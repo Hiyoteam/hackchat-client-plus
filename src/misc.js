@@ -400,7 +400,7 @@ function sendInputContent(delay) {
 
 	updateInputSize();
 }
-
+var editcustomId = 0
 function silentSendText(text) {
 	if (kolorful) {
 		send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") });
@@ -415,10 +415,18 @@ function silentSendText(text) {
 		send({ cmd: 'emote', text: text });
 	} else {
 		// Hook localCmds
-		if(isSPCmd(text)){
+		if (isSPCmd(text)) {
 			callSPcmd(text)
-		}else{
-			send({ cmd: 'chat', text: text });
+		} else {
+			let chatpack = { 
+				cmd: 'chat',
+				text: text
+			}
+			if (edit_message) {
+				chatpack.customId = editcustomId.toString(36);
+				editcustomId +=1
+			}
+			send(chatpack);
 		}
 	}
 	return text;
