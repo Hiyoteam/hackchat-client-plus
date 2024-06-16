@@ -22,6 +22,11 @@ function nickGetHash(nick) {
 		if (users_[k].nick === nick) return users_[k].hash
 	}
 }
+function nickGetTrip(nick) {
+	for (let k in users_) {
+		if (users_[k].nick === nick) return users_[k].trip
+	}
+}
 
 setInterval(function () {
 	var editTimeout = 6 * 60 * 1000;
@@ -196,7 +201,7 @@ function join(channel, oldNick) {
 
 function nickIgnored(nick) {
 	if (!nick) return false
-	return ignoredUsers.indexOf(nick) >= 0 || ignoredHashs.indexOf(nickGetHash(nick)) >= 0
+	return ignoredUsers.indexOf(nick) >= 0 || ignoredHashs.indexOf(nickGetHash(nick)) >= 0 || ignoredTrips.indexOf(nickGetTrip(nick)) >= 0
 }
 var activedMessages = [];
 var COMMANDS = {
@@ -682,9 +687,17 @@ function getMenuOptions(args) {
 		let hash = nickGetHash(nick);
 		options[ignoredHashs.includes(hash) ? "UnIgnore Hash" : "Ignore Hash"] = (event, nickLinkEl, args) => {
 			let hash = nickGetHash(args.from || args.nick);
-			if (ignoredUsers.includes(hash)) {
+			if (ignoredHashs.includes(hash)) {
 				hashDeignore(hash);
 			} else hashIgnore(hash);
+		}
+		if (args.trip) {
+			options[ignoredTrips.includes(args.trip) ? "UnIgnore Trip" : "Ignore Trip"] = (event, nickLinkEl, args) => {
+				let trip = args.trip
+				if (ignoredTrips.includes(trip)) {
+					tripDeignore(trip);
+				} else tripIgnore(trip);
+			}
 		}
 	}
 	return options;
@@ -756,17 +769,19 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 		":( WHAT ARE YOU DOING???": ()=>{}
 	}
 	for (let k in defMenu) {
-		let option = document.createElement("li");
-		option.onclick = () => {
-			defMenu[k](event, nickLinkEl, args);
+		if (defMenu[k]) {
+			let option = document.createElement("li");
+			option.onclick = () => {
+				defMenu[k](event, nickLinkEl, args);
+			}
+			option.innerText = i18ntranslate(k,['menu']);
+			menuDom.appendChild(option);
 		}
-		option.innerText = i18ntranslate(k,['menu']);
-		menuDom.appendChild(option);
 	}
 	setTimeout(()=>{
 		menuDom.style.display = "block";
 		menuDom.style.top = ((event.clientY + menuDom.clientHeight) > window.innerHeight ? window.innerHeight - menuDom.clientHeight : event.clientY) + 'px';
-		menuDom.style.left = event.clientX + 'px';
+		menuDom.style.left = ((event.clientX + menuDom.clientWidth) > window.innerWidth ? window.innerWidth - menuDom.clientWidth : event.clientX) + 'px';
 		menuDom.scrollTo(0, 0);
 	},100)
 }

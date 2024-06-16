@@ -299,8 +299,40 @@ $('#send').onclick = function () {
 var onlineUsers = []
 var ignoredUsers = []
 var ignoredHashs = []
+var ignoredTrips = []
 var usersInfo = {};
-
+function getUserMenuOptions(nick) {
+	let options = {
+		"Reply": false,
+		"Copy Text": false,
+		"Delete": false
+	}
+	options[ignoredUsers.includes(nick) ? "UnIgnore Nick" : "Ignore Nick"] = (event, nickLinkEl, args) => {
+		let name = args.nick;
+		if (ignoredUsers.includes(nick)) {
+			userDeignore(name);
+		} else userIgnore(name);
+	}
+	let hash = nickGetHash(nick);
+	options[ignoredHashs.includes(hash) ? "UnIgnore Hash" : "Ignore Hash"] = (event, nickLinkEl, args) => {
+		let hash = nickGetHash(args.nick);
+		if (ignoredUsers.includes(hash)) {
+			hashDeignore(hash);
+		} else hashIgnore(hash);
+	}
+	let trip = nickGetTrip(nick);
+	if (trip) {
+		options[ignoredTrips.includes(trip) ? "UnIgnore Trip" : "Ignore Trip"] = (event, nickLinkEl, args) => {
+			if (ignoredTrips.includes(trip)) {
+				tripDeignore(trip);
+			} else tripIgnore(trip);
+		}
+	}
+	options.Invite = (event, nickLinkEl, args) => {
+		userInvite(args.nick)
+	}
+	return options;
+}
 function userAdd(nick, user_info) {
 	let trip = user_info.trip
 
@@ -313,18 +345,17 @@ function userAdd(nick, user_info) {
 	user.textContent = nick;
 
 	user.onclick = function (e) {
+		if (checkIsMobileOrTablet()) {
+			let options = getUserMenuOptions(nick)
+			return openMenu(e, false, { nick: nick }, options);
+		}
 		userInvite(nick)
 	}
 
 	user.oncontextmenu = function (e) {
 		e.preventDefault()
-		if (ignoredUsers.indexOf(nick) > -1) {
-			userDeignore(nick)
-			pushMessage({ nick: '*', text: `Cancelled ignoring nick ${nick}.` })
-		} else {
-			userIgnore(nick)
-			pushMessage({ nick: '*', text: `Ignored nick ${nick}.` })
-		}
+		let options = getUserMenuOptions(nick)
+		return openMenu(e, false, { nick: nick }, options);
 	}
 
 	user.onmouseenter = function (e) {
@@ -426,6 +457,15 @@ function hashIgnore(hash) {
 
 function hashDeignore(hash) {
 	ignoredHashs.splice(ignoredHashs.indexOf(hash))
+}
+
+
+function tripIgnore(trip) {
+	ignoredTrips.push(trip)
+}
+
+function tripDeignore(trip) {
+	ignoredTrips.splice(ignoredTtips.indexOf(trip))
 }
 
 
