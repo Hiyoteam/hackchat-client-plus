@@ -610,7 +610,7 @@ function getMenuOptions(args) {
 			})
 			Dialog(`
 				<div>
-					<button onclick="closeHere(this)" style="float: right;">x</button>
+					<a onclick="closeHere(this)" style="float: right;">x</a>
 				</div>
 				<div>
 					<div style="width: 75px; float: left;">
