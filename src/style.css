@@ -422,3 +422,21 @@ ol ol {
     border-bottom: solid 1px;
   }
 }
+#menu {
+  position: relative;
+  width: 200px;
+  position: fixed;
+  border-radius: 4px;
+  background: #000000aa;
+  line-height: 20px;
+  max-height: 300px;
+  overflow-y: scroll;
+}
+#menu>li {
+  padding: 10px;
+  display: block;
+  cursor: pointer;
+}
+#menu>li:hover {
+  background: #ffffff20;
+}
