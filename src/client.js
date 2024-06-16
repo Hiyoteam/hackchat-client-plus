@@ -558,12 +558,14 @@ function getMenuOptions(args) {
 				editel.style.height = "auto";
 				editel.style.height = editel.scrollHeight + 'px';
 			}
+			editel.autocomplete = "off";
+			editel.spellcheck = "false";
 			editel.addEventListener('input', changev)
 			editelp.classList.add("text");
 			msgbox.parentElement.appendChild(editelp);
 			editelp.appendChild(editelc);
 			editelp.appendChild(editel);
-			editel.addEventListener('blur', ()=>{
+			function donee() {
 				if (editel.value !== origindata) {
 					send({
 						cmd: 'updateMessage',
@@ -575,6 +577,13 @@ function getMenuOptions(args) {
 				editelp.remove();
 				editelc.remove();
 				msgbox.style.display = "";
+			}
+			editel.addEventListener('blur', donee)
+			editel.addEventListener('keydown', (e) => {
+				if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
+					e.preventDefault();
+					donee()
+				}
 			})
 			editel.focus();
 			changev();
