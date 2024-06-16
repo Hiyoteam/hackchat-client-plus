@@ -545,6 +545,7 @@ function getMenuOptions(args) {
 			let editel = document.createElement("textarea");
 			let editelp = document.createElement("p");
 			let editelc = document.createElement("p");
+			editelc.innerHTML = md.render("*Press `Esc` to **cancel**; click outside the **input box** or press `Enter` to **confirm***")
 			let msgbox = nickLinkEl.parentElement.parentElement.querySelector("p");
 			msgbox.style.display = "none";
 			let lasted = activedMessages.filter((an)=>{
@@ -565,8 +566,8 @@ function getMenuOptions(args) {
 			msgbox.parentElement.appendChild(editelp);
 			editelp.appendChild(editelc);
 			editelp.appendChild(editel);
-			function donee() {
-				if (editel.value !== origindata) {
+			function donee(change=true) {
+				if (editel.value !== origindata && change) {
 					send({
 						cmd: 'updateMessage',
 						customId: args.customId,
@@ -583,6 +584,11 @@ function getMenuOptions(args) {
 				if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
 					e.preventDefault();
 					donee()
+				}
+				if (e.keyCode == 27 /* ESC */) {
+					e.preventDefault();
+					editel.removeEventListener('blur', donee)
+					donee(false);
 				}
 			})
 			editel.focus();
@@ -746,6 +752,9 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 	for (let k in options) {
 		defMenu[k] = options[k];
 	}
+	if (args.trip == "preview") defMenu = {
+		":( WHAT ARE YOU DOING???": ()=>{}
+	}
 	for (let k in defMenu) {
 		let option = document.createElement("li");
 		option.onclick = () => {
@@ -843,7 +852,7 @@ function makeTextEl(args, options, date) {
 }
 
 
-function pushMessage(args, options = {}) {
+function pushMessage(args, options = {},padId="messages") {
 	args = hook.run("before", "pushmessage", [args])?.[0] ?? false
 	if (!args) {
 		return //prevented
@@ -892,7 +901,7 @@ function pushMessage(args, options = {}) {
 
 	// Scroll to bottom
 	var atBottom = isAtBottom();
-	$id('messages').appendChild(messageEl);
+	$id(padId).appendChild(messageEl);
 	if (atBottom && myChannel != ''/*Frontpage should not be scrooled*/) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}

@@ -37,6 +37,7 @@
                 ['Send', '发送'],
                 ['Settings', '设置'],
                 ['Can Edit Message', '可编辑消息'],
+                ['Message Preview', '预览消息'],
             ]),
             prompt: new Map([
                 /* Alerts and prompts */
@@ -167,7 +168,8 @@
                 ['Ignore Nick', '屏蔽名称'],
                 ['UnIgnore Hash', '取消屏蔽Hash'],
                 ['Ignore Hash', '屏蔽Hash'],
-		['Update (Edit)', '更新消息（编辑）']
+		['Update (Edit)', '更新消息（编辑）'],
+                [':( WHAT ARE YOU DOING???', ':( 你在做什么？？？']
             ]),
         }
     ]

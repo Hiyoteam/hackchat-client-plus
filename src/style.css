@@ -389,9 +389,9 @@ ol ol {
 /* Mobile style */
 
 @media only screen and (max-width: 600px) {
-  #messages {
+  #messages, #preview {
     border: none;
-    padding: 0.5em;
+    padding: 0 0.5em 0 0.5em;
   }
 
   .message {

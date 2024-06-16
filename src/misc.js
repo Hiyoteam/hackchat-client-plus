@@ -377,8 +377,20 @@ input.onkeydown = function (e) {
 
 		keyActions.tab();
 	}
+	updatePreview()
 }
-
+function updatePreview() {
+	if (message_preview) {
+		$id('preview').innerText = "";
+		if (!input.value) return;
+		pushMessage({
+			trip: 'preview',
+			nick: 'You',
+			text: input.value
+		},{},'preview')
+	}
+}
+input.addEventListener('input', updatePreview)
 function sendInputContent(delay) {
 	let text = input.value;
 	input.value = '';
