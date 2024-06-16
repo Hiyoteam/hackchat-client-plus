@@ -465,7 +465,7 @@ function tripIgnore(trip) {
 }
 
 function tripDeignore(trip) {
-	ignoredTrips.splice(ignoredTtips.indexOf(trip))
+	ignoredTrips.splice(ignoredTrips.indexOf(trip))
 }
 
 
