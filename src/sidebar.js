@@ -197,7 +197,7 @@ registerSetting('soft-mention', false)
 
 registerSetting('auto-precaution', false)
 
-var auto_fold, do_log_messages, should_get_info
+var auto_fold, do_log_messages, should_get_info, edit_message
 
 registerSetting('auto-fold', false, (enabled) => {
 	auto_fold = enabled
@@ -228,6 +228,10 @@ registerSetting('mobile-btn', false, (enabled) => {
 
 registerSetting('should-get-info', false, (enabled) => {
 	should_get_info = enabled
+}, true)
+
+registerSetting('edit-message', false, (enabled) => {
+	edit_message = enabled
 }, true)
 
 /* ---Buttons for some mobile users--- */

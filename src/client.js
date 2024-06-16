@@ -198,7 +198,7 @@ function nickIgnored(nick) {
 	if (!nick) return false
 	return ignoredUsers.indexOf(nick) >= 0 || ignoredHashs.indexOf(nickGetHash(nick)) >= 0
 }
-
+var activedMessages = [];
 var COMMANDS = {
 	chat: function (args, raw) {
 		if (nickIgnored(args.nick)) {
@@ -251,7 +251,14 @@ var COMMANDS = {
 		}
 
 		message.text = newText;
-
+                activedMessages.push({
+			customId: customId,
+			userid: args.userid,
+			text: newText,
+			elem: message.elem,
+			textElem: textElem,
+			time: args.time
+                })
 		// Scroll to bottom if necessary
 		var atBottom = isAtBottom();
 
@@ -490,6 +497,34 @@ function createAt(args) {
 		return;
 	}
 }
+
+///////从 hcwak2 上扣下来的Dialog////////
+function Dialog(code,style,modal,into,timeout) {
+	//closeHere(this) 关闭窗口
+	var dialog = document.createElement('dialog');
+	dialog.innerHTML = code;
+	dialog.style = style;
+	let added = into || document.body
+	added.appendChild(dialog);
+	if (modal) {
+		dialog.showModal();
+	} else {
+		dialog.show();
+	}
+	if (timeout) {
+		setTimeout(()=>{
+			dialog.remove()
+		},timeout)
+	}
+}
+
+function closeHere(event) {
+	if (event instanceof HTMLDialogElement) {
+		event.remove()
+	} else if (event.parentNode) closeHere(event.parentNode)
+}
+///////////////////////////////////////////
+
 function getMenuOptions(args) {
 	let options = {};
 	let nick = args.nick || args.from;
@@ -503,6 +538,123 @@ function getMenuOptions(args) {
 					text: `Failed to copy: ${err.message}`
 			    })
 			});
+		}
+	}
+	if (args.customId) {
+		options["Update (Edit)"] = (event, nickLinkEl, args) => {
+			let editel = document.createElement("textarea");
+			let editelp = document.createElement("p");
+			let editelc = document.createElement("p");
+			let msgbox = nickLinkEl.parentElement.parentElement.querySelector("p");
+			msgbox.style.display = "none";
+			let lasted = activedMessages.filter((an)=>{
+				return an.customId == args.customId && an.userid == args.userid
+			})
+			editel.style.width = "100%";
+			let origindata = ((lasted?lasted[lasted.length-1]:false)||args).text
+			editel.value = origindata;
+			editel.style.padding = "0";
+			function changev() {
+				editel.style.height = "auto";
+				editel.style.height = editel.scrollHeight + 'px';
+			}
+			editel.addEventListener('input', changev)
+			editelp.classList.add("text");
+			msgbox.parentElement.appendChild(editelp);
+			editelp.appendChild(editelc);
+			editelp.appendChild(editel);
+			editel.addEventListener('blur', ()=>{
+				if (editel.value !== origindata) {
+					send({
+						cmd: 'updateMessage',
+						customId: args.customId,
+						mode: 'overwrite',
+						text: editel.value
+					})
+				}
+				editelp.remove();
+				editelc.remove();
+				msgbox.style.display = "";
+			})
+			editel.focus();
+			changev();
+		}
+		options["Update History"] = (event, nickLinkEl, args) => {
+			let updateHistorys = [args];
+			for (let k in activedMessages) {
+				if (activedMessages[k].customId == args.customId && activedMessages[k].userid == args.userid) {
+					updateHistorys.push(activedMessages[k]);
+				}
+			}
+			//原始内容： args.text
+			//Update数组： updateHistorys ，包含了下面结构的OBJ
+			/*
+				customId: customId,
+				userid: 用户id,
+				text: 更新后的内容,
+				elem: 消息源DOM,
+				textElem: 消息内容DOM,
+				time: 时间戳
+			*/
+			let updateInfo = updateHistorys.map((his,i)=>{
+				return `|${i}||`
+			})
+			Dialog(`
+				<div>
+					<button onclick="closeHere(this)" style="float: right;">x</button>
+				</div>
+				<div>
+					<div style="width: 75px; float: left;">
+						<ul id="timeList"></ul>
+					</div>
+					<div id="upcontent" style="margin-left:10px; float: left; background:#ffffff20;padding:0 5px 0 5px;border-radius:2px;margin: 5px;"></div>
+				</div>
+				<div style="width: 50px;">
+					<input type="checkbox" name="raw" id="upraw" style="margin-right:3px;"><label style="vertical-align: 3px;">Raw</label>
+				</div>
+			`,"max-height: 500px;",true);
+			const timeList = document.getElementById('timeList');
+			const content = document.getElementById('upcontent');
+			const upraw = document.getElementById('upraw');
+			upraw.addEventListener('change', () => {
+				linList.forEach((lin) => {
+					if (lin.style.background != "unset") lin.click();
+				})
+			})
+			const linList = [];
+			function createLin(item) {
+				const li = document.createElement('li');
+				li.innerText = new Date(item.time).toLocaleString();
+				li.addEventListener('click', () => {
+					linList.forEach((lin) => {
+						lin.style.background = "unset";
+					})
+					li.style.background = "#ffffff20";
+					renderContent(item.text);
+				});
+				li.style.padding = "2px";
+				li.style.display = "block";
+				li.style["border-radius"] = "2px";
+				timeList.appendChild(li);
+				li.click(); //6的;
+				linList.push(li);
+			}
+			updateHistorys.forEach(item => {
+				createLin(item);
+			});
+
+			function renderContent(text) {
+				if (verifyMessage({ text: text }) && !upraw.checked) {
+					content.innerHTML = md.render(text);
+				} else {
+					content.innerHTML = "";
+					upraw.checked = true;
+					let pElc = document.createElement('p')
+					pElc.appendChild(document.createTextNode(text))
+					pElc.classList.add('break') //make lines broken at newline characters, as this text is not rendered and may contain raw newline characters
+					content.appendChild(pElc)
+				}
+			}
 		}
 	}
 	if (!(args.type == 'whisper' || nick == '*' || nick == '!')) {
@@ -590,7 +742,7 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 		option.onclick = () => {
 			defMenu[k](event, nickLinkEl, args);
 		}
-		option.innerText = k;
+		option.innerText = i18ntranslate(k,['menu']);
 		menuDom.appendChild(option);
 	}
 	setTimeout(()=>{
