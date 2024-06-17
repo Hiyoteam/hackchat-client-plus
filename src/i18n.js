@@ -169,7 +169,10 @@
                 ['UnIgnore Hash', '取消屏蔽Hash'],
                 ['Ignore Hash', '屏蔽Hash'],
 		['Update (Edit)', '更新消息（编辑）'],
-                [':( WHAT ARE YOU DOING???', ':( 你在做什么？？？']
+                [':( WHAT ARE YOU DOING???', ':( 你在做什么？？？'],
+                ['UnIgnore Trip', '取消屏蔽Trip'],
+		['Ignore Trip', '屏蔽Trip'],
+                ['Invite', '邀请']
             ]),
         }
     ]
