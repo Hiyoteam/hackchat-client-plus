@@ -431,6 +431,8 @@ ol ol {
   line-height: 20px;
   max-height: 300px;
   overflow-y: scroll;
+  -ms-overflow-style: none; /* IE 10+ */
+  scrollbar-width: none; /* Firefox */
 }
 #menu>li {
   padding: 10px;
@@ -450,4 +452,8 @@ dialog {
   max-width: 90%;
   max-height: 90vh;
   position: fixed;
+}
+
+#menu::-webkit-scrollbar {
+  display: none; /* Chrome, Safari ºÍ Opera */
 }
