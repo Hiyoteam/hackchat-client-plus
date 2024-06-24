@@ -463,6 +463,7 @@ function updateInputSize() {
 	if (atBottom) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
+	updatePreview();
 }
 
 input.oninput = function () {
