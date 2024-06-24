@@ -584,7 +584,6 @@ function getMenuOptions(args) {
 				editelc.remove();
 				msgbox.style.display = "";
 			}
-			editel.addEventListener('blur', donee)
 			editel.addEventListener('keydown', (e) => {
 				if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
 					e.preventDefault();
