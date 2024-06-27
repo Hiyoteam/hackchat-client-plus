@@ -68,7 +68,7 @@
             system: new Map([
                 /* System messages */
                 ['Users online: ', '在线用户：'],
-                ['Thanks for using hackchat++ client! Source at: ', '感谢使用hackchat++！开源在：'],
+                ['Thanks for using hackchat++ client! Source code at: ', '感谢使用hackchat++！代码开源在：'],
                 [/^([a-zA-Z0-9_]{1,24}) joined$/, '$1 加入了聊天室'],
                 [/^([a-zA-Z0-9_]{1,24}) left$/, '$1 离开了聊天室'],
                 ['You cancelled joining. Press enter at the input field to reconnect.', '你取消了加入。在输入框上按回车可以重新加入。'],
@@ -160,7 +160,7 @@
             menu: new Map([
                 ['Reply', '回复'],
                 ['Copy Text', '复制内容'],
-                ['Delete', '删除'],
+                ['Delete (Only client)', '删除（仅客户端）'],
                 ['Copy Color', '复制颜色'],
                 ['Update History', '消息更新历史'],
                 ['Reply', '回复'],

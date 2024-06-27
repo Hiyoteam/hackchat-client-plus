@@ -143,7 +143,7 @@ function reply(args) {//from crosst.chat
 
 
 	// Add mention when reply to others
-	if (args.nick != myNick.split('#')[0]) {
+	if (args.nick != currentNick) {
 		var nick = args.nick
 		let at = '@'
 		if ($id('soft-mention').checked) { at += ' ' }

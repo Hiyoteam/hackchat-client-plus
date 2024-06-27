@@ -57,6 +57,7 @@ var wasConnected = false;
 
 var isInChannel = false;
 var purgatory = false;
+var currentNick = false;
 
 var shouldAutoReconnect = true;
 
@@ -108,6 +109,7 @@ function join(channel, oldNick) {
 	ws.onclose = function () {
 		hook.run("after", "disconnected", [])
 		isInChannel = false
+		currentNick = false
 
 		if (shouldAutoReconnect) {
 			if (wasConnected) {
@@ -286,10 +288,13 @@ var COMMANDS = {
 		if ((args.type == 'whisper' || args.type == 'invite') && (nickIgnored(args.from))) {
 			return
 		}
-		if (args.type == 'info') {
-			let match = args.text.match(/^.+ is now .+$/)
-			if (match && nickIgnored(match[1])) {
-				return
+		let match = args.text.match(/^([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})$/)
+		if (match?.[2]) {
+			if (match[1] === currentNick) currentNick = match[2];
+			if (nickIgnored(match[1])) {
+				userDeignore(match[1]);
+				userIgnore(metch[2])
+				return;
 			}
 		}
 		args.nick = '*'
@@ -343,7 +348,8 @@ var COMMANDS = {
 			send({ cmd: 'changecolor', color: myColor })
 		}
 
-		isInChannel = true
+		isInChannel = true;
+		currentNick = args.nicks[args.nicks.length-1];
 	},
 
 	onlineAdd: function (args, raw) {
@@ -450,7 +456,7 @@ var COMMANDS = {
 }
 
 function addClassToMessage(element, args) {
-	if (verifyNickname(myNick.split('#')[0]) && args.nick == myNick.split('#')[0]) {
+	if (verifyNickname(currentNick||"i love 4n0n4me") && args.nick == currentNick) {
 		element.classList.add('me');
 	} else if (args.nick == '!') {
 		element.classList.add('warn');
@@ -738,6 +744,10 @@ menuDom.style.display = "none";
 document.addEventListener('click', () => {
 	menuDom.style.display = "none";
 })
+
+function getUpdateMessageLastText(customId,userid) {
+  return activedMessages.reverse().find((msg)=>{return msg.customId == customId && msg.userid == userid})?.text;
+}
 function openMenu(event, nickLinkEl, args, options = {}) {
 	menuDom.innerText = "";
 	let defMenu = {
@@ -745,9 +755,17 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 			createAt(args);
 		},
 		"Reply": (event, nickLinkEl, args) => {
+			if (args.customId) {
+				let newtext = getUpdateMessageLastText(args.customId, args.userid);
+				if (newtext) args.text = newtext;
+			}
 			reply(args);
 		},
 		"Copy Text": (event, nickLinkEl, args) => {
+			if (args.customId) {
+				let newtext = getUpdateMessageLastText(args.customId, args.userid);
+				if (newtext) args.text = newtext;
+			}
 			navigator.clipboard.writeText(args.text)
 			.then(() => {})
 			.catch(err => {
@@ -757,7 +775,7 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 			    })
 			});
 		},
-		"Delete": (event, nickLinkEl, args) => {
+		"Delete (Only client)": (event, nickLinkEl, args) => {
 			nickLinkEl.parentElement.parentElement.remove()
 		},
 	}
@@ -882,7 +900,7 @@ function pushMessage(args, options = {},padId="messages") {
 
 	if (
 		typeof (myNick) === 'string' && (
-			args.text.match(new RegExp('@' + myNick.split('#')[0] + '\\b', "gi")) ||
+			args.text.match(new RegExp('@' + currentNick + '\\b', "gi")) ||
 			((args.type === "whisper" || args.type === "invite") && args.from)
 		)
 	) {
