@@ -38,6 +38,7 @@
                 ['Settings', '设置'],
                 ['Can Edit Message', '可编辑消息'],
                 ['Message Preview', '预览消息'],
+		['Right-click menu', '右键菜单'],
             ]),
             prompt: new Map([
                 /* Alerts and prompts */

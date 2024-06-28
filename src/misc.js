@@ -78,6 +78,7 @@ var lastSentPos = 0;
 
 var kolorful = false
 var devMode = false
+var right_click_menu = true
 
 //message log
 var jsonLog = '';
