@@ -716,7 +716,7 @@ function makeNickEl(args, options, date) {
 	//tweaked code from crosst.chat
 	nickLinkEl.onclick = function (e) {
 		//right-click menu
-		if (checkIsMobileOrTablet()) {
+		if (checkIsMobileOrTablet() && right_click_menu) {
 			let options = getMenuOptions(args)
 			return openMenu(e, nickLinkEl, args, options);
 		}
@@ -726,9 +726,10 @@ function makeNickEl(args, options, date) {
 	// Mention someone when right-clicking
 	nickLinkEl.oncontextmenu = function (e) {
 		e.preventDefault();
-		//reply(args)
-		let options = getMenuOptions(args);
-		openMenu(e, nickLinkEl, args, options);
+		if (right_click_menu) {
+			let options = getMenuOptions(args);
+			openMenu(e, nickLinkEl, args, options);
+		} else reply(args)
 	}
 
 	nickLinkEl.title = date.toLocaleString();

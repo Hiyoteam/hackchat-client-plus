@@ -239,6 +239,11 @@ registerSetting('message-preview', false, (enabled) => {
 	message_preview = enabled
 }, true)
 
+registerSetting('right-click-menu', true, (enabled) => {
+	right_click_menu = enabled
+}, true)
+
+
 /* ---Buttons for some mobile users--- */
 
 function createMobileButton(text, callback, id) {
@@ -346,7 +351,7 @@ function userAdd(nick, user_info) {
 	user.textContent = nick;
 
 	user.onclick = function (e) {
-		if (checkIsMobileOrTablet()) {
+		if (checkIsMobileOrTablet() && right_click_menu) {
 			let options = getUserMenuOptions(nick)
 			return openMenu(e, false, { nick: nick }, options);
 		}
@@ -355,8 +360,18 @@ function userAdd(nick, user_info) {
 
 	user.oncontextmenu = function (e) {
 		e.preventDefault()
-		let options = getUserMenuOptions(nick)
-		return openMenu(e, false, { nick: nick }, options);
+		if (right_click_menu) {
+			let options = getUserMenuOptions(nick)
+			return openMenu(e, false, { nick: nick }, options);
+		} else {
+			if (nickIgnored(nick)) {
+				userDeignore(nick)
+				pushMessage({ nick: '*', text: `Cancelled ignoring nick ${nick}.` })
+			} else {
+				userIgnore(nick)
+				pushMessage({ nick: '*', text: `Ignored nick ${nick}.` })
+			}
+		}
 	}
 
 	user.onmouseenter = function (e) {
