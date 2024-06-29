@@ -311,7 +311,7 @@ function getUserMenuOptions(nick) {
 	let options = {
 		"Reply": false,
 		"Copy Text": false,
-		"Delete": false
+		"Delete (Only client)": false
 	}
 	options[ignoredUsers.includes(nick) ? "UnIgnore Nick" : "Ignore Nick"] = (event, nickLinkEl, args) => {
 		let name = args.nick;
