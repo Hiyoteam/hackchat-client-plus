@@ -887,7 +887,7 @@ function makeTextEl(args, options, date) {
 }
 
 
-function pushMessage(args, options = {},padId="messages") {
+function pushMessage(args, options = {},padId="messages",makeunread=true) {
 	args = hook.run("before", "pushmessage", [args])?.[0] ?? false
 	if (!args) {
 		return //prevented
@@ -941,8 +941,10 @@ function pushMessage(args, options = {},padId="messages") {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
-	unread += 1;
-	updateTitle();
+	if (makeunread) {
+		unread += 1;
+		updateTitle();
+	}
 
 	if (do_log_messages && args.nick && args.text) {
 		readableLog += `\n[${date.toLocaleString()}] `
