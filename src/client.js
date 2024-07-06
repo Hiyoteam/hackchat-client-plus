@@ -15,7 +15,7 @@
 var checkActiveCacheInterval = 30 * 1000;
 var activeMessages = [];
 var users_ = []
-
+var editboxs = [];
 
 function nickGetHash(nick) {
 	for (let k in users_) {
@@ -494,17 +494,17 @@ function makeTripEl(args, options, date) {
 	tripEl.classList.add('trip');
 	return tripEl
 }
-function createAt(args) {
+function createAt(args, inputEl = input) {
 	if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
-		insertAtCursor(args.text);
-		$id('chatinput').focus();
+		insertAtCursor(args.text, inputEl);
+		inputEl.focus();
 		return;
 	} else {
 		var nick = args.nick
 		let at = '@'
 		if ($id('soft-mention').checked) { at += ' ' }
-		insertAtCursor(at + nick + ' ');
-		input.focus();
+		insertAtCursor(at + nick + ' ', inputEl);
+		inputEl.focus();
 		return;
 	}
 }
@@ -554,6 +554,7 @@ function getMenuOptions(args) {
 	if (args.customId) {
 		options["Update (Edit)"] = (event, nickLinkEl, args) => {
 			let editel = document.createElement("textarea");
+			editboxs.push(editel);
 			let editelp = document.createElement("p");
 			let editelc = document.createElement("p");
 			editelc.innerHTML = md.render("*Press `Esc` to **cancel**; click outside the **input box** or press `Enter` to **confirm***")
@@ -588,6 +589,7 @@ function getMenuOptions(args) {
 				}
 				editelp.remove();
 				editelc.remove();
+				editboxs.splice(editboxs.indexOf(editel))
 				msgbox.style.display = "";
 			}
 			editel.addEventListener('keydown', (e) => {
@@ -721,7 +723,7 @@ function makeNickEl(args, options, date) {
 			return openMenu(e, nickLinkEl, args, options);
 		}
 		// Reply to a whisper or info is meaningless
-		createAt(args);
+		createAt(args, geteditbox()||input);
 	}
 	// Mention someone when right-clicking
 	nickLinkEl.oncontextmenu = function (e) {
@@ -729,7 +731,14 @@ function makeNickEl(args, options, date) {
 		if (right_click_menu) {
 			let options = getMenuOptions(args);
 			openMenu(e, nickLinkEl, args, options);
-		} else reply(args)
+		} else {
+			let args_ = {...args} // clone
+			if (args_.customId) {
+				let newtext = getUpdateMessageLastText(args_.customId, args_.userid);
+				if (newtext) args_.text = newtext;
+			}
+			reply(args_, geteditbox()||input)
+		}
 	}
 
 	nickLinkEl.title = date.toLocaleString();
@@ -753,16 +762,18 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 	menuDom.innerText = "";
 	let defMenu = {
 		"At": (event, nickLinkEl, args) => {
-			createAt(args);
+			createAt(args, geteditbox()||input);
 		},
-		"Reply": (event, nickLinkEl, args) => {
+		"Reply": (event, nickLinkEl, _args) => {
+			let args = {..._args} // clone
 			if (args.customId) {
 				let newtext = getUpdateMessageLastText(args.customId, args.userid);
 				if (newtext) args.text = newtext;
 			}
-			reply(args);
+			reply(args, geteditbox()||input);
 		},
-		"Copy Text": (event, nickLinkEl, args) => {
+		"Copy Text": (event, nickLinkEl, _args) => {
+			let args = {..._args} // clone
 			if (args.customId) {
 				let newtext = getUpdateMessageLastText(args.customId, args.userid);
 				if (newtext) args.text = newtext;
@@ -802,6 +813,10 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 		menuDom.style.left = ((event.clientX + menuDom.clientWidth) > window.innerWidth ? window.innerWidth - menuDom.clientWidth : event.clientX) + 'px';
 		menuDom.scrollTo(0, 0);
 	},100)
+}
+function geteditbox() {
+  if (editboxs.length == 0) return null;
+  return editboxs[editboxs.length-1]
 }
 
 function makeTextEl(args, options, date) {
@@ -885,7 +900,7 @@ function makeTextEl(args, options, date) {
 }
 
 
-function pushMessage(args, options = {},padId="messages") {
+function pushMessage(args, options = {},padId="messages",makeunread=true) {
 	args = hook.run("before", "pushmessage", [args])?.[0] ?? false
 	if (!args) {
 		return //prevented
@@ -939,8 +954,10 @@ function pushMessage(args, options = {},padId="messages") {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
-	unread += 1;
-	updateTitle();
+	if (makeunread) {
+		unread += 1;
+		updateTitle();
+	}
 
 	if (do_log_messages && args.nick && args.text) {
 		readableLog += `\n[${date.toLocaleString()}] `
