@@ -15,7 +15,7 @@
 var checkActiveCacheInterval = 30 * 1000;
 var activeMessages = [];
 var users_ = []
-
+var editbox = null;
 
 function nickGetHash(nick) {
 	for (let k in users_) {
@@ -494,17 +494,17 @@ function makeTripEl(args, options, date) {
 	tripEl.classList.add('trip');
 	return tripEl
 }
-function createAt(args) {
+function createAt(args, inputEl = input) {
 	if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
-		insertAtCursor(args.text);
-		$id('chatinput').focus();
+		insertAtCursor(args.text, inputEl);
+		inputEl.focus();
 		return;
 	} else {
 		var nick = args.nick
 		let at = '@'
 		if ($id('soft-mention').checked) { at += ' ' }
-		insertAtCursor(at + nick + ' ');
-		input.focus();
+		insertAtCursor(at + nick + ' ', inputEl);
+		inputEl.focus();
 		return;
 	}
 }
@@ -554,6 +554,7 @@ function getMenuOptions(args) {
 	if (args.customId) {
 		options["Update (Edit)"] = (event, nickLinkEl, args) => {
 			let editel = document.createElement("textarea");
+			editbox = editel;
 			let editelp = document.createElement("p");
 			let editelc = document.createElement("p");
 			editelc.innerHTML = md.render("*Press `Esc` to **cancel**; click outside the **input box** or press `Enter` to **confirm***")
@@ -588,6 +589,7 @@ function getMenuOptions(args) {
 				}
 				editelp.remove();
 				editelc.remove();
+				editbox = null;
 				msgbox.style.display = "";
 			}
 			editel.addEventListener('keydown', (e) => {
@@ -721,7 +723,7 @@ function makeNickEl(args, options, date) {
 			return openMenu(e, nickLinkEl, args, options);
 		}
 		// Reply to a whisper or info is meaningless
-		createAt(args);
+		createAt(args, editbox||input);
 	}
 	// Mention someone when right-clicking
 	nickLinkEl.oncontextmenu = function (e) {
@@ -729,7 +731,7 @@ function makeNickEl(args, options, date) {
 		if (right_click_menu) {
 			let options = getMenuOptions(args);
 			openMenu(e, nickLinkEl, args, options);
-		} else reply(args)
+		} else reply(args, editbox||input)
 	}
 
 	nickLinkEl.title = date.toLocaleString();
@@ -753,7 +755,7 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 	menuDom.innerText = "";
 	let defMenu = {
 		"At": (event, nickLinkEl, args) => {
-			createAt(args);
+			createAt(args, editbox||input);
 		},
 		"Reply": (event, nickLinkEl, _args) => {
 			let args = {..._args} // clone
@@ -761,7 +763,7 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 				let newtext = getUpdateMessageLastText(args.customId, args.userid);
 				if (newtext) args.text = newtext;
 			}
-			reply(args);
+			reply(args, editbox||input);
 		},
 		"Copy Text": (event, nickLinkEl, _args) => {
 			let args = {..._args} // clone

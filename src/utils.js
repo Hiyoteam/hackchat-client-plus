@@ -242,16 +242,16 @@ function msgLineLength(text) {
 
 var input = $id('chatinput');
 
-function insertAtCursor(text) {
-	var start = input.selectionStart || 0;
-	var before = input.value.substr(0, start);
-	var after = input.value.substr(start);
+function insertAtCursor(text, inputEl = input) {
+	var start = inputEl.selectionStart || 0;
+	var before = inputEl.value.substr(0, start);
+	var after = inputEl.value.substr(start);
 
 	before += text;
-	input.value = before + after;
-	input.selectionStart = input.selectionEnd = before.length;
+	inputEl.value = before + after;
+	inputEl.selectionStart = inputEl.selectionEnd = before.length;
 
-	updateInputSize();
+	updateInputSize(inputEl);
 }
 
 function backspaceAtCursor(length = 1) {

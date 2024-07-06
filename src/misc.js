@@ -102,7 +102,7 @@ var seconds = {
 var lastMentioned = ''
 
 
-function reply(args) {//from crosst.chat
+function reply(args, inputEl = input) {//from crosst.chat
 	let replyText = '';
 	let originalText = args.text;
 	let overlongText = false;
@@ -152,11 +152,11 @@ function reply(args) {//from crosst.chat
 	}
 
 	// Insert reply text
-	replyText += input.value;
+	replyText += inputEl.value;
 
-	input.value = '';
-	insertAtCursor(replyText);
-	input.focus();
+	inputEl.value = '';
+	insertAtCursor(replyText, inputEl);
+	inputEl.focus();
 }
 
 /* ---Session Command--- */
@@ -453,11 +453,11 @@ function checkIsMobileOrTablet() {
 
 // const isMobile = checkIsMobileOrTablet()
 
-function updateInputSize() {
+function updateInputSize(inputEl = input) {
 	var atBottom = isAtBottom();
 
-	input.style.height = 0;
-	input.style.height = input.scrollHeight + 'px';
+	inputEl.style.height = 0;
+	inputEl.style.height = inputEl.scrollHeight + 'px';
 
 	document.body.style.marginBottom = $id('footer').offsetHeight + 'px';
 
