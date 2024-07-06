@@ -755,14 +755,16 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 		"At": (event, nickLinkEl, args) => {
 			createAt(args);
 		},
-		"Reply": (event, nickLinkEl, args) => {
+		"Reply": (event, nickLinkEl, _args) => {
+			let args = {..._args} // clone
 			if (args.customId) {
 				let newtext = getUpdateMessageLastText(args.customId, args.userid);
 				if (newtext) args.text = newtext;
 			}
 			reply(args);
 		},
-		"Copy Text": (event, nickLinkEl, args) => {
+		"Copy Text": (event, nickLinkEl, _args) => {
+			let args = {..._args} // clone
 			if (args.customId) {
 				let newtext = getUpdateMessageLastText(args.customId, args.userid);
 				if (newtext) args.text = newtext;
