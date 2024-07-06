@@ -731,7 +731,14 @@ function makeNickEl(args, options, date) {
 		if (right_click_menu) {
 			let options = getMenuOptions(args);
 			openMenu(e, nickLinkEl, args, options);
-		} else reply(args, editbox||input)
+		} else {
+			let args_ = {...args} // clone
+			if (args_.customId) {
+				let newtext = getUpdateMessageLastText(args_.customId, args_.userid);
+				if (newtext) args_.text = newtext;
+			}
+			reply(args_, editbox||input)
+		}
 	}
 
 	nickLinkEl.title = date.toLocaleString();
