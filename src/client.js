@@ -999,7 +999,7 @@ function pushMessage(args, options = {},padId="messages",makeunread=true,in_log=
 		updateTitle();
 	}
 
-	if (do_log_messages && args.nick && args.text & in_log) {
+	if (do_log_messages && args.nick && args.text && in_log) {
 		readableLog += `\n[${date.toLocaleString()}] `
 		if (args.mod) { readableLog += '(mod) ' }
 		if (args.color) { readableLog += '(color:' + args.color + ') ' }
