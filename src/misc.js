@@ -388,7 +388,7 @@ function updatePreview() {
 			trip: 'preview',
 			nick: 'You',
 			text: input.value
-		},{},'preview',false)
+		},{},'preview',false,false)
 	}
 }
 input.addEventListener('input', updatePreview)
