@@ -1,9 +1,9 @@
 ﻿//https://github.com/hack-chat/main/pull/184
 //select "chatinput" on "/"
 document.addEventListener("keydown", e => {
-	if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
+	if (e.key === '/' && (editboxs.length > 0 ? editboxs[editboxs.length-1] : null || document.getElementById("chatinput")) != document.activeElement) {
 		e.preventDefault();
-		document.getElementById("chatinput").focus();
+		(editboxs.length > 0 ? editboxs[editboxs.length-1] : null || document.getElementById("chatinput")).focus();
 	}
 });
 
