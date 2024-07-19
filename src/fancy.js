@@ -159,7 +159,7 @@
 			} else {
 				debugMode = true
 				pushMessage({ nick: '*', text: 'Developer mode has been enabled.' })
-				pushMessage({ nick: '!', text: 'Do not keep developer mode enabled for too long. After using it, please refresh immediately to restore protection.'})
+				pushMessage({ nick: '!', text: 'Do not keep developer mode enabled for too long. After using it, please refresh immediately to restore protection.' })
 				run.eval = (...args) => {
 					try {
 						let rollback = eval(args.join(" "))
@@ -175,7 +175,7 @@
 				let erudaDOM = document.createElement("script");
 				erudaDOM.setAttribute("src", "./eruda.js")
 				erudaDOM.setAttribute("type", "application/javascript");
-				erudaDOM.onload = function() {
+				erudaDOM.onload = function () {
 					eruda.init();
 				}
 				document.getElementsByTagName('head')[0].appendChild(erudaDOM);

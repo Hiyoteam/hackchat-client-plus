@@ -1,48 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HC++ Rescue Mode</title>
 </head>
+
 <body style="padding: 4px; display: none;">
     <h1>HC++ Rescue Mode</h1>
     <hr>
     <h2>Quick Actions</h2>
     <button onclick="localStorage.clear();alert('Done.')">Clear localStorage</button></br>
-    <button onclick="alert('Your plugins:\n'+JSON.parse(localStorage['plugins']).join('\n'))">List all plugins</button></br>
+    <button onclick="alert('Your plugins:\n'+JSON.parse(localStorage['plugins']).join('\n'))">List all
+        plugins</button></br>
     <button onclick="localStorage['plugins']='[]'">Remove all plugins</button></br>
     <script>
-        if(!document.location.hash){
-            document.querySelector("body").style.display="block"
-        }else{
+        if (!document.location.hash) {
+            document.querySelector("body").style.display = "block"
+        } else {
             //run action
-            var actions=document.location.hash.slice(1).split(",")
-            actions.forEach(function(e){
-                let action=e.split("?")[0]
-                let args=e.split("?").slice(1).join("?")
-                if(["remove-plugin"].indexOf(action) != -1){
-                    if(action=="remove-plugin"){
-                        var news=[]
-                        JSON.parse(localStorage['plugins']).forEach(function(el){
-                            if(el!=decodeURIComponent(args)){
+            var actions = document.location.hash.slice(1).split(",")
+            actions.forEach(function (e) {
+                let action = e.split("?")[0]
+                let args = e.split("?").slice(1).join("?")
+                if (["remove-plugin"].indexOf(action) != -1) {
+                    if (action == "remove-plugin") {
+                        var news = []
+                        JSON.parse(localStorage['plugins']).forEach(function (el) {
+                            if (el != decodeURIComponent(args)) {
                                 news.push(el)
                             }
                         })
-                        localStorage['plugins']=JSON.stringify(news)
+                        localStorage['plugins'] = JSON.stringify(news)
                     }
-                }else{
-                var other_map={
-                    "clear-localstorage":0,
-                    "list-plugins":1,
-                    "remove-plugins":2
+                } else {
+                    var other_map = {
+                        "clear-localstorage": 0,
+                        "list-plugins": 1,
+                        "remove-plugins": 2
+                    }
+                    document.querySelectorAll("button")[other_map[action]].click();
                 }
-                document.querySelectorAll("button")[other_map[action]].click();
-            }
             })
             alert("Actions done.")
             window.close()
         }
     </script>
 </body>
+
 </html>
