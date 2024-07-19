@@ -30,42 +30,42 @@ function nickGetTrip(nick) {
 
 // 笑死，还是变成了内置函数
 window.camoFetch = (url, options) => {
-    let index = 0;
+	let index = 0;
 
-    function doFetch() {
-        const camoUrl = camoAddrs[index % camoAddrs.length] + "?proxyUrl=" + encodeURIComponent(url);
-        return fetch(camoUrl, options)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Request failed");
-                }
-                return response;
-            })
-            .catch(error => {
-                index++;
-                if (index < camoAddrs.length) {
-                    return doFetch();
-                } else {
-                    throw new Error("All Camo addresses failed");
-                }
-            });
-    }
+	function doFetch() {
+		const camoUrl = camoAddrs[index % camoAddrs.length] + "?proxyUrl=" + encodeURIComponent(url);
+		return fetch(camoUrl, options)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Request failed");
+				}
+				return response;
+			})
+			.catch(error => {
+				index++;
+				if (index < camoAddrs.length) {
+					return doFetch();
+				} else {
+					throw new Error("All Camo addresses failed");
+				}
+			});
+	}
 
-    const promise = doFetch();
+	const promise = doFetch();
 
-    // 返回 promise 对象，支持 .then 回调
-    if (!options || !options.await) {
-        return promise;
-    }
+	// 返回 promise 对象，支持 .then 回调
+	if (!options || !options.await) {
+		return promise;
+	}
 
-    // 如果 options 中包含 await 属性，支持 await 等待
-    return (async () => {
-        try {
-            return await promise;
-        } catch (error) {
-            throw error;
-        }
-    })();
+	// 如果 options 中包含 await 属性，支持 await 等待
+	return (async () => {
+		try {
+			return await promise;
+		} catch (error) {
+			throw error;
+		}
+	})();
 }
 
 setInterval(function () {
@@ -298,14 +298,14 @@ var COMMANDS = {
 		}
 
 		message.text = newText;
-                activedMessages.push({
+		activedMessages.push({
 			customId: customId,
 			userid: args.userid,
 			text: newText,
 			elem: message.elem,
 			textElem: textElem,
 			time: args.time
-                })
+		})
 		// Scroll to bottom if necessary
 		var atBottom = isAtBottom();
 
@@ -389,7 +389,7 @@ var COMMANDS = {
 		}
 
 		isInChannel = true;
-		currentNick = args.nicks[args.nicks.length-1];
+		currentNick = args.nicks[args.nicks.length - 1];
 	},
 
 	onlineAdd: function (args, raw) {
@@ -496,7 +496,7 @@ var COMMANDS = {
 }
 
 function addClassToMessage(element, args) {
-	if (verifyNickname(currentNick||"i love 4n0n4me") && args.nick == currentNick) {
+	if (verifyNickname(currentNick || "i love 4n0n4me") && args.nick == currentNick) {
 		element.classList.add('me');
 	} else if (args.nick == '!') {
 		element.classList.add('warn');
@@ -550,7 +550,7 @@ function createAt(args, inputEl = input) {
 }
 
 ///////从 hcwak2 上扣下来的Dialog////////
-function Dialog(code,style,modal,into,timeout) {
+function Dialog(code, style, modal, into, timeout) {
 	//closeHere(this) 关闭窗口
 	var dialog = document.createElement('dialog');
 	dialog.innerHTML = code;
@@ -563,9 +563,9 @@ function Dialog(code,style,modal,into,timeout) {
 		dialog.show();
 	}
 	if (timeout) {
-		setTimeout(()=>{
+		setTimeout(() => {
 			dialog.remove()
-		},timeout)
+		}, timeout)
 	}
 }
 
@@ -582,13 +582,13 @@ function getMenuOptions(args) {
 	if (args.color) {
 		options["Copy Color"] = (event, nickLinkEl, args) => {
 			navigator.clipboard.writeText(args.color)
-			.then(() => {})
-			.catch(err => {
-			    pushMessage({
-			  	    nick: '!',
-					text: `Failed to copy: ${err.message}`
-			    })
-			});
+				.then(() => { })
+				.catch(err => {
+					pushMessage({
+						nick: '!',
+						text: `Failed to copy: ${err.message}`
+					})
+				});
 		}
 	}
 	if (args.customId) {
@@ -600,11 +600,11 @@ function getMenuOptions(args) {
 			editelc.innerHTML = md.render("*Press `Esc` to **cancel**; click outside the **input box** or press `Enter` to **confirm***")
 			let msgbox = nickLinkEl.parentElement.parentElement.querySelector("p");
 			msgbox.style.display = "none";
-			let lasted = activedMessages.filter((an)=>{
+			let lasted = activedMessages.filter((an) => {
 				return an.customId == args.customId && an.userid == args.userid
 			})
 			editel.style.width = "100%";
-			let origindata = ((lasted?lasted[lasted.length-1]:false)||args).text
+			let origindata = ((lasted ? lasted[lasted.length - 1] : false) || args).text
 			editel.value = origindata;
 			editel.style.padding = "0";
 			function changev() {
@@ -618,7 +618,7 @@ function getMenuOptions(args) {
 			msgbox.parentElement.appendChild(editelp);
 			editelp.appendChild(editelc);
 			editelp.appendChild(editel);
-			function donee(change=true) {
+			function donee(change = true) {
 				if (editel.value !== origindata && change) {
 					send({
 						cmd: 'updateMessage',
@@ -663,7 +663,7 @@ function getMenuOptions(args) {
 				textElem: 消息内容DOM,
 				time: 时间戳
 			*/
-			let updateInfo = updateHistorys.map((his,i)=>{
+			let updateInfo = updateHistorys.map((his, i) => {
 				return `|${i}||`
 			})
 			Dialog(`
@@ -679,7 +679,7 @@ function getMenuOptions(args) {
 				<div style="width: 50px;">
 					<input type="checkbox" name="raw" id="upraw" style="margin-right:3px;"><label style="vertical-align: 3px;">Raw</label>
 				</div>
-			`,"max-height: 500px;",true);
+			`, "max-height: 500px;", true);
 			const timeList = document.getElementById('timeList');
 			const content = document.getElementById('upcontent');
 			const upraw = document.getElementById('upraw');
@@ -763,7 +763,7 @@ function makeNickEl(args, options, date) {
 			return openMenu(e, nickLinkEl, args, options);
 		}
 		// Reply to a whisper or info is meaningless
-		createAt(args, geteditbox()||input);
+		createAt(args, geteditbox() || input);
 	}
 	// Mention someone when right-clicking
 	nickLinkEl.oncontextmenu = function (e) {
@@ -772,12 +772,12 @@ function makeNickEl(args, options, date) {
 			let options = getMenuOptions(args);
 			openMenu(e, nickLinkEl, args, options);
 		} else {
-			let args_ = {...args} // clone
+			let args_ = { ...args } // clone
 			if (args_.customId) {
 				let newtext = getUpdateMessageLastText(args_.customId, args_.userid);
 				if (newtext) args_.text = newtext;
 			}
-			reply(args_, geteditbox()||input)
+			reply(args_, geteditbox() || input)
 		}
 	}
 
@@ -795,37 +795,37 @@ document.addEventListener('click', () => {
 	menuDom.style.display = "none";
 })
 
-function getUpdateMessageLastText(customId,userid) {
-  return activedMessages.reverse().find((msg)=>{return msg.customId == customId && msg.userid == userid})?.text;
+function getUpdateMessageLastText(customId, userid) {
+	return activedMessages.reverse().find((msg) => { return msg.customId == customId && msg.userid == userid })?.text;
 }
 function openMenu(event, nickLinkEl, args, options = {}) {
 	menuDom.innerText = "";
 	let defMenu = {
 		"At": (event, nickLinkEl, args) => {
-			createAt(args, geteditbox()||input);
+			createAt(args, geteditbox() || input);
 		},
 		"Reply": (event, nickLinkEl, _args) => {
-			let args = {..._args} // clone
+			let args = { ..._args } // clone
 			if (args.customId) {
 				let newtext = getUpdateMessageLastText(args.customId, args.userid);
 				if (newtext) args.text = newtext;
 			}
-			reply(args, geteditbox()||input);
+			reply(args, geteditbox() || input);
 		},
 		"Copy Text": (event, nickLinkEl, _args) => {
-			let args = {..._args} // clone
+			let args = { ..._args } // clone
 			if (args.customId) {
 				let newtext = getUpdateMessageLastText(args.customId, args.userid);
 				if (newtext) args.text = newtext;
 			}
 			navigator.clipboard.writeText(args.text)
-			.then(() => {})
-			.catch(err => {
-			    pushMessage({
-			  	    nick: '!',
-					text: `Failed to copy: ${err.message}`
-			    })
-			});
+				.then(() => { })
+				.catch(err => {
+					pushMessage({
+						nick: '!',
+						text: `Failed to copy: ${err.message}`
+					})
+				});
 		},
 		"Delete (Only client)": (event, nickLinkEl, args) => {
 			nickLinkEl.parentElement.parentElement.remove()
@@ -835,7 +835,7 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 		defMenu[k] = options[k];
 	}
 	if (args.trip == "preview") defMenu = {
-		":( WHAT ARE YOU DOING???": ()=>{}
+		":( WHAT ARE YOU DOING???": () => { }
 	}
 	for (let k in defMenu) {
 		if (defMenu[k]) {
@@ -843,20 +843,20 @@ function openMenu(event, nickLinkEl, args, options = {}) {
 			option.onclick = () => {
 				defMenu[k](event, nickLinkEl, args);
 			}
-			option.innerText = i18ntranslate(k,['menu']);
+			option.innerText = i18ntranslate(k, ['menu']);
 			menuDom.appendChild(option);
 		}
 	}
-	setTimeout(()=>{
+	setTimeout(() => {
 		menuDom.style.display = "block";
 		menuDom.style.top = ((event.clientY + menuDom.clientHeight) > window.innerHeight ? window.innerHeight - menuDom.clientHeight : event.clientY) + 'px';
 		menuDom.style.left = ((event.clientX + menuDom.clientWidth) > window.innerWidth ? window.innerWidth - menuDom.clientWidth : event.clientX) + 'px';
 		menuDom.scrollTo(0, 0);
-	},100)
+	}, 100)
 }
 function geteditbox() {
-  if (editboxs.length == 0) return null;
-  return editboxs[editboxs.length-1]
+	if (editboxs.length == 0) return null;
+	return editboxs[editboxs.length - 1]
 }
 
 function makeTextEl(args, options, date) {
@@ -940,7 +940,7 @@ function makeTextEl(args, options, date) {
 }
 
 
-function pushMessage(args, options = {},padId="messages",makeunread=true,in_log=true) {
+function pushMessage(args, options = {}, padId = "messages", makeunread = true, in_log = true) {
 	args = hook.run("before", "pushmessage", [args])?.[0] ?? false
 	if (!args) {
 		return //prevented

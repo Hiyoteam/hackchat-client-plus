@@ -1,9 +1,9 @@
 ﻿//https://github.com/hack-chat/main/pull/184
 //select "chatinput" on "/"
 document.addEventListener("keydown", e => {
-	if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
+	if (e.key === '/' && (editboxs.length > 0 ? editboxs[editboxs.length - 1] : null || document.getElementById("chatinput")) != document.activeElement) {
 		e.preventDefault();
-		document.getElementById("chatinput").focus();
+		(editboxs.length > 0 ? editboxs[editboxs.length - 1] : null || document.getElementById("chatinput")).focus();
 	}
 });
 
@@ -388,7 +388,7 @@ function updatePreview() {
 			trip: 'preview',
 			nick: 'You',
 			text: input.value
-		},{},'preview',false,false)
+		}, {}, 'preview', false, false)
 	}
 }
 input.addEventListener('input', updatePreview)
@@ -431,13 +431,13 @@ function silentSendText(text) {
 		if (isSPCmd(text)) {
 			callSPcmd(text)
 		} else {
-			let chatpack = { 
+			let chatpack = {
 				cmd: 'chat',
 				text: text
 			}
 			if (edit_message) {
 				chatpack.customId = editcustomId.toString(36);
-				editcustomId +=1
+				editcustomId += 1
 			}
 			send(chatpack);
 		}
