@@ -188,6 +188,18 @@ pre.captcha {
   background-size: 400% 100%;
 }
 
+.muidar {
+  background: linear-gradient(219deg, 
+        #186cb8 19%, transparent 19%, transparent 20%, 
+        #2a9a9f 20%, #2a9a9f 39%, transparent 39%, transparent 40%, 
+        #f1b211 40%, #f1b211 59%, transparent 59%, transparent 60%, 
+        #e83611 60%, #e83611 79%, transparent 79%, transparent 80%, 
+        #f9002f 80%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+}
+
 @keyframes rainbow_animation {
 
   0%,
