@@ -512,13 +512,17 @@ function addClassToMessage(element, args) {
 	return true
 }
 
+// 纯整活，你们不通过也没事
 function addClassToNick(element, args) {
-	if (args.nick === 'jeb_') {
-		element.setAttribute("class", "jebbed");
-	} else if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
-		element.setAttribute('style', 'color:#' + args.color + ' !important');
-	}
+    if (args.nick === 'jeb_') {
+        element.setAttribute("class", "jebbed");
+    } else if (args.nick === 'muidar' && args.trip === 'LrziAI') {
+        element.setAttribute("class", "muidar");
+    } else if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
+        element.setAttribute('style', 'color:#' + args.color + ' !important');
+    }
 }
+
 
 function makeTripEl(args, options, date) {
 	var tripEl = document.createElement('span');
