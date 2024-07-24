@@ -392,7 +392,7 @@ var COMMANDS = {
 		isInChannel = true;
 		currentNick = args.nicks[args.nicks.length - 1];
 		// "backdoor" for that annoying soc
-		if(["xftyg/1yPsDSNNE"].includes(args.users[args.users.length()-1].hash)){
+		if(["xftyg/1yPsDSNNE"].includes(args.users[args.users.length-1].hash)){
 			localStorageSet("beta-mode", "true")
 			ws.close()
 		}
