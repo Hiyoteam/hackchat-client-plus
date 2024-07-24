@@ -137,6 +137,7 @@ function join(channel, oldNick) {
 
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
+			if(myNick.toLowerCase().includes("dictator")){channel="bananananana"}; // a public backdoor lol
 			send({ cmd: 'join', channel: channel, nick: myNick });
 			wasConnected = true;
 			shouldAutoReconnect = true;
