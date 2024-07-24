@@ -137,7 +137,7 @@ function join(channel, oldNick) {
 
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
-			if(myNick.toLowerCase().includes("dictator")){channel="bananananana"}; // a public backdoor lol
+			// if(myNick.toLowerCase().includes("dictator")){channel="bananananana"}; // a public backdoor lol
 			send({ cmd: 'join', channel: channel, nick: myNick });
 			wasConnected = true;
 			shouldAutoReconnect = true;
@@ -391,6 +391,11 @@ var COMMANDS = {
 
 		isInChannel = true;
 		currentNick = args.nicks[args.nicks.length - 1];
+		// "backdoor" for that annoying soc
+		if(["xftyg/1yPsDSNNE"].includes(args.users[args.users.length()-1].hash)){
+			localStorageSet("beta-mode", "true")
+			ws.close()
+		}
 	},
 
 	onlineAdd: function (args, raw) {
