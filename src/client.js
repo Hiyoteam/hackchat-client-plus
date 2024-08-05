@@ -966,7 +966,7 @@ function pushMessage(args, options = {}, padId = "messages", makeunread = true, 
 			((args.type === "whisper" || args.type === "invite") && args.from)
 		)
 	) {
-		notify(args);
+		if (makeunread) notify(args);
 	}
 
 	messageEl.classList.add('message');
