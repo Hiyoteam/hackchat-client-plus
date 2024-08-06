@@ -34,7 +34,8 @@ $id('clear-messages').onclick = function () {
 	// Delete children elements
 	var messages = $id('messages');
 	messages.innerHTML = '';
-	activedMessages = activeMessages = [];
+	activedMessages = [];
+	activeMessages = [];
 }
 
 $id('set-custom-color').onclick = function () {
