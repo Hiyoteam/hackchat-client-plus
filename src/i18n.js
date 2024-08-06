@@ -64,7 +64,8 @@
                 ['Automatically converted into upper case by client.', '客户端已自动转换为大写。'],
                 ["Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "请输入隧道URL.(如果你不知道这是做什么的，请点击取消。)"],
                 ["Invaild tunnel URL.", "非法的隧道URL."],
-                ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"]
+                ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"],
+                ['Input command:(This is for the developers to access/test some special experimental functions.)', '输入指令：（这是供开发者测试／访问一些也是功能的功能）']
             ]),
             system: new Map([
                 /* System messages */
@@ -106,7 +107,9 @@
                 ['You are being rate-limited or blocked.', '你被暂时限制了，或者被封禁了。'],
                 ['Wait a moment and try again.', '请稍后再试。'],
                 [/^([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})$/, '$1 改名为 $2'],
-
+                ['You are enabling developer mode. I want you to be aware of what you are doing. Enabling this mode will disable some protections and may lead to password theft. We recommend using a non-personal password in incognito mode to test untrusted things. Executing this command may result in your password being stolen. To proceed with the execution, please run `/debug ([1-9]{10})`.', '你正在开启开发者模式，您应该知道您在做什么，开启此模式将会禁用一些保护并可能导致密码泄露。我们建议您在隐身模式使用非个人密码来测试不信任的东西。继续执行可能导致密码泄露。要继续执行，请发送：`/debug $1`'],
+                ['Do not keep developer mode enabled for too long. After using it, please refresh immediately to restore protection.', '不要保持在开发者模式过长时间，结束使用后，请刷新页面以恢复保护。'],
+                ['No such function: (.+)', '指令不存在：$1'],
                 /* Help */
                 ['All commands:', '全部命令：'],
                 ['Category:', '分\ufeff类\ufeff：'],
