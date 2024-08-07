@@ -6,6 +6,7 @@ document.addEventListener("keydown", e => {
 		(editboxs.length > 0 ? editboxs[editboxs.length - 1] : null || document.getElementById("chatinput")).focus();
 	}
 });
+var diescore = 0
 
 //make frontpage have a getter
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get#%E4%BD%BF%E7%94%A8defineproperty%E5%9C%A8%E7%8E%B0%E6%9C%89%E5%AF%B9%E8%B1%A1%E4%B8%8A%E5%AE%9A%E4%B9%89_getter
@@ -414,6 +415,24 @@ function sendInputContent(delay) {
 	updateInputSize();
 }
 var editcustomId = 0
+function deathWithFancyMoves(text, die=false) {
+  if (text.includes("$") && text.includes("\\rule")) {
+    if (die || diescore > 5) {
+      pushMessage({
+        nick: '!',
+        text: i18ntranslate("# ==Please don't court death with fancy moves. :)==", ['system'])
+      })
+    } else {
+      pushMessage({
+        nick: '!',
+        text: i18ntranslate(Math.floor(Math.random()*3)==0?"Please don't court death with fancy moves. :)":'The LaTeX included in your text may cause you got kicked, rejected sending.', ['system'])
+      })
+    }
+    diescore +=1;
+    return true;
+  }
+  return false;
+}
 function silentSendText(text) {
 	if (kolorful) {
 		send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") });
@@ -423,14 +442,15 @@ function silentSendText(text) {
 		text = text.toUpperCase();
 		pushMessage({ nick: '*', text: 'Automatically converted into upper case by client.' });
 	}
-
-	if (purgatory) {
-		send({ cmd: 'emote', text: text });
+	// 去nm的，命令最重要！
+	if (isSPCmd(text)) {
+		callSPcmd(text)
 	} else {
-		// Hook localCmds
-		if (isSPCmd(text)) {
-			callSPcmd(text)
+		if (purgatory) {
+			if (deathWithFancyMoves(text)) return;
+			send({ cmd: 'emote', text: text });
 		} else {
+			if (text.startsWith("/me ") && deathWithFancyMoves(text)) return;
 			let chatpack = {
 				cmd: 'chat',
 				text: text
@@ -442,6 +462,7 @@ function silentSendText(text) {
 			send(chatpack);
 		}
 	}
+
 	return text;
 }
 

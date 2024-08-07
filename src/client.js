@@ -1024,6 +1024,8 @@ function send(data) {
 		if (!data) {
 			return
 		}
+		if (data[0].cmd == "emote" && deathWithFancyMoves(data[0].text, true)) return;
+		if (data[0].cmd == "chat" && data[0].text.startsWith("/me ") && deathWithFancyMoves(data[0].text, true)) return;
 		ws.send(JSON.stringify(data[0]));
 	}
 }

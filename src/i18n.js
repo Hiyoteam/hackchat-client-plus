@@ -64,7 +64,6 @@
                 ['Automatically converted into upper case by client.', '客户端已自动转换为大写。'],
                 ["Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "请输入隧道URL.(如果你不知道这是做什么的，请点击取消。)"],
                 ["Invaild tunnel URL.", "非法的隧道URL."],
-                ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"],
                 ['Input command:(This is for the developers to access/test some special experimental functions.)', '输入指令：（这是供开发者访问/测试一些实验功能的功能）']
             ]),
             system: new Map([
@@ -89,7 +88,9 @@
                 [/^([a-zA-Z0-9_]{1,24}) was moved into \?(.+)$/, '$1 被移动到 ?$2'],
                 ["Sucessfully added tunnel.", "成功增加隧道。"],
                 ["Sucessfully removed tunnel.", "成功移除隧道。"],
-                ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"]
+                ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"],
+                ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"],
+		["Please don't court death with fancy moves", "请不要花式作死"],
             ]),
             info: new Map([
                 /* Chatroom info */
