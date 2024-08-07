@@ -90,7 +90,7 @@
                 ["Sucessfully removed tunnel.", "成功移除隧道。"],
                 ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"],
                 ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"],
-		["Please don't court death with fancy moves", "请不要花式作死"],
+		["Please don't court death with fancy moves. :)", "请不要花式作死。 :)"],
             ]),
             info: new Map([
                 /* Chatroom info */
