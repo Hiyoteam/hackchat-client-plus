@@ -962,7 +962,7 @@ function pushMessage(args, options = {}, padId = "messages", makeunread = true, 
 
 	if (
 		typeof (myNick) === 'string' && (
-			args.text.match(new RegExp('@' + currentNick + '\\b', "gi")) ||
+			(args.text.match(new RegExp('@' + currentNick + '\\b', "gi")) && args.nick !== currentNick) ||
 			((args.type === "whisper" || args.type === "invite") && args.from)
 		)
 	) {

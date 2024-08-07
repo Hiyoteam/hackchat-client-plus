@@ -111,6 +111,7 @@
                 ['You are enabling developer mode. I want you to be aware of what you are doing. Enabling this mode will disable some protections and may lead to password theft. We recommend using a non-personal password in incognito mode to test untrusted things. Executing this command may result in your password being stolen. To proceed with the execution, please run `/debug ([1-9]{10})`.', '你正在开启开发者模式，您应该知道您在做什么，开启此模式将会禁用一些保护并可能导致密码泄露。我们建议您在隐身模式使用非个人密码来测试不信任的东西。继续执行可能导致密码泄露。要继续执行，请发送：`/debug $1`'],
                 ['Do not keep developer mode enabled for too long. After using it, please refresh immediately to restore protection.', '不要保持在开发者模式过长时间，结束使用后，请刷新页面以恢复保护。'],
                 ['No such function: (.+)', '指令不存在：$1'],
+		['You may not join that channel.', '你不能加入这个频道'],
                 /* Help */
                 ['All commands:', '全部命令：'],
                 ['Category:', '分\ufeff类\ufeff：'],
