@@ -188,27 +188,23 @@ function join(channel, oldNick) {
 			command = data[2]
 		}
 		if (args.channel) {
-			if (args.channel != myChannel && isInChannel) {
-				isInChannel = false
+			if (args.channel != channel) {
 				if (args.channel != 'purgatory') {
-					purgatory = false
 					// usersClear()
 					// let p = document.createElement('p')
 					// p.textContent = `You may be kicked or moved to this channel by force to channel ?${args.channel}. Unable to get full user list. `
 					// $id('users').appendChild(p)
-					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` })
+					if (purgatory) {
+						pushMessage({ nick: '!', text: `You are now at ?${args.channel} . A mod has moved you. ` })
+					} else {
+						pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` });
+					}
 				} else {
-					purgatory = true
 					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be locked out from ?${myChannel} . You may also be kicked or moved to this channel by force. ` })
 				}
-			} else if (isInChannel) {
-				if (purgatory && myChannel != 'purgatory') {// you are moved by a mod from purgatory to where you want to be at
-					purgatory = false
-					pushMessage({ nick: '!', text: `You are now at ?${args.channel} . A mod has moved you. ` })
-				} else if (args.channel == 'purgatory') {
-					purgatory = true
-				}
 			}
+			purgatory = args.channel == "purgatory";
+			channel = args.channel;
 		}
 		if (cmd == 'join') {
 			let limiter = seconds['join']
