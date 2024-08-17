@@ -28,6 +28,18 @@ function nickGetTrip(nick) {
 	}
 }
 
+function getRandomItemFromArray(arr) {
+  var randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+}
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
 // 笑死，还是变成了内置函数
 window.camoFetch = (url, options) => {
 	let index = 0;
@@ -103,6 +115,24 @@ var shouldAutoReconnect = true;
 
 var isAnsweringCaptcha = false;
 
+
+function getNewNick(nick) {
+  let newnick = nick;
+
+  newnick += "_";
+  if (newnick.length > 3 && newnick.endsWith("_".repeat(3))) newnick = newnick.replace(/_{3,}$/,'');
+  if (newnick.length > 24) {
+    let index = newnick.endsWith("_") ? newnick.replace(/_+$/,'_').lastIndexOf("_") : newnick.length 
+    console.log(index)
+    newnick = `${newnick.substring(0,index-1)}${`_`.repeat(24)}`.substring(0,24);
+  } 
+  if (newnick.length == 0) {
+    newnick = prompt(i18ntranslate(`Please enter a new name, preferably different from your previous one`, 'prompt'));
+    if (newnick && /^[a-zA-Z0-9_]{1,24}$/.test(newnick.split("#")[0])) newnick = newnick.split("#")[0];
+    if (!newnick) newnick = `_${getRandomNumber(0,2176782335).toString(36)}`;
+  }
+  return newnick.substring(0,24);
+}
 function join(channel, oldNick) {
 	let oldchannel = channel;
 	try {
@@ -149,30 +179,28 @@ function join(channel, oldNick) {
 	}
 
 	ws.onclose = function () {
-		hook.run("after", "disconnected", [])
-		isInChannel = false
-		currentNick = false
+		hook.run("after", "disconnected", []);
+		isInChannel = false;
+		currentNick = false;
 
 		if (shouldAutoReconnect) {
 			if (wasConnected) {
 				wasConnected = false;
+				shouldAutoReconnect = true;
 				pushMessage({ nick: '!', text: "Server disconnected. Attempting to reconnect. . ." });
+			} else {
+				shouldAutoReconnect = false;
+				pushMessage({ nick: '!', text: "Failed to connect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." });
+			}
+			if (shouldAutoReconnect) {
+				if (myNick.split('#')[1]) {
+					join(oldchannel, getNewNick(myNick.split('#')[0]) + '#' + myNick.split('#')[1]);
+				} else {
+					join(oldchannel, getNewNick(myNick.split('#')[0]));
+				}
 			}
 
-			window.setTimeout(function () {
-				if (myNick.split('#')[1]) {
-					join(oldchannel, (myNick.split('#')[0] + '_').replace(/_{3,}$/g, '') + '#' + myNick.split('#')[1]);
-				} else {
-					join(oldchannel, (myNick + '_').replace(/_{3,}$/g, ''));
-				}
-			}, 2000);
 
-			window.setTimeout(function () {
-				if (!wasConnected) {
-					shouldAutoReconnect = false;
-					pushMessage({ nick: '!', text: "Failed to connect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." })
-				}
-			}, 2000);
 		}
 	}
 
