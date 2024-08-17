@@ -104,6 +104,7 @@ var shouldAutoReconnect = true;
 var isAnsweringCaptcha = false;
 
 function join(channel, oldNick) {
+	let oldchannel = channel;
 	try {
 		ws.close()
 	} catch (e) { }
@@ -160,9 +161,9 @@ function join(channel, oldNick) {
 
 			window.setTimeout(function () {
 				if (myNick.split('#')[1]) {
-					join(channel, (myNick.split('#')[0] + '_').replace(/_{3,}$/g, '') + '#' + myNick.split('#')[1]);
+					join(oldchannel, (myNick.split('#')[0] + '_').replace(/_{3,}$/g, '') + '#' + myNick.split('#')[1]);
 				} else {
-					join(channel, (myNick + '_').replace(/_{3,}$/g, ''));
+					join(oldchannel, (myNick + '_').replace(/_{3,}$/g, ''));
 				}
 			}, 2000);
 
