@@ -64,7 +64,8 @@
                 ['Automatically converted into upper case by client.', '客户端已自动转换为大写。'],
                 ["Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "请输入隧道URL.(如果你不知道这是做什么的，请点击取消。)"],
                 ["Invaild tunnel URL.", "非法的隧道URL."],
-                ['Input command:(This is for the developers to access/test some special experimental functions.)', '输入指令：（这是供开发者访问/测试一些实验功能的功能）']
+                ['Input command:(This is for the developers to access/test some special experimental functions.)', '输入指令：（这是供开发者访问/测试一些实验功能的功能）'],
+                [`Please enter a new name, preferably different from your previous one`, '请输入一个新名称，最好不要和你的名称一样']
             ]),
             system: new Map([
                 /* System messages */
