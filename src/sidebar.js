@@ -304,13 +304,13 @@ $('#send').onclick = function () {
 
 function safeLocalStorageGet(key) {
     try {
-        return localStorage.getItem(key) || "[]";
+        var result = localStorage.getItem(key);
+        return result !== null ? result : "[]";
     } catch (err) {
         console.error("Error accessing localStorage:", err);
         return "[]";
     }
 }
-
 
 // User list
 var onlineUsers = []
