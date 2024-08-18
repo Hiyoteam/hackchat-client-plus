@@ -304,17 +304,10 @@ $('#send').onclick = function () {
 
 // User list
 var onlineUsers = []
-var ignoredUsers = getLocalStorageItem('ignoredUsers').split(',') 
-var ignoredHashs = getLocalStorageItem('ignoredHashs').split(',') 
-var ignoredTrips = getLocalStorageItem('ignoredTrips').split(',') 
+var ignoredUsers = []
+var ignoredHashs = []
+var ignoredTrips = []
 var usersInfo = {};
-function getLocalStorageItem(key) {
-    return localStorage.getItem(key) || "";
-}
-
-function setLocalStorageItem(key, value) {
-    localStorage.setItem(key, value);
-}
 function getUserMenuOptions(nick) {
 	let options = {
 		"Reply": false,
@@ -469,33 +462,27 @@ function userInvite(nick) {
 
 function userIgnore(nick) {
 	ignoredUsers.push(nick)
-	setLocalStorageItem('ignoredUsers', ignoredUsers.toString())
 }
 
 function userDeignore(nick) {
 	ignoredUsers.splice(ignoredUsers.indexOf(nick))
-	setLocalStorageItem('ignoredUsers', ignoredUsers.toString())
 }
 
 function hashIgnore(hash) {
 	ignoredHashs.push(hash)
-	setLocalStorageItem('ignoredHashs', ignoredUsers.toString())
 }
 
 function hashDeignore(hash) {
 	ignoredHashs.splice(ignoredHashs.indexOf(hash))
-	setLocalStorageItem('ignoredHashs', ignoredUsers.toString())
 }
 
 
 function tripIgnore(trip) {
 	ignoredTrips.push(trip)
-	setLocalStorageItem('ignoredTrips', ignoredUsers.toString())
 }
 
 function tripDeignore(trip) {
 	ignoredTrips.splice(ignoredTrips.indexOf(trip))
-	setLocalStorageItem('ignoredTrips', ignoredUsers.toString())
 }
 
 
