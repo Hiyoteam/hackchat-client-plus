@@ -1,135 +1,115 @@
-/** Notification switch and local storage behavior **/
-var notifySwitch = document.getElementById("notify-switch")
-var notifySetting = localStorageGet("notify-api")
-var notifyPermissionExplained = 0; // 1 = granted msg shown, -1 = denied message shown
+// Handle switch states and localStorage updates
+function initializeSwitch(switchElement, storageKey, onChangeCallback) {
+    var storedValue = localStorageGet(storageKey);
+    if (storedValue === null) {
+        localStorageSet(storageKey, "false");
+        switchElement.checked = false;
+    } else {
+        switchElement.checked = storedValue === "true";
+    }
 
-// Inital request for notifications permission
-function RequestNotifyPermission() {
-	try {
-		var notifyPromise = Notification.requestPermission();
-		if (notifyPromise) {
-			notifyPromise.then(function (result) {
-				console.log("Hack.Chat notification permission: " + result);
-				if (result === "granted") {
-					if (notifyPermissionExplained === 0) {
-						pushMessage({
-							cmd: "chat",
-							nick: "*",
-							text: "Notifications permission granted.",
-							time: null
-						});
-						notifyPermissionExplained = 1;
-					}
-					return false;
-				} else {
-					if (notifyPermissionExplained === 0) {
-						pushMessage({
-							cmd: "chat",
-							nick: "*",
-							text: "Notifications permission denied, you won't be notified if someone @mentions you.",
-							time: null
-						});
-						notifyPermissionExplained = -1;
-					}
-					return true;
-				}
-			});
-		}
-	} catch (error) {
-		pushMessage({
-			cmd: "chat",
-			nick: "*",
-			text: "Unable to create a notification.",
-			time: null
-		});
-		console.error("An error occured trying to request notification permissions. This browser might not support desktop notifications.\nDetails:")
-		console.error(error)
-		return false;
-	}
+    switchElement.addEventListener('change', (event) => {
+        localStorageSet(storageKey, switchElement.checked);
+        if (onChangeCallback) onChangeCallback(event);
+    });
 }
 
-// Update localStorage with value of checkbox
-notifySwitch.addEventListener('change', (event) => {
-	if (event.target.checked) {
-		RequestNotifyPermission();
-	}
-	localStorageSet("notify-api", notifySwitch.checked)
-})
-// Check if localStorage value is set, defaults to OFF
-if (notifySetting === null) {
-	localStorageSet("notify-api", "false")
-	notifySwitch.checked = false
-}
-// Configure notifySwitch checkbox element
-if (notifySetting === "true" || notifySetting === true) {
-	notifySwitch.checked = true
-} else if (notifySetting === "false" || notifySetting === false) {
-	notifySwitch.checked = false
+// Request notification permissions
+async function RequestNotifyPermission() {
+    try {
+        let result = await Notification.requestPermission();
+        console.log("Notification permission: " + result);
+        if (result === "granted") {
+            if (notifyPermissionExplained === 0) {
+                pushMessage({
+                    cmd: "chat",
+                    nick: "*",
+                    text: "Notifications permission granted.",
+                    time: null
+                });
+                notifyPermissionExplained = 1;
+            }
+        } else {
+            if (notifyPermissionExplained === 0) {
+                pushMessage({
+                    cmd: "chat",
+                    nick: "*",
+                    text: "Notifications permission denied.",
+                    time: null
+                });
+                notifyPermissionExplained = -1;
+            }
+        }
+        return result === "granted";
+    } catch (error) {
+        pushMessage({
+            cmd: "chat",
+            nick: "*",
+            text: "Unable to request notification permission.",
+            time: null
+        });
+        console.error("Error requesting notification permissions:", error);
+        return false;
+    }
 }
 
-/** Sound switch and local storage behavior **/
-var soundSwitch = document.getElementById("sound-switch")
-var notifySetting = localStorageGet("notify-sound")
+// Initialize switches
+var notifySwitch = document.getElementById("notify-switch");
+var soundSwitch = document.getElementById("sound-switch");
 
-// Update localStorage with value of checkbox
-soundSwitch.addEventListener('change', (event) => {
-	localStorageSet("notify-sound", soundSwitch.checked)
-})
-// Check if localStorage value is set, defaults to OFF
-if (notifySetting === null) {
-	localStorageSet("notify-sound", "false")
-	soundSwitch.checked = false
-}
-// Configure soundSwitch checkbox element
-if (notifySetting === "true" || notifySetting === true) {
-	soundSwitch.checked = true
-} else if (notifySetting === "false" || notifySetting === false) {
-	soundSwitch.checked = false
+if (notifySwitch) {
+    initializeSwitch(notifySwitch, "notify-api", async () => {
+        if (notifySwitch.checked) {
+            await RequestNotifyPermission();
+        }
+    });
 }
 
-// Create a new notification after checking if permission has been granted
+if (soundSwitch) {
+    initializeSwitch(soundSwitch, "notify-sound");
+}
+
+// Create notification with error handling
 function spawnNotification(title, body) {
-	// Let's check if the browser supports notifications
-	if (!("Notification" in window)) {
-		console.error("This browser does not support desktop notification");
-	} else if (Notification.permission === "granted") { // Check if notification permissions are already given
-		// If it's okay let's create a notification
-		var options = {
-			body: body,
-			icon: "/favicon-96x96.png"
-		};
-		var n = new Notification(title, options);
-	}
-	// Otherwise, we need to ask the user for permission
-	else if (Notification.permission !== "denied") {
-		if (RequestNotifyPermission()) {
-			var options = {
-				body: body,
-				icon: "/favicon-96x96.png"
-			};
-			var n = new Notification(title, options);
-		}
-	} else if (Notification.permission == "denied") {
-		// At last, if the user has denied notifications, and you
-		// want to be respectful, there is no need to bother them any more.
-	}
+    try {
+        if (!("Notification" in window)) {
+            console.error("This browser does not support desktop notifications.");
+            return;
+        }
+
+        if (Notification.permission === "granted") {
+            new Notification(title, { body: body, icon: "/favicon-96x96.png" });
+        } else if (Notification.permission !== "denied") {
+            RequestNotifyPermission().then(granted => {
+                if (granted) {
+                    new Notification(title, { body: body, icon: "/favicon-96x96.png" });
+                }
+            });
+        }
+    } catch (error) {
+        console.error("Error creating notification:", error);
+    }
 }
 
+// Handle notifications and sounds
 function notify(args) {
-	try {
-		// Spawn notification if enabled
-		if (notifySwitch.checked) {
-			spawnNotification("?" + myChannel + "  �  " + args.nick, args.text)
-		}
+    try {
+        if (notifySwitch.checked) {
+            spawnNotification("?" + myChannel + "  ·  " + args.nick, args.text);
+        }
 
-		// Play sound if enabled
-		if (soundSwitch.checked) {
-			var soundPromise = document.getElementById("notify-sound").play();
-			if (soundPromise) {
-				soundPromise.catch(function (error) {
-					console.error("Problem playing sound:\n" + error);
-				});
-			}
-		}
-	} catch (_) { console.error(e) }
+        if (soundSwitch.checked) {
+            let soundElement = document.getElementById("notify-sound");
+            if (soundElement) {
+                let soundPromise = soundElement.play();
+                if (soundPromise) {
+                    soundPromise.catch(error => {
+                        console.error("Problem playing sound:", error);
+                    });
+                }
+            }
+        }
+    } catch (e) {
+        console.error("Error in notify function:", e);
+    }
 }
