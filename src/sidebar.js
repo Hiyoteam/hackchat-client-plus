@@ -304,8 +304,7 @@ $('#send').onclick = function () {
 
 function safeLocalStorageGet(key) {
     try {
-        var result = localStorage.getItem(key);
-        return result !== null ? result : "[]";
+        return localStorage.getItem(key) ?? "[]"; // what the fuck
     } catch (err) {
         console.error("Error accessing localStorage:", err);
         return "[]";
