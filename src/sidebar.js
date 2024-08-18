@@ -304,9 +304,9 @@ $('#send').onclick = function () {
 
 // User list
 var onlineUsers = []
-var ignoredUsers = []
-var ignoredHashs = []
-var ignoredTrips = []
+var ignoredUsers = localStorageGet('ignoredUsers')
+var ignoredHashs = localStorageGet('ignoredHashs')
+var ignoredTrips = localStorageGet('ignoredTrips')
 var usersInfo = {};
 function getUserMenuOptions(nick) {
 	let options = {
@@ -462,27 +462,33 @@ function userInvite(nick) {
 
 function userIgnore(nick) {
 	ignoredUsers.push(nick)
+	localStorageSet('ignoredUsers',JSON.stringify(ignoredUsers))
 }
 
 function userDeignore(nick) {
 	ignoredUsers.splice(ignoredUsers.indexOf(nick))
+	localStorageSet('ignoredUsers',JSON.stringify(ignoredUsers))
 }
 
 function hashIgnore(hash) {
 	ignoredHashs.push(hash)
+	localStorageSet('ignoredHashs',JSON.stringify(ignoredHashs))
 }
 
 function hashDeignore(hash) {
 	ignoredHashs.splice(ignoredHashs.indexOf(hash))
+	localStorageSet('ignoredHashs',JSON.stringify(ignoredHashs))
 }
 
 
 function tripIgnore(trip) {
 	ignoredTrips.push(trip)
+	localStorageSet('ignoredTrips',JSON.stringify(ignoredTrips))
 }
 
 function tripDeignore(trip) {
 	ignoredTrips.splice(ignoredTrips.indexOf(trip))
+	localStorageSet('ignoredTrips',JSON.stringify(ignoredTrips))
 }
 
 
