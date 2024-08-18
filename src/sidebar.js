@@ -304,9 +304,9 @@ $('#send').onclick = function () {
 
 // User list
 var onlineUsers = []
-var ignoredUsers = localStorageGet('ignoredUsers')
-var ignoredHashs = localStorageGet('ignoredHashs')
-var ignoredTrips = localStorageGet('ignoredTrips')
+var ignoredUsers = JSON.parse(localStorageGet('ignoredUsers'))
+var ignoredHashs = JSON.parse(localStorageGet('ignoredHashs'))
+var ignoredTrips = JSON.parse(localStorageGet('ignoredTrips'))
 var usersInfo = {};
 function getUserMenuOptions(nick) {
 	let options = {
