@@ -302,11 +302,19 @@ $('#send').onclick = function () {
 
 /* ---Sidebar user list--- */
 
+function safeLocalStorageGet(key){
+	try{
+		localStorageGet(key)
+	}catch(err){
+		return "[]"
+	}
+}
+
 // User list
 var onlineUsers = []
-var ignoredUsers = JSON.parse(localStorageGet('ignoredUsers'))
-var ignoredHashs = JSON.parse(localStorageGet('ignoredHashs'))
-var ignoredTrips = JSON.parse(localStorageGet('ignoredTrips'))
+var ignoredUsers = JSON.parse(safeLocalStorageGet('ignoredUsers')
+var ignoredHashs = JSON.parse(safeLocalStorageGet('ignoredHashs'))
+var ignoredTrips = JSON.parse(safeLocalStorageGet('ignoredTrips'))
 var usersInfo = {};
 function getUserMenuOptions(nick) {
 	let options = {
