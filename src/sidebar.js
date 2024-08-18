@@ -304,10 +304,29 @@ $('#send').onclick = function () {
 
 // User list
 var onlineUsers = []
-var ignoredUsers = []
-var ignoredHashs = []
-var ignoredTrips = []
+var ignoredUsers = getCookie('ignoredUsers').split(',')
+var ignoredHashs = getCookie('ignoredHashs').split(',')
+var ignoredTrips = getCookie('ignoredTrips').split(',')
 var usersInfo = {};
+
+function getCookie(cname)
+{
+	var name = cname + "=";
+	var ca = document.cookie.split(';');
+	for(var i=0; i<ca.length; i++) 
+	{
+    		var c = ca[i].trim();
+    		if (c.indexOf(name)==0) return c.substring(name.length,c.length);
+  	}
+  	return "";
+}
+function setCookie(cname,cvalue,exdays)
+{
+	var d = new Date();
+	d.setTime(d.getTime()+(exdays*24*60*60*1000));
+	var expires = "expires="+d.toGMTString();
+	document.cookie = cname + "=" + cvalue + "; " + expires;
+}
 function getUserMenuOptions(nick) {
 	let options = {
 		"Reply": false,
@@ -462,27 +481,33 @@ function userInvite(nick) {
 
 function userIgnore(nick) {
 	ignoredUsers.push(nick)
+	setCookie('ignoredUsers',ignoredUsers.toString(),365)
 }
 
 function userDeignore(nick) {
 	ignoredUsers.splice(ignoredUsers.indexOf(nick))
+	setCookie('ignoredUsers',ignoredUsers.toString(),365)
 }
 
 function hashIgnore(hash) {
 	ignoredHashs.push(hash)
+	setCookie('ignoredHashs',ignoredUsers.toString(),365)
 }
 
 function hashDeignore(hash) {
 	ignoredHashs.splice(ignoredHashs.indexOf(hash))
+	setCookie('ignoredHashs',ignoredUsers.toString(),365)
 }
 
 
 function tripIgnore(trip) {
 	ignoredTrips.push(trip)
+	setCookie('ignoredTrips',ignoredUsers.toString(),365)
 }
 
 function tripDeignore(trip) {
 	ignoredTrips.splice(ignoredTrips.indexOf(trip))
+	setCookie('ignoredTrips',ignoredUsers.toString(),365)
 }
 
 
