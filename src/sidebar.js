@@ -302,11 +302,20 @@ $('#send').onclick = function () {
 
 /* ---Sidebar user list--- */
 
+function safeLocalStorageGet(key) {
+    try {
+        return localStorage.getItem(key) ?? "[]"; // what the fuck
+    } catch (err) {
+        console.error("Error accessing localStorage:", err);
+        return "[]";
+    }
+}
+
 // User list
 var onlineUsers = []
-var ignoredUsers = []
-var ignoredHashs = []
-var ignoredTrips = []
+var ignoredUsers = JSON.parse(safeLocalStorageGet('ignoredUsers'))
+var ignoredHashs = JSON.parse(safeLocalStorageGet('ignoredHashs'))
+var ignoredTrips = JSON.parse(safeLocalStorageGet('ignoredTrips'))
 var usersInfo = {};
 function getUserMenuOptions(nick) {
 	let options = {
@@ -462,27 +471,33 @@ function userInvite(nick) {
 
 function userIgnore(nick) {
 	ignoredUsers.push(nick)
+	localStorageSet('ignoredUsers',JSON.stringify(ignoredUsers))
 }
 
 function userDeignore(nick) {
 	ignoredUsers.splice(ignoredUsers.indexOf(nick))
+	localStorageSet('ignoredUsers',JSON.stringify(ignoredUsers))
 }
 
 function hashIgnore(hash) {
 	ignoredHashs.push(hash)
+	localStorageSet('ignoredHashs',JSON.stringify(ignoredHashs))
 }
 
 function hashDeignore(hash) {
 	ignoredHashs.splice(ignoredHashs.indexOf(hash))
+	localStorageSet('ignoredHashs',JSON.stringify(ignoredHashs))
 }
 
 
 function tripIgnore(trip) {
 	ignoredTrips.push(trip)
+	localStorageSet('ignoredTrips',JSON.stringify(ignoredTrips))
 }
 
 function tripDeignore(trip) {
 	ignoredTrips.splice(ignoredTrips.indexOf(trip))
+	localStorageSet('ignoredTrips',JSON.stringify(ignoredTrips))
 }
 
 
