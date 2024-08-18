@@ -302,17 +302,19 @@ $('#send').onclick = function () {
 
 /* ---Sidebar user list--- */
 
-function safeLocalStorageGet(key){
-	try{
-		localStorageGet(key)
-	}catch(err){
-		return "[]"
-	}
+function safeLocalStorageGet(key) {
+    try {
+        return localStorage.getItem(key) || "[]";
+    } catch (err) {
+        console.error("Error accessing localStorage:", err);
+        return "[]";
+    }
 }
+
 
 // User list
 var onlineUsers = []
-var ignoredUsers = JSON.parse(safeLocalStorageGet('ignoredUsers')
+var ignoredUsers = JSON.parse(safeLocalStorageGet('ignoredUsers'))
 var ignoredHashs = JSON.parse(safeLocalStorageGet('ignoredHashs'))
 var ignoredTrips = JSON.parse(safeLocalStorageGet('ignoredTrips'))
 var usersInfo = {};
