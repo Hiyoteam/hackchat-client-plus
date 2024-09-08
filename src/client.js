@@ -117,6 +117,13 @@ var isInChannel = false;
 var purgatory = false;
 var currentNick = false;
 
+var join_time = 0;
+
+setInterval(()=>{
+  join_time = Math.max(0, join_time - 1);
+  $("#join_time").innerText = join_time;
+}, 1000)
+
 var shouldAutoReconnect = true;
 
 var isAnsweringCaptcha = false;
@@ -148,6 +155,7 @@ function joinBox_prompt(channel,mynick) {
   return new Promise((resolve, reject) => {
 
     $("#join-box").style.top = "0";
+    join_time = 50;
     $("#login-channel").value = channel || "";
 
     let l_pass = mynick.split("#");

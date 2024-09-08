@@ -522,3 +522,6 @@ dialog {
 .login-error-message {
   display: none;
 }
+#join-box>label, #join-box>p>label, #join-box>b>label {
+  vertical-align: 0;
+}
