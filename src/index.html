@@ -32,6 +32,18 @@
   <audio style="display: none" id="notify-sound" preload="auto" src="audio/notify.mp3">
     <source src="audio/notify.mp3" type="audio/ogg">
   </audio>
+  <div id="join-box">
+    <p><b>Login:</b><p>
+
+    <p><label><b>[?]</b> Channel:&ensp; </label><input id="login-channel"/> <label class="r">*</label></p>
+    <p class="login-error-message" id="channel-error"><label class="login-error">The channel must be any characters between 1 and 120 characters long.</label></p>
+
+    <p><label><b>[O]</b> NickName: </label><input id="login-nickname"/> <label class="r">*</label></p>
+    <p class="login-error-message" id="nickname-error"><label class="login-error">NickName must consist of 1 to 24 characters, including letters, numbers, and underscores.</label></p>
+
+    <p><label><b>[#]</b> PassWord: </label><input type="password" id="login-password"/> <label id="showhide-pass">Show</label></p>
+    <button id="cancel-button">Cancel</button><button id="join-button">Join</button>
+  </div>
   <article class="container">
     <div id="messages" class="messages"></div>
     <div id="preview"></div>
