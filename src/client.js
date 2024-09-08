@@ -155,7 +155,8 @@ function joinBox_prompt(channel,mynick) {
   return new Promise((resolve, reject) => {
 
     $("#join-box").style.top = "0";
-    join_time = 50;
+    join_time = 49;
+    $("#join_time").innerText = join_time;
     $("#login-channel").value = channel || "";
 
     let l_pass = mynick.split("#");
