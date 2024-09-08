@@ -142,7 +142,7 @@ $("#showhide-pass").onclick = () => {
     $("#showhide-pass").innerText = "Show";
     $("#login-password").type = 'password';
   }
-}
+};
 
 function joinBox_prompt(channel,mynick) {
   return new Promise((resolve, reject) => {
@@ -158,6 +158,16 @@ function joinBox_prompt(channel,mynick) {
     $("#login-password").value = l_pass || "";
 
     if ($("#showhide-pass").innerText != "Show") $("#showhide-pass").click();
+
+    function per(event) {
+      if (event.key === 'Enter') {
+        $("#join-button").click();
+        event.preventDefault(); 
+      } else if (event.key === 'Escape') {
+        $("#cancel-button").click();
+        event.preventDefault(); 
+      }
+    }
     function rej() {
       $all(".login-error-message").forEach(el=>el.style.display = "none");
 
@@ -178,6 +188,8 @@ function joinBox_prompt(channel,mynick) {
       $("#join-box").style.top = "-120px";
       $("#cancel-button").removeEventListener('click', cal);
       $("#join-button").removeEventListener('click', rej);
+      document.removeEventListener('keydown', per);
+
       resolve({
         channel: $("#login-channel").value,
         nick: `${$("#login-nickname").value}#${$("#login-password").value}`
@@ -188,13 +200,18 @@ function joinBox_prompt(channel,mynick) {
       $("#join-box").style.top = "-120px";
       $("#cancel-button").removeEventListener('click', cal);
       $("#join-button").removeEventListener('click', rej);
+      document.removeEventListener('keydown', per);
+
       resolve({
         channel: channel,
         nick: null
       });
     }
+
     $("#join-button").addEventListener('click', rej);
     $("#cancel-button").addEventListener('click', cal);
+    document.addEventListener('keydown', per);
+    
   });
 }
 function getNewNick(nick) {
