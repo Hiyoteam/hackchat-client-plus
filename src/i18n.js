@@ -92,6 +92,7 @@
                 ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"],
                 ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"],
 		["Please don't court death with fancy moves. :)", "请不要花式作死。 :)"],
+		["Notice: hack.chat currently has no crypto products (zero, none, no sol, nothing). If you are here because of a crypto: you are being rugged. Follow the official https://x.com/hackdotchat", "注意：hack.chat 目前没有任何加密货币产品（字面意义上的，绝对的，没有 SOL，什么都没有）。如果你因为一个加密货币而来到这里：你正在被欺诈。关注我们的官方账号 https://x.com/hackdotchat"]
             ]),
             info: new Map([
                 /* Chatroom info */
