@@ -39,6 +39,12 @@ function sleep(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+function shakeEl(element) {
+  element.classList.add('shake');
+  setTimeout(()=>{
+    element.classList.remove('shake');
+  }, 820);
+}
 
 // 笑死，还是变成了内置函数
 window.camoFetch = (url, options) => {
@@ -111,11 +117,112 @@ var isInChannel = false;
 var purgatory = false;
 var currentNick = false;
 
+var join_time = 0;
+
+setInterval(()=>{
+  join_time = Math.max(0, join_time - 1);
+  $("#join_time").innerText = join_time;
+}, 1000)
+
 var shouldAutoReconnect = true;
 
 var isAnsweringCaptcha = false;
 
 
+function $all(e) { return document.querySelectorAll(e) };
+$all(".login-error-message").forEach(el=>el.style.display = "none");
+
+function verChannel(c) {
+  if (
+    typeof c !== 'string' ||
+    c === '' ||
+    c.length > 120
+  ) return false;
+
+  return true;
+}
+$("#showhide-pass").onclick = () => {
+  if ($("#showhide-pass").innerText == "Show") {
+    $("#showhide-pass").innerText = "Hide";
+    $("#login-password").type = '';
+  } else {
+    $("#showhide-pass").innerText = "Show";
+    $("#login-password").type = 'password';
+  }
+};
+
+function joinBox_prompt(channel,mynick) {
+  return new Promise((resolve, reject) => {
+
+    $("#join-box").style.top = "0";
+    join_time = 49;
+    $("#join_time").innerText = join_time;
+    $("#login-channel").value = channel || "";
+
+    let l_pass = mynick.split("#");
+    let l_nick = l_pass.shift();
+    l_pass = l_pass.join("#");
+
+    $("#login-nickname").value = l_nick || "";
+    $("#login-password").value = l_pass || "";
+
+    if ($("#showhide-pass").innerText != "Show") $("#showhide-pass").click();
+
+    function per(event) {
+      if (event.key === 'Enter') {
+        $("#join-button").click();
+        event.preventDefault(); 
+      } else if (event.key === 'Escape') {
+        $("#cancel-button").click();
+        event.preventDefault(); 
+      }
+    }
+    function rej() {
+      $all(".login-error-message").forEach(el=>el.style.display = "none");
+
+      let err = false
+      if (!verChannel(channel)) {
+        err = true;
+        $("#channel-error").style.display = "block";
+        [$("#login-channel"), $("#channel-error")].forEach(shakeEl);
+      }
+      if (!/^[a-zA-Z0-9_]{1,24}$/.test($("#login-nickname").value)) {
+        err = true;
+        $("#nickname-error").style.display = "block";
+
+        [$("#login-nickname"), $("#nickname-error")].forEach(shakeEl);
+      }
+      if (err) return;
+
+      $("#join-box").style.top = "-120px";
+      $("#cancel-button").removeEventListener('click', cal);
+      $("#join-button").removeEventListener('click', rej);
+      document.removeEventListener('keydown', per);
+
+      resolve({
+        channel: $("#login-channel").value,
+        nick: `${$("#login-nickname").value}#${$("#login-password").value}`
+      });
+    }
+
+    function cal() {
+      $("#join-box").style.top = "-120px";
+      $("#cancel-button").removeEventListener('click', cal);
+      $("#join-button").removeEventListener('click', rej);
+      document.removeEventListener('keydown', per);
+
+      resolve({
+        channel: channel,
+        nick: null
+      });
+    }
+
+    $("#join-button").addEventListener('click', rej);
+    $("#cancel-button").addEventListener('click', cal);
+    document.addEventListener('keydown', per);
+    
+  });
+}
 function getNewNick(nick) {
   let newnick = nick;
 
@@ -143,7 +250,7 @@ function join(channel, oldNick) {
 
 	wasConnected = false;
 
-	ws.onopen = function () {
+	ws.onopen = async function () {
 		hook.run("before", "connect", [])
 		var shouldConnect = true;
 		if (!wasConnected) {
@@ -154,7 +261,10 @@ function join(channel, oldNick) {
 					myNick = oldNick;
 				}
 			} else {
-				var newNick = prompt(i18ntranslate('Nickname:', 'prompt'), myNick);
+				// var newNick = prompt(i18ntranslate('Nickname:', 'prompt'), myNick);
+				var req = await joinBox_prompt(channel,myNick);
+				var newNick = req.nick;
+				channel = req.channel;
 				if (newNick !== null) {
 					myNick = newNick;
 				} else {
@@ -182,6 +292,8 @@ function join(channel, oldNick) {
 		hook.run("after", "disconnected", []);
 		isInChannel = false;
 		currentNick = false;
+		
+		if ($("#cancel-button")) $("#cancel-button").click();
 
 		if (shouldAutoReconnect) {
 			if (wasConnected) {
