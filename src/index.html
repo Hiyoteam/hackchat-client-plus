@@ -5,8 +5,12 @@
   <meta charset="utf-8">
   <meta name="viewport"
     content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no">
+
   <title>hack.chat++</title>
   <link rel="manifest" href="manifest.json">
+  <meta name="apple-mobile-web-app-title" content="Hack.Chat++">
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
   <link rel="stylesheet" href="vendor/normalize.css">
 
@@ -30,6 +34,7 @@
   </audio>
   <article class="container">
     <div id="messages" class="messages"></div>
+    <div id="preview"></div>
   </article>
   <footer id="footer">
     <div class="container" style="display: flex">
@@ -79,7 +84,8 @@
       </p>
       <p>
         <input id="allow-imgur" type="checkbox">
-        <label for="allow-imgur" title="Embed images like: ![Title](https://i.imgur.com/image.png)" tr>Allow Images</label>
+        <label for="allow-imgur" title="Embed images like: ![Title](https://i.imgur.com/image.png)" tr>Allow
+          Images</label>
       </p>
       <p>
         <input id="allow-all-images" type="checkbox">
@@ -110,6 +116,18 @@
       <p>
         <input id="should-get-info" type="checkbox" checked>
         <label for="should-get-info" tr>Index Online Count</label>
+      </p>
+      <p>
+        <input id="edit-message" type="checkbox" checked>
+        <label for="edit-message" tr>Can Edit Message</label>
+      </p>
+      <p>
+        <input id="message-preview" type="checkbox" checked>
+        <label for="message-preview" tr>Message Preview</label>
+      </p>
+      <p>
+        <input id="right-click-menu" type="checkbox" checked>
+        <label for="right-click-menu" tr>Right-click menu</label>
       </p>
       <hr>
       <p>
@@ -175,6 +193,8 @@
       </p> -->
     </div>
   </nav>
+  <ul id="menu">
+  </ul>
   <!-- build:js index.js -->
   <script src="hooks.js"></script>
   <script src="utils.js"></script>

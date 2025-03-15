@@ -1,11 +1,12 @@
 ﻿//https://github.com/hack-chat/main/pull/184
 //select "chatinput" on "/"
 document.addEventListener("keydown", e => {
-	if (e.key === '/' && document.getElementById("chatinput") != document.activeElement) {
+	if (e.key === '/' && (editboxs.length > 0 ? editboxs[editboxs.length - 1] : null || document.getElementById("chatinput")) != document.activeElement) {
 		e.preventDefault();
-		document.getElementById("chatinput").focus();
+		(editboxs.length > 0 ? editboxs[editboxs.length - 1] : null || document.getElementById("chatinput")).focus();
 	}
 });
+var diescore = 0
 
 //make frontpage have a getter
 //https://developer.mozilla.org/zh-CN/docs/Web/JavaScript/Reference/Functions/get#%E4%BD%BF%E7%94%A8defineproperty%E5%9C%A8%E7%8E%B0%E6%9C%89%E5%AF%B9%E8%B1%A1%E4%B8%8A%E5%AE%9A%E4%B9%89_getter
@@ -78,6 +79,7 @@ var lastSentPos = 0;
 
 var kolorful = false
 var devMode = false
+var right_click_menu = true
 
 //message log
 var jsonLog = '';
@@ -101,7 +103,7 @@ var seconds = {
 var lastMentioned = ''
 
 
-function reply(args) {//from crosst.chat
+function reply(args, inputEl = input) {//from crosst.chat
 	let replyText = '';
 	let originalText = args.text;
 	let overlongText = false;
@@ -143,7 +145,7 @@ function reply(args) {//from crosst.chat
 
 
 	// Add mention when reply to others
-	if (args.nick != myNick.split('#')[0]) {
+	if (args.nick != currentNick) {
 		var nick = args.nick
 		let at = '@'
 		if ($id('soft-mention').checked) { at += ' ' }
@@ -151,11 +153,11 @@ function reply(args) {//from crosst.chat
 	}
 
 	// Insert reply text
-	replyText += input.value;
+	replyText += inputEl.value;
 
-	input.value = '';
-	insertAtCursor(replyText);
-	input.focus();
+	inputEl.value = '';
+	insertAtCursor(replyText, inputEl);
+	inputEl.focus();
 }
 
 /* ---Session Command--- */
@@ -377,8 +379,20 @@ input.onkeydown = function (e) {
 
 		keyActions.tab();
 	}
+	updatePreview()
 }
-
+function updatePreview() {
+	if (message_preview) {
+		$id('preview').innerText = "";
+		if (!input.value) return;
+		pushMessage({
+			trip: 'preview',
+			nick: 'You',
+			text: input.value
+		}, {}, 'preview', false, false)
+	}
+}
+input.addEventListener('input', updatePreview)
 function sendInputContent(delay) {
 	let text = input.value;
 	input.value = '';
@@ -400,7 +414,25 @@ function sendInputContent(delay) {
 
 	updateInputSize();
 }
-
+var editcustomId = 0
+function deathWithFancyMoves(text, die=false) {
+  if (text.includes("$") && text.includes("\\rule")) {
+    if (die || diescore > 5) {
+      pushMessage({
+        nick: '!',
+        text: i18ntranslate("# ==Please don't court death with fancy moves. :)==", ['system'])
+      })
+    } else {
+      pushMessage({
+        nick: '!',
+        text: i18ntranslate(Math.floor(Math.random()*3)==0?"Please don't court death with fancy moves. :)":'The LaTeX included in your text may cause you got kicked, rejected sending.', ['system'])
+      })
+    }
+    diescore +=1;
+    return true;
+  }
+  return false;
+}
 function silentSendText(text) {
 	if (kolorful) {
 		send({ cmd: 'changecolor', color: Math.floor(Math.random() * 0xffffff).toString(16).padEnd(6, "0") });
@@ -410,17 +442,27 @@ function silentSendText(text) {
 		text = text.toUpperCase();
 		pushMessage({ nick: '*', text: 'Automatically converted into upper case by client.' });
 	}
-
-	if (purgatory) {
-		send({ cmd: 'emote', text: text });
+	// 去nm的，命令最重要！
+	if (isSPCmd(text)) {
+		callSPcmd(text)
 	} else {
-		// Hook localCmds
-		if(isSPCmd(text)){
-			callSPcmd(text)
-		}else{
-			send({ cmd: 'chat', text: text });
+		if (purgatory) {
+			if (deathWithFancyMoves(text)) return;
+			send({ cmd: 'emote', text: text });
+		} else {
+			if (text.startsWith("/me ") && deathWithFancyMoves(text)) return;
+			let chatpack = {
+				cmd: 'chat',
+				text: text
+			}
+			if (edit_message) {
+				chatpack.customId = editcustomId.toString(36);
+				editcustomId += 1
+			}
+			send(chatpack);
 		}
 	}
+
 	return text;
 }
 
@@ -432,17 +474,18 @@ function checkIsMobileOrTablet() {
 
 // const isMobile = checkIsMobileOrTablet()
 
-function updateInputSize() {
+function updateInputSize(inputEl = input) {
 	var atBottom = isAtBottom();
 
-	input.style.height = 0;
-	input.style.height = input.scrollHeight + 'px';
+	inputEl.style.height = 0;
+	inputEl.style.height = inputEl.scrollHeight + 'px';
 
 	document.body.style.marginBottom = $id('footer').offsetHeight + 'px';
 
 	if (atBottom) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
+	updatePreview();
 }
 
 input.oninput = function () {

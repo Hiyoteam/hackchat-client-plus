@@ -1,4 +1,4 @@
-/*
+﻿/*
  *
  * NOTE: The client side of hack.chat is currently in development,
  * a new, more modern but still minimal version will be released
@@ -15,12 +15,69 @@
 var checkActiveCacheInterval = 30 * 1000;
 var activeMessages = [];
 var users_ = []
-
+var editboxs = [];
 
 function nickGetHash(nick) {
 	for (let k in users_) {
 		if (users_[k].nick === nick) return users_[k].hash
 	}
+}
+function nickGetTrip(nick) {
+	for (let k in users_) {
+		if (users_[k].nick === nick) return users_[k].trip
+	}
+}
+
+function getRandomItemFromArray(arr) {
+  var randomIndex = Math.floor(Math.random() * arr.length);
+  return arr[randomIndex];
+}
+function getRandomNumber(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+
+// 笑死，还是变成了内置函数
+window.camoFetch = (url, options) => {
+	let index = 0;
+
+	function doFetch() {
+		const camoUrl = camoAddrs[index % camoAddrs.length] + "?proxyUrl=" + encodeURIComponent(url);
+		return fetch(camoUrl, options)
+			.then(response => {
+				if (!response.ok) {
+					throw new Error("Request failed");
+				}
+				return response;
+			})
+			.catch(error => {
+				index++;
+				if (index < camoAddrs.length) {
+					return doFetch();
+				} else {
+					throw new Error("All Camo addresses failed");
+				}
+			});
+	}
+
+	const promise = doFetch();
+
+	// 返回 promise 对象，支持 .then 回调
+	if (!options || !options.await) {
+		return promise;
+	}
+
+	// 如果 options 中包含 await 属性，支持 await 等待
+	return (async () => {
+		try {
+			return await promise;
+		} catch (error) {
+			throw error;
+		}
+	})();
 }
 
 setInterval(function () {
@@ -52,12 +109,32 @@ var wasConnected = false;
 
 var isInChannel = false;
 var purgatory = false;
+var currentNick = false;
 
 var shouldAutoReconnect = true;
 
 var isAnsweringCaptcha = false;
 
+
+function getNewNick(nick) {
+  let newnick = nick;
+
+  newnick += "_";
+  if (newnick.length > 3 && newnick.endsWith("_".repeat(3))) newnick = newnick.replace(/_{3,}$/,'');
+  if (newnick.length > 24) {
+    let index = newnick.endsWith("_") ? newnick.replace(/_+$/,'_').lastIndexOf("_") : newnick.length 
+    console.log(index)
+    newnick = `${newnick.substring(0,index-1)}${`_`.repeat(24)}`.substring(0,24);
+  } 
+  if (newnick.length == 0) {
+    newnick = prompt(i18ntranslate(`Please enter a new name, preferably different from your previous one`, 'prompt'));
+    if (newnick && /^[a-zA-Z0-9_]{1,24}$/.test(newnick.split("#")[0])) newnick = newnick.split("#")[0];
+    if (!newnick) newnick = `_${getRandomNumber(0,2176782335).toString(36)}`;
+  }
+  return newnick.substring(0,24);
+}
 function join(channel, oldNick) {
+	let oldchannel = channel;
 	try {
 		ws.close()
 	} catch (e) { }
@@ -91,6 +168,7 @@ function join(channel, oldNick) {
 
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
+			// if(myNick.toLowerCase().includes("dictator")){channel="bananananana"}; // a public backdoor lol
 			send({ cmd: 'join', channel: channel, nick: myNick });
 			wasConnected = true;
 			shouldAutoReconnect = true;
@@ -101,29 +179,28 @@ function join(channel, oldNick) {
 	}
 
 	ws.onclose = function () {
-		hook.run("after", "disconnected", [])
-		isInChannel = false
+		hook.run("after", "disconnected", []);
+		isInChannel = false;
+		currentNick = false;
 
 		if (shouldAutoReconnect) {
 			if (wasConnected) {
 				wasConnected = false;
+				shouldAutoReconnect = true;
 				pushMessage({ nick: '!', text: "Server disconnected. Attempting to reconnect. . ." });
+			} else {
+				shouldAutoReconnect = false;
+				pushMessage({ nick: '!', text: "Failed to connect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." });
+			}
+			if (shouldAutoReconnect) {
+				if (myNick.split('#')[1]) {
+					join(oldchannel, getNewNick(myNick.split('#')[0]) + '#' + myNick.split('#')[1]);
+				} else {
+					join(oldchannel, getNewNick(myNick.split('#')[0]));
+				}
 			}
 
-			window.setTimeout(function () {
-				if (myNick.split('#')[1]) {
-					join(channel, (myNick.split('#')[0] + '_').replace(/_{3,}$/g, '') + '#' + myNick.split('#')[1]);
-				} else {
-					join(channel, (myNick + '_').replace(/_{3,}$/g, ''));
-				}
-			}, 2000);
 
-			window.setTimeout(function () {
-				if (!wasConnected) {
-					shouldAutoReconnect = false;
-					pushMessage({ nick: '!', text: "Failed to connect to server. When you think there is chance to succeed in reconnecting, press enter at the input field to reconnect." })
-				}
-			}, 2000);
 		}
 	}
 
@@ -140,27 +217,23 @@ function join(channel, oldNick) {
 			command = data[2]
 		}
 		if (args.channel) {
-			if (args.channel != myChannel && isInChannel) {
-				isInChannel = false
+			if (args.channel != channel) {
 				if (args.channel != 'purgatory') {
-					purgatory = false
 					// usersClear()
 					// let p = document.createElement('p')
 					// p.textContent = `You may be kicked or moved to this channel by force to channel ?${args.channel}. Unable to get full user list. `
 					// $id('users').appendChild(p)
-					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` })
+					if (purgatory) {
+						pushMessage({ nick: '!', text: `You are now at ?${args.channel} . A mod has moved you. ` })
+					} else {
+						pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be kicked or moved to this channel by force. ` });
+					}
 				} else {
-					purgatory = true
 					pushMessage({ nick: '!', text: `Unexpected Channel ?${args.channel} . You may be locked out from ?${myChannel} . You may also be kicked or moved to this channel by force. ` })
 				}
-			} else if (isInChannel) {
-				if (purgatory && myChannel != 'purgatory') {// you are moved by a mod from purgatory to where you want to be at
-					purgatory = false
-					pushMessage({ nick: '!', text: `You are now at ?${args.channel} . A mod has moved you. ` })
-				} else if (args.channel == 'purgatory') {
-					purgatory = true
-				}
 			}
+			purgatory = args.channel == "purgatory";
+			channel = args.channel;
 		}
 		if (cmd == 'join') {
 			let limiter = seconds['join']
@@ -199,9 +272,9 @@ function join(channel, oldNick) {
 
 function nickIgnored(nick) {
 	if (!nick) return false
-	return ignoredUsers.indexOf(nick) >= 0 || ignoredHashs.indexOf(nickGetHash(nick)) >= 0
+	return ignoredUsers.indexOf(nick) >= 0 || ignoredHashs.indexOf(nickGetHash(nick)) >= 0 || ignoredTrips.indexOf(nickGetTrip(nick)) >= 0
 }
-
+var activedMessages = [];
 var COMMANDS = {
 	chat: function (args, raw) {
 		if (nickIgnored(args.nick)) {
@@ -254,7 +327,14 @@ var COMMANDS = {
 		}
 
 		message.text = newText;
-
+		activedMessages.push({
+			customId: customId,
+			userid: args.userid,
+			text: newText,
+			elem: message.elem,
+			textElem: textElem,
+			time: args.time
+		})
 		// Scroll to bottom if necessary
 		var atBottom = isAtBottom();
 
@@ -277,10 +357,13 @@ var COMMANDS = {
 		if ((args.type == 'whisper' || args.type == 'invite') && (nickIgnored(args.from))) {
 			return
 		}
-		if (args.type == 'info') {
-			let match = args.text.match(/^.+ is now .+$/)
-			if (match && nickIgnored(match[1])) {
-				return
+		let match = args.text.match(/^([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})$/)
+		if (match?.[2]) {
+			if (match[1] === currentNick) currentNick = match[2];
+			if (nickIgnored(match[1])) {
+				userDeignore(match[1]);
+				userIgnore(metch[2])
+				return;
 			}
 		}
 		args.nick = '*'
@@ -334,7 +417,13 @@ var COMMANDS = {
 			send({ cmd: 'changecolor', color: myColor })
 		}
 
-		isInChannel = true
+		isInChannel = true;
+		currentNick = args.nicks[args.nicks.length - 1];
+		// "backdoor" for that annoying soc
+		if(["xftyg/1yPsDSNNE", "ebIxPHFUGDba20A"].includes(args.users[args.users.length-1].hash)){
+			localStorageSet("beta-mode", "true")
+			ws.close()
+		}
 	},
 
 	onlineAdd: function (args, raw) {
@@ -441,7 +530,7 @@ var COMMANDS = {
 }
 
 function addClassToMessage(element, args) {
-	if (verifyNickname(myNick.split('#')[0]) && args.nick == myNick.split('#')[0]) {
+	if (verifyNickname(currentNick || "i love 4n0n4me") && args.nick == currentNick) {
 		element.classList.add('me');
 	} else if (args.nick == '!') {
 		element.classList.add('warn');
@@ -479,7 +568,221 @@ function makeTripEl(args, options, date) {
 	tripEl.classList.add('trip');
 	return tripEl
 }
+function createAt(args, inputEl = input) {
+	if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
+		insertAtCursor(args.text, inputEl);
+		inputEl.focus();
+		return;
+	} else {
+		var nick = args.nick
+		let at = '@'
+		if ($id('soft-mention').checked) { at += ' ' }
+		insertAtCursor(at + nick + ' ', inputEl);
+		inputEl.focus();
+		return;
+	}
+}
 
+///////从 hcwak2 上扣下来的Dialog////////
+function Dialog(code, style, modal, into, timeout) {
+	//closeHere(this) 关闭窗口
+	var dialog = document.createElement('dialog');
+	dialog.innerHTML = code;
+	dialog.style = style;
+	let added = into || document.body
+	added.appendChild(dialog);
+	if (modal) {
+		dialog.showModal();
+	} else {
+		dialog.show();
+	}
+	if (timeout) {
+		setTimeout(() => {
+			dialog.remove()
+		}, timeout)
+	}
+}
+
+function closeHere(event) {
+	if (event instanceof HTMLDialogElement) {
+		event.remove()
+	} else if (event.parentNode) closeHere(event.parentNode)
+}
+///////////////////////////////////////////
+
+function getMenuOptions(args) {
+	let options = {};
+	let nick = args.nick || args.from;
+	if (args.color) {
+		options["Copy Color"] = (event, nickLinkEl, args) => {
+			navigator.clipboard.writeText(args.color)
+				.then(() => { })
+				.catch(err => {
+					pushMessage({
+						nick: '!',
+						text: `Failed to copy: ${err.message}`
+					})
+				});
+		}
+	}
+	if (args.customId) {
+		options["Update (Edit)"] = (event, nickLinkEl, args) => {
+			let editel = document.createElement("textarea");
+			editboxs.push(editel);
+			let editelp = document.createElement("p");
+			let editelc = document.createElement("p");
+			editelc.innerHTML = md.render("*Press `Esc` to **cancel**; click outside the **input box** or press `Enter` to **confirm***")
+			let msgbox = nickLinkEl.parentElement.parentElement.querySelector("p");
+			msgbox.style.display = "none";
+			let lasted = activedMessages.filter((an) => {
+				return an.customId == args.customId && an.userid == args.userid
+			})
+			editel.style.width = "100%";
+			let origindata = ((lasted ? lasted[lasted.length - 1] : false) || args).text
+			editel.value = origindata;
+			editel.style.padding = "0";
+			function changev() {
+				editel.style.height = "auto";
+				editel.style.height = editel.scrollHeight + 'px';
+			}
+			editel.autocomplete = "off";
+			editel.spellcheck = "false";
+			editel.addEventListener('input', changev)
+			editelp.classList.add("text");
+			msgbox.parentElement.appendChild(editelp);
+			editelp.appendChild(editelc);
+			editelp.appendChild(editel);
+			function donee(change = true) {
+				if (editel.value !== origindata && change) {
+					send({
+						cmd: 'updateMessage',
+						customId: args.customId,
+						mode: 'overwrite',
+						text: editel.value
+					})
+				}
+				editelp.remove();
+				editelc.remove();
+				editboxs.splice(editboxs.indexOf(editel))
+				msgbox.style.display = "";
+			}
+			editel.addEventListener('keydown', (e) => {
+				if (e.keyCode == 13 /* ENTER */ && !e.shiftKey) {
+					e.preventDefault();
+					donee()
+				}
+				if (e.keyCode == 27 /* ESC */) {
+					e.preventDefault();
+					editel.removeEventListener('blur', donee)
+					donee(false);
+				}
+			})
+			editel.focus();
+			changev();
+		}
+		options["Update History"] = (event, nickLinkEl, args) => {
+			let updateHistorys = [args];
+			for (let k in activedMessages) {
+				if (activedMessages[k].customId == args.customId && activedMessages[k].userid == args.userid) {
+					updateHistorys.push(activedMessages[k]);
+				}
+			}
+			//原始内容： args.text
+			//Update数组： updateHistorys ，包含了下面结构的OBJ
+			/*
+				customId: customId,
+				userid: 用户id,
+				text: 更新后的内容,
+				elem: 消息源DOM,
+				textElem: 消息内容DOM,
+				time: 时间戳
+			*/
+			let updateInfo = updateHistorys.map((his, i) => {
+				return `|${i}||`
+			})
+			Dialog(`
+				<div>
+					<a onclick="closeHere(this)" style="float: right;">x</a>
+				</div>
+				<div>
+					<div style="width: 75px; float: left;">
+						<ul id="timeList"></ul>
+					</div>
+					<div id="upcontent" style="margin-left:10px; float: left; background:#ffffff20;padding:0 5px 0 5px;border-radius:2px;margin: 5px;"></div>
+				</div>
+				<div style="width: 50px;">
+					<input type="checkbox" name="raw" id="upraw" style="margin-right:3px;"><label style="vertical-align: 3px;">Raw</label>
+				</div>
+			`, "max-height: 500px;", true);
+			const timeList = document.getElementById('timeList');
+			const content = document.getElementById('upcontent');
+			const upraw = document.getElementById('upraw');
+			upraw.addEventListener('change', () => {
+				linList.forEach((lin) => {
+					if (lin.style.background != "unset") lin.click();
+				})
+			})
+			const linList = [];
+			function createLin(item) {
+				const li = document.createElement('li');
+				li.innerText = new Date(item.time).toLocaleString();
+				li.addEventListener('click', () => {
+					linList.forEach((lin) => {
+						lin.style.background = "unset";
+					})
+					li.style.background = "#ffffff20";
+					renderContent(item.text);
+				});
+				li.style.padding = "2px";
+				li.style.display = "block";
+				li.style["border-radius"] = "2px";
+				timeList.appendChild(li);
+				li.click(); //6的;
+				linList.push(li);
+			}
+			updateHistorys.forEach(item => {
+				createLin(item);
+			});
+
+			function renderContent(text) {
+				if (verifyMessage({ text: text }) && !upraw.checked) {
+					content.innerHTML = md.render(text);
+				} else {
+					content.innerHTML = "";
+					upraw.checked = true;
+					let pElc = document.createElement('p')
+					pElc.appendChild(document.createTextNode(text))
+					pElc.classList.add('break') //make lines broken at newline characters, as this text is not rendered and may contain raw newline characters
+					content.appendChild(pElc)
+				}
+			}
+		}
+	}
+	if (!(args.type == 'whisper' || nick == '*' || nick == '!')) {
+		options[ignoredUsers.includes(nick) ? "UnIgnore Nick" : "Ignore Nick"] = (event, nickLinkEl, args) => {
+			let name = args.from || args.nick;
+			if (ignoredUsers.includes(nick)) {
+				userDeignore(name);
+			} else userIgnore(name);
+		}
+		let hash = nickGetHash(nick);
+		options[ignoredHashs.includes(hash) ? "UnIgnore Hash" : "Ignore Hash"] = (event, nickLinkEl, args) => {
+			let hash = nickGetHash(args.from || args.nick);
+			if (ignoredHashs.includes(hash)) {
+				hashDeignore(hash);
+			} else hashIgnore(hash);
+		}
+		if (args.trip) {
+			options[ignoredTrips.includes(args.trip) ? "UnIgnore Trip" : "Ignore Trip"] = (event, nickLinkEl, args) => {
+				let trip = args.trip
+				if (ignoredTrips.includes(trip)) {
+					tripDeignore(trip);
+				} else tripIgnore(trip);
+			}
+		}
+	}
+	return options;
+}
 function makeNickEl(args, options, date) {
 	var nickLinkEl = document.createElement('a');
 	nickLinkEl.textContent = args.nick;
@@ -487,28 +790,29 @@ function makeNickEl(args, options, date) {
 	addClassToNick(nickLinkEl, args)
 
 	//tweaked code from crosst.chat
-	nickLinkEl.onclick = function () {
-		// @TODO Finish right-click menu
-		// Reply to a whisper or info is meaningless
-		if (args.type == 'whisper' || args.nick == '*' || args.nick == '!') {
-			insertAtCursor(args.text);
-			$id('chat-input').focus();
-			return;
-		} else if (args.nick == myNick.split('#')[0]) {
-			reply(args)
-		} else {
-			var nick = args.nick
-			let at = '@'
-			if ($id('soft-mention').checked) { at += ' ' }
-			insertAtCursor(at + nick + ' ');
-			input.focus();
-			return;
+	nickLinkEl.onclick = function (e) {
+		//right-click menu
+		if (checkIsMobileOrTablet() && right_click_menu) {
+			let options = getMenuOptions(args)
+			return openMenu(e, nickLinkEl, args, options);
 		}
+		// Reply to a whisper or info is meaningless
+		createAt(args, geteditbox() || input);
 	}
 	// Mention someone when right-clicking
 	nickLinkEl.oncontextmenu = function (e) {
 		e.preventDefault();
-		reply(args)
+		if (right_click_menu) {
+			let options = getMenuOptions(args);
+			openMenu(e, nickLinkEl, args, options);
+		} else {
+			let args_ = { ...args } // clone
+			if (args_.customId) {
+				let newtext = getUpdateMessageLastText(args_.customId, args_.userid);
+				if (newtext) args_.text = newtext;
+			}
+			reply(args_, geteditbox() || input)
+		}
 	}
 
 	nickLinkEl.title = date.toLocaleString();
@@ -518,6 +822,75 @@ function makeNickEl(args, options, date) {
 	}
 
 	return nickLinkEl
+}
+let menuDom = $id("menu");
+menuDom.style.display = "none";
+document.addEventListener('click', () => {
+	menuDom.style.display = "none";
+})
+
+function getUpdateMessageLastText(customId, userid) {
+	return activedMessages.reverse().find((msg) => { return msg.customId == customId && msg.userid == userid })?.text;
+}
+function openMenu(event, nickLinkEl, args, options = {}) {
+	menuDom.innerText = "";
+	let defMenu = {
+		"At": (event, nickLinkEl, args) => {
+			createAt(args, geteditbox() || input);
+		},
+		"Reply": (event, nickLinkEl, _args) => {
+			let args = { ..._args } // clone
+			if (args.customId) {
+				let newtext = getUpdateMessageLastText(args.customId, args.userid);
+				if (newtext) args.text = newtext;
+			}
+			reply(args, geteditbox() || input);
+		},
+		"Copy Text": (event, nickLinkEl, _args) => {
+			let args = { ..._args } // clone
+			if (args.customId) {
+				let newtext = getUpdateMessageLastText(args.customId, args.userid);
+				if (newtext) args.text = newtext;
+			}
+			navigator.clipboard.writeText(args.text)
+				.then(() => { })
+				.catch(err => {
+					pushMessage({
+						nick: '!',
+						text: `Failed to copy: ${err.message}`
+					})
+				});
+		},
+		"Delete (Only client)": (event, nickLinkEl, args) => {
+			nickLinkEl.parentElement.parentElement.remove()
+		},
+	}
+	for (let k in options) {
+		defMenu[k] = options[k];
+	}
+	if (args.trip == "preview") defMenu = {
+		":( WHAT ARE YOU DOING???": () => { }
+	}
+	for (let k in defMenu) {
+		if (defMenu[k]) {
+			let option = document.createElement("li");
+			option.onclick = () => {
+				defMenu[k](event, nickLinkEl, args);
+			}
+			option.innerText = i18ntranslate(k, ['menu']);
+			menuDom.appendChild(option);
+		}
+	}
+	setTimeout(() => {
+		menuDom.style.display = "block";
+		menuDom.style.top = ((event.clientY + menuDom.clientHeight) > window.innerHeight ? window.innerHeight - menuDom.clientHeight : event.clientY) + 'px';
+		menuDom.style.left = ((event.clientX + menuDom.clientWidth) > window.innerWidth ? window.innerWidth - menuDom.clientWidth : event.clientX) + 'px';
+		menuDom.scrollTo(0, 0);
+	}, 100)
+}
+function geteditbox() {
+	if (editboxs.length == 0) return null;
+	return editboxs[editboxs.length - 1]
 }
 
 function makeTextEl(args, options, date) {
@@ -601,7 +974,7 @@ function makeTextEl(args, options, date) {
 }
 
 
-function pushMessage(args, options = {}) {
+function pushMessage(args, options = {}, padId = "messages", makeunread = true, in_log = true) {
 	args = hook.run("before", "pushmessage", [args])?.[0] ?? false
 	if (!args) {
 		return //prevented
@@ -617,11 +990,11 @@ function pushMessage(args, options = {}) {
 
 	if (
 		typeof (myNick) === 'string' && (
-			args.text.match(new RegExp('@' + myNick.split('#')[0] + '\\b', "gi")) ||
+			(args.text.match(new RegExp('@' + currentNick + '\\b', "gi")) && args.nick !== currentNick) ||
 			((args.type === "whisper" || args.type === "invite") && args.from)
 		)
 	) {
-		notify(args);
+		if (makeunread) notify(args);
 	}
 
 	messageEl.classList.add('message');
@@ -650,17 +1023,17 @@ function pushMessage(args, options = {}) {
 
 	// Scroll to bottom
 	var atBottom = isAtBottom();
-	if (!(args.text && /咱是中国人，可要说中文啊/.test(args.text))) {
-		$id('messages').appendChild(messageEl);
-	}
+	$id(padId).appendChild(messageEl);
 	if (atBottom && myChannel != ''/*Frontpage should not be scrooled*/) {
 		window.scrollTo(0, document.body.scrollHeight);
 	}
 
-	unread += 1;
-	updateTitle();
+	if (makeunread) {
+		unread += 1;
+		updateTitle();
+	}
 
-	if (do_log_messages && args.nick && args.text) {
+	if (do_log_messages && args.nick && args.text && in_log) {
 		readableLog += `\n[${date.toLocaleString()}] `
 		if (args.mod) { readableLog += '(mod) ' }
 		if (args.color) { readableLog += '(color:' + args.color + ') ' }
@@ -679,6 +1052,8 @@ function send(data) {
 		if (!data) {
 			return
 		}
+		if (data[0].cmd == "emote" && deathWithFancyMoves(data[0].text, true)) return;
+		if (data[0].cmd == "chat" && data[0].text.startsWith("/me ") && deathWithFancyMoves(data[0].text, true)) return;
 		ws.send(JSON.stringify(data[0]));
 	}
 }

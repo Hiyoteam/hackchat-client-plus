@@ -159,16 +159,14 @@ pre.captcha {
 }
 
 .colorful {
-  background: linear-gradient(
-    to right,
-    #6600cc,
-    #9900ff,
-    #9900cc,
-    #660066,
-    #9900cc,
-    #9900ff,
-    #6600cc
-  );
+  background: linear-gradient(to right,
+      #6600cc,
+      #9900ff,
+      #9900cc,
+      #660066,
+      #9900cc,
+      #9900ff,
+      #6600cc);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -177,14 +175,12 @@ pre.captcha {
 }
 
 .jebbed {
-  background: linear-gradient(
-    to right,
-    #6666ff,
-    #0099ff,
-    #00ff00,
-    #ff3399,
-    #6666ff
-  );
+  background: linear-gradient(to right,
+      #6666ff,
+      #0099ff,
+      #00ff00,
+      #ff3399,
+      #6666ff);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -193,6 +189,7 @@ pre.captcha {
 }
 
 @keyframes rainbow_animation {
+
   0%,
   100% {
     background-position: 0 0;
@@ -309,26 +306,26 @@ table {
   border-collapse: collapse;
 }
 
-table > caption + thead > tr:first-child > th,
-table > colgroup + thead > tr:first-child > th,
-table > thead:first-child > tr:first-child > th,
-table > caption + thead > tr:first-child > td,
-table > colgroup + thead > tr:first-child > td,
-table > thead:first-child > tr:first-child > td {
+table>caption+thead>tr:first-child>th,
+table>colgroup+thead>tr:first-child>th,
+table>thead:first-child>tr:first-child>th,
+table>caption+thead>tr:first-child>td,
+table>colgroup+thead>tr:first-child>td,
+table>thead:first-child>tr:first-child>td {
   border-top: 0;
 }
 
-table > thead > tr > th {
+table>thead>tr>th {
   vertical-align: bottom;
   border-bottom: 2px solid #4e4e4e;
 }
 
-table > thead > tr > th,
-table > tbody > tr > th,
-table > tfoot > tr > th,
-table > thead > tr > td,
-table > tbody > tr > td,
-table > tfoot > tr > td {
+table>thead>tr>th,
+table>tbody>tr>th,
+table>tfoot>tr>th,
+table>thead>tr>td,
+table>tbody>tr>td,
+table>tfoot>tr>td {
   padding: 8px;
   line-height: 1.42857143;
   vertical-align: top;
@@ -344,17 +341,17 @@ th {
   padding: 0;
 }
 
-table > tbody > tr:nth-child(odd) > td,
-table > tbody > tr:nth-child(odd) > th {
+table>tbody>tr:nth-child(odd)>td,
+table>tbody>tr:nth-child(odd)>th {
   background-color: #4e4e4e;
 }
 
-table > thead > tr > th,
-table > tbody > tr > th,
-table > tfoot > tr > th,
-table > thead > tr > td,
-table > tbody > tr > td,
-table > tfoot > tr > td {
+table>thead>tr>th,
+table>tbody>tr>th,
+table>tfoot>tr>th,
+table>thead>tr>td,
+table>tbody>tr>td,
+table>tfoot>tr>td {
   padding: 8px;
   line-height: 1.42857143;
   vertical-align: top;
@@ -389,9 +386,11 @@ ol ol {
 /* Mobile style */
 
 @media only screen and (max-width: 600px) {
-  #messages {
+
+  #messages,
+  #preview {
     border: none;
-    padding: 0.5em;
+    padding: 0 0.5em 0 0.5em;
   }
 
   .message {
@@ -421,4 +420,45 @@ ol ol {
     bottom: auto;
     border-bottom: solid 1px;
   }
+}
+
+#menu {
+  position: relative;
+  width: 200px;
+  position: fixed;
+  border-radius: 4px;
+  background: #000000aa;
+  line-height: 20px;
+  max-height: 300px;
+  overflow-y: scroll;
+  -ms-overflow-style: none;
+  /* IE 10+ */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+#menu>li {
+  padding: 10px;
+  display: block;
+  cursor: pointer;
+}
+
+#menu>li:hover {
+  background: #ffffff20;
+}
+
+dialog {
+  border: 1px solid;
+  padding: 5px 10px 5px 10px;
+  border-radius: 2px;
+  background: #333333ee;
+  color: unset;
+  max-width: 90%;
+  max-height: 90vh;
+  position: fixed;
+}
+
+#menu::-webkit-scrollbar {
+  display: none;
+  /* Chrome, Safari �� Opera */
 }

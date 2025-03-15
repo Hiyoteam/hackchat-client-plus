@@ -34,6 +34,8 @@ $id('clear-messages').onclick = function () {
 	// Delete children elements
 	var messages = $id('messages');
 	messages.innerHTML = '';
+	activedMessages = [];
+	activeMessages = [];
 }
 
 $id('set-custom-color').onclick = function () {
@@ -197,7 +199,7 @@ registerSetting('soft-mention', false)
 
 registerSetting('auto-precaution', false)
 
-var auto_fold, do_log_messages, should_get_info
+var auto_fold, do_log_messages, should_get_info, edit_message, message_preview
 
 registerSetting('auto-fold', false, (enabled) => {
 	auto_fold = enabled
@@ -229,6 +231,19 @@ registerSetting('mobile-btn', false, (enabled) => {
 registerSetting('should-get-info', false, (enabled) => {
 	should_get_info = enabled
 }, true)
+
+registerSetting('edit-message', false, (enabled) => {
+	edit_message = enabled
+}, true)
+
+registerSetting('message-preview', false, (enabled) => {
+	message_preview = enabled
+}, true)
+
+registerSetting('right-click-menu', true, (enabled) => {
+	right_click_menu = enabled
+}, true)
+
 
 /* ---Buttons for some mobile users--- */
 
@@ -287,12 +302,53 @@ $('#send').onclick = function () {
 
 /* ---Sidebar user list--- */
 
+function safeLocalStorageGet(key) {
+    try {
+        return localStorage.getItem(key) ?? "[]"; // what the fuck
+    } catch (err) {
+        console.error("Error accessing localStorage:", err);
+        return "[]";
+    }
+}
+
 // User list
 var onlineUsers = []
-var ignoredUsers = []
-var ignoredHashs = []
+var ignoredUsers = JSON.parse(safeLocalStorageGet('ignoredUsers'))
+var ignoredHashs = JSON.parse(safeLocalStorageGet('ignoredHashs'))
+var ignoredTrips = JSON.parse(safeLocalStorageGet('ignoredTrips'))
 var usersInfo = {};
-
+function getUserMenuOptions(nick) {
+	let options = {
+		"Reply": false,
+		"Copy Text": false,
+		"Delete (Only client)": false
+	}
+	options[ignoredUsers.includes(nick) ? "UnIgnore Nick" : "Ignore Nick"] = (event, nickLinkEl, args) => {
+		let name = args.nick;
+		if (ignoredUsers.includes(nick)) {
+			userDeignore(name);
+		} else userIgnore(name);
+	}
+	let hash = nickGetHash(nick);
+	options[ignoredHashs.includes(hash) ? "UnIgnore Hash" : "Ignore Hash"] = (event, nickLinkEl, args) => {
+		let hash = nickGetHash(args.nick);
+		if (ignoredUsers.includes(hash)) {
+			hashDeignore(hash);
+		} else hashIgnore(hash);
+	}
+	let trip = nickGetTrip(nick);
+	if (trip) {
+		options[ignoredTrips.includes(trip) ? "UnIgnore Trip" : "Ignore Trip"] = (event, nickLinkEl, args) => {
+			if (ignoredTrips.includes(trip)) {
+				tripDeignore(trip);
+			} else tripIgnore(trip);
+		}
+	}
+	options.Invite = (event, nickLinkEl, args) => {
+		userInvite(args.nick)
+	}
+	return options;
+}
 function userAdd(nick, user_info) {
 	let trip = user_info.trip
 
@@ -305,17 +361,26 @@ function userAdd(nick, user_info) {
 	user.textContent = nick;
 
 	user.onclick = function (e) {
+		if (checkIsMobileOrTablet() && right_click_menu) {
+			let options = getUserMenuOptions(nick)
+			return openMenu(e, false, { nick: nick }, options);
+		}
 		userInvite(nick)
 	}
 
 	user.oncontextmenu = function (e) {
 		e.preventDefault()
-		if (ignoredUsers.indexOf(nick) > -1) {
-			userDeignore(nick)
-			pushMessage({ nick: '*', text: `Cancelled ignoring nick ${nick}.` })
+		if (right_click_menu) {
+			let options = getUserMenuOptions(nick)
+			return openMenu(e, false, { nick: nick }, options);
 		} else {
-			userIgnore(nick)
-			pushMessage({ nick: '*', text: `Ignored nick ${nick}.` })
+			if (nickIgnored(nick)) {
+				userDeignore(nick)
+				pushMessage({ nick: '*', text: `Cancelled ignoring nick ${nick}.` })
+			} else {
+				userIgnore(nick)
+				pushMessage({ nick: '*', text: `Ignored nick ${nick}.` })
+			}
 		}
 	}
 
@@ -406,18 +471,33 @@ function userInvite(nick) {
 
 function userIgnore(nick) {
 	ignoredUsers.push(nick)
+	localStorageSet('ignoredUsers',JSON.stringify(ignoredUsers))
 }
 
 function userDeignore(nick) {
 	ignoredUsers.splice(ignoredUsers.indexOf(nick))
+	localStorageSet('ignoredUsers',JSON.stringify(ignoredUsers))
 }
 
 function hashIgnore(hash) {
 	ignoredHashs.push(hash)
+	localStorageSet('ignoredHashs',JSON.stringify(ignoredHashs))
 }
 
 function hashDeignore(hash) {
 	ignoredHashs.splice(ignoredHashs.indexOf(hash))
+	localStorageSet('ignoredHashs',JSON.stringify(ignoredHashs))
+}
+
+
+function tripIgnore(trip) {
+	ignoredTrips.push(trip)
+	localStorageSet('ignoredTrips',JSON.stringify(ignoredTrips))
+}
+
+function tripDeignore(trip) {
+	ignoredTrips.splice(ignoredTrips.indexOf(trip))
+	localStorageSet('ignoredTrips',JSON.stringify(ignoredTrips))
 }
 
 

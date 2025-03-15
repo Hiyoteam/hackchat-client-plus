@@ -36,6 +36,9 @@
                 ['Fold Long Messages', '折叠长消息'],
                 ['Send', '发送'],
                 ['Settings', '设置'],
+                ['Can Edit Message', '可编辑消息'],
+                ['Message Preview', '预览消息'],
+                ['Right-click menu', '右键菜单'],
             ]),
             prompt: new Map([
                 /* Alerts and prompts */
@@ -61,12 +64,13 @@
                 ['Automatically converted into upper case by client.', '客户端已自动转换为大写。'],
                 ["Please input the tunnel URL.(IF YOU DON'T KNOW WHAT THIS DOES, CLICK CANCEL.)", "请输入隧道URL.(如果你不知道这是做什么的，请点击取消。)"],
                 ["Invaild tunnel URL.", "非法的隧道URL."],
-                ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"]
+                ['Input command:(This is for the developers to access/test some special experimental functions.)', '输入指令：（这是供开发者访问/测试一些实验功能的功能）'],
+                [`Please enter a new name, preferably different from your previous one`, '请输入一个新名称，最好不要和你的名称一样']
             ]),
             system: new Map([
                 /* System messages */
                 ['Users online: ', '在线用户：'],
-                ['Thanks for using hackchat++ client! Source at: ', '感谢使用hackchat++！开源在：'],
+                ['Thanks for using hackchat++ client! Source code at: ', '感谢使用hackchat++！代码开源在：'],
                 [/^([a-zA-Z0-9_]{1,24}) joined$/, '$1 加入了聊天室'],
                 [/^([a-zA-Z0-9_]{1,24}) left$/, '$1 离开了聊天室'],
                 ['You cancelled joining. Press enter at the input field to reconnect.', '你取消了加入。在输入框上按回车可以重新加入。'],
@@ -85,7 +89,10 @@
                 [/^([a-zA-Z0-9_]{1,24}) was moved into \?(.+)$/, '$1 被移动到 ?$2'],
                 ["Sucessfully added tunnel.", "成功增加隧道。"],
                 ["Sucessfully removed tunnel.", "成功移除隧道。"],
-                ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"]
+                ["Sucessfully changed tunnel, refresh to apply the changes.", "成功更改隧道设置，刷新来应用更改。"],
+                ["The LaTeX included in your text may cause you got kicked, rejected sending.", "你的文本中含有部分可能导致你被踢出的特殊LaTeX公式，已中断发送。"],
+		["Please don't court death with fancy moves. :)", "请不要花式作死。 :)"],
+		["Notice: hack.chat currently has no crypto products (zero, none, no sol, nothing). If you are here because of a crypto: you are being rugged. Follow the official https://x.com/hackdotchat", "注意：hack.chat 目前没有任何加密货币产品（字面意义上的，绝对的，没有 SOL，什么都没有）。如果你因为一个加密货币而来到这里：你正在被欺诈。关注我们的官方账号 https://x.com/hackdotchat"]
             ]),
             info: new Map([
                 /* Chatroom info */
@@ -103,7 +110,10 @@
                 ['You are being rate-limited or blocked.', '你被暂时限制了，或者被封禁了。'],
                 ['Wait a moment and try again.', '请稍后再试。'],
                 [/^([a-zA-Z0-9_]{1,24}) is now ([a-zA-Z0-9_]{1,24})$/, '$1 改名为 $2'],
-
+                ['You are enabling developer mode. I want you to be aware of what you are doing. Enabling this mode will disable some protections and may lead to password theft. We recommend using a non-personal password in incognito mode to test untrusted things. Executing this command may result in your password being stolen. To proceed with the execution, please run `/debug ([1-9]{10})`.', '你正在开启开发者模式，您应该知道您在做什么，开启此模式将会禁用一些保护并可能导致密码泄露。我们建议您在隐身模式使用非个人密码来测试不信任的东西。继续执行可能导致密码泄露。要继续执行，请发送：`/debug $1`'],
+                ['Do not keep developer mode enabled for too long. After using it, please refresh immediately to restore protection.', '不要保持在开发者模式过长时间，结束使用后，请刷新页面以恢复保护。'],
+                ['No such function: (.+)', '指令不存在：$1'],
+		['You may not join that channel.', '你不能加入这个频道'],
                 /* Help */
                 ['All commands:', '全部命令：'],
                 ['Category:', '分\ufeff类\ufeff：'],
@@ -154,6 +164,23 @@
                 ['Hosted at https://hcer.netlify.app/ and https://hc.thz.cool/ (thanks to Maggie, aka THZ, for hosting).', '托管在 https://hcer.netlify.app/ 和 https://hc.thz.cool/（感谢Maggie，即THZ，提供托管）。'],
                 ['Links: ', '友情链接：'],
                 [' (Thanks for providing replying script!) ', '（感谢提供回复功能的代码）']
+            ]),
+            menu: new Map([
+                ['Reply', '回复'],
+                ['Copy Text', '复制内容'],
+                ['Delete (Only client)', '删除（仅客户端）'],
+                ['Copy Color', '复制颜色'],
+                ['Update History', '消息更新历史'],
+                ['Reply', '回复'],
+                ['UnIgnore Nick', '取消屏蔽名称'],
+                ['Ignore Nick', '屏蔽名称'],
+                ['UnIgnore Hash', '取消屏蔽Hash'],
+                ['Ignore Hash', '屏蔽Hash'],
+                ['Update (Edit)', '更新消息（编辑）'],
+                [':( WHAT ARE YOU DOING???', ':( 你在做什么？？？'],
+                ['UnIgnore Trip', '取消屏蔽Trip'],
+                ['Ignore Trip', '屏蔽Trip'],
+                ['Invite', '邀请']
             ]),
         }
     ]
