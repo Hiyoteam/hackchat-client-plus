@@ -187,6 +187,9 @@ function join(channel, oldNick) {
 				}
 			}
 		}
+		if (cmd !== 'captcha') {
+			isAnsweringCaptcha = false;
+		}
 		if (command) {
 			command.call(null, args, message.data);
 		}
