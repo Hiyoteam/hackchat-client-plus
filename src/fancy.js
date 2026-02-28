@@ -113,6 +113,21 @@
 			plugins = []
 		}
 		pushMessage({ nick: "*", text: "Restigered plugins:" + JSON.stringify(plugins) })
+  },
+  removeplugin(...args) {
+    let plugin_to_remove = args[0];
+    let plugins_removed = 0;
+    let plugin_after_remove = new Array();
+    let plugins = localStorageGet("plugins") ?? "[]";
+    JSON.parse(plugins).forEach((e) => {
+      if (e == plugin_to_remove) {
+        plugins_removed = plugins_removed + 1;
+      } else {
+        plugin_after_remove.push(e);
+      }
+    })
+    localStorageSet("plugins", JSON.stringify(plugin_after_remove))
+    pushMessage({ nick: "*", text: `Removed ${plugins_removed} plugin(s). Refresh to apply the changes.`})
 	},
 	clearplugins(...args) {
 		localStorageSet("plugins", "[]")
