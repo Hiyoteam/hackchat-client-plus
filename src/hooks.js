@@ -1,10 +1,8 @@
 var hooks = {};
-const defaultHook = { "before": [], "in": [], "after": [] };
-
 var hook = {
     register: function (when, name, func) {
         if (!hooks[name]) {
-            hooks[name] = { ...defaultHook };
+            hooks[name] = { before: [], in: [], after: [] };
         }
         hooks[name][when].push(func);
     },
