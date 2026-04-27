@@ -371,9 +371,8 @@ var COMMANDS = {
 	},
 
 	emote: function (args, raw) {
-		if (nickIgnored(args.text.match(/@(.+?)(?: .+)/)[1])) {
-			return
-		}
+        let nick = args.text.match(/@([^\s']+)/)?.[1];
+        if (nick && nickIgnored(nick)) return;
 		args.nick = '*'
 		pushMessage(args, { i18n: false, raw })
 	},
